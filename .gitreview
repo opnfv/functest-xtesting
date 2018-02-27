@@ -1,5 +1,5 @@
 [gerrit]
 host=gerrit.opnfv.org
 port=29418
-project=functest.git
+project=functest-xtesting.git
 

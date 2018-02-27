@@ -12,4 +12,3 @@ Subpackages
 .. toctree::
 
     functest.core
-    functest.opnfv_tests
