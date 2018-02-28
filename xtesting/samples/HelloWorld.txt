@@ -1,0 +1,7 @@
+*** Settings ***
+Library         HelloWorld.py
+
+*** Test Cases ***
+HelloWorld
+   Hello World
+   Log    ${var01} ${var02}
