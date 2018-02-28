@@ -3,7 +3,6 @@
 .*.sw?
 .project
 .pydevproject
-rally_conf.json
 /docs_build/
 _build
 /docs_output/
@@ -13,7 +12,7 @@ _build
 cover
 coverage.xml
 nosetests.xml
-functest.egg-info
+*.egg-info
 *venv
 .tox
 *.out

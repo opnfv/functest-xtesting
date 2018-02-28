@@ -1,7 +1,7 @@
-functest
+xtesting
 ========
 
 .. toctree::
    :maxdepth: 4
 
-   functest
+   xtesting

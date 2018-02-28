@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# OPNFV Functest documentation build configuration file, created by
+# Xtesting documentation build configuration file, created by
 # sphinx-quickstart on Mon Apr 17 10:03:43 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'OPNFV Functest'
+project = u'Xtesting'
 copyright = u'2017, #opnfv-functest (chat.freenode.net)'
 author = u'#opnfv-functest (chat.freenode.net)'
 
@@ -135,7 +135,7 @@ html_theme = 'sphinx_rtd_theme'
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
 #
-# html_title = u'OPNFV Functest vmaster'
+# html_title = u'Xtesting vmaster'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #
@@ -235,7 +235,7 @@ html_static_path = ['_static']
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'OPNFVFunctestdoc'
+htmlhelp_basename = 'Xtestingdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -261,7 +261,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'OPNFVFunctest.tex', u'OPNFV Functest Documentation',
+    (master_doc, 'Xtesting.tex', u'Xtesting Documentation',
      u'\\#opnfv-functest (chat.freenode.net)', 'manual'),
 ]
 
@@ -303,7 +303,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'opnfvfunctest', u'OPNFV Functest Documentation',
+    (master_doc, 'xtesting', u'Xtesting Documentation',
      [author], 1)
 ]
 
@@ -318,8 +318,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'OPNFVFunctest', u'OPNFV Functest Documentation',
-     author, 'OPNFVFunctest', 'One line description of project.',
+    (master_doc, 'Xtesting', u'Xtesting Documentation',
+     author, 'Xtesting', 'One line description of project.',
      'Miscellaneous'),
 ]
 

@@ -1,5 +1,5 @@
-Welcome to OPNFV Functest's documentation!
-==========================================
+Welcome to Xtesting's documentation!
+====================================
 
 Contents:
 
