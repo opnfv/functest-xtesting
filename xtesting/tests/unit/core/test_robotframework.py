@@ -169,6 +169,7 @@ class RunTesting(unittest.TestCase):
         self._test_makedirs()
         args[0].assert_called_once_with(self.test.res_dir)
 
+    @mock.patch('os.makedirs')
     @mock.patch('robot.run')
     def _test_parse_results(self, status, *args):
         self.assertEqual(
@@ -180,6 +181,7 @@ class RunTesting(unittest.TestCase):
             *self.suites, log='NONE', output=self.test.xml_file,
             report='NONE', stdout=mock.ANY, variable=self.variable,
             variablefile=self.variablefile)
+        args[1].assert_called_once_with(self.test.res_dir)
 
     def test_parse_results_exc(self):
         with mock.patch.object(self.test, 'parse_results',

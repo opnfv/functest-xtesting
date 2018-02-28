@@ -14,6 +14,7 @@
 """
 
 import argparse
+import errno
 import importlib
 import logging
 import logging.config
@@ -293,6 +294,12 @@ class Runner(object):
 
 def main():
     """Entry point"""
+    try:
+        os.makedirs('/var/lib/xtesting/results/')
+    except OSError as ex:
+        if ex.errno != errno.EEXIST:
+            print "Cannot create /var/lib/xtesting/results/"
+            return testcase.TestCase.EX_RUN_ERROR
     logging.config.fileConfig(pkg_resources.resource_filename(
         'xtesting', 'ci/logging.ini'))
     logging.captureWarnings(True)
