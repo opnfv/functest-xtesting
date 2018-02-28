@@ -2,4 +2,4 @@
 
 # pylint: disable=missing-docstring
 
-ENV_FILE = '/home/opnfv/xtesting/conf/env_file'
+ENV_FILE = '/var/lib/xtesting/conf/env_file'

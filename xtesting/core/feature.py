@@ -27,7 +27,7 @@ class Feature(testcase.TestCase):
     """Base model for single feature."""
 
     __logger = logging.getLogger(__name__)
-    dir_results = "/home/opnfv/xtesting/results"
+    dir_results = "/var/lib/xtesting/results"
 
     def __init__(self, **kwargs):
         super(Feature, self).__init__(**kwargs)

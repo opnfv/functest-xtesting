@@ -10,6 +10,5 @@ RUN apk --no-cache add --update python py-pip bash git && \
         -chttps://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=$OPENSTACK_TAG \
         -chttps://git.opnfv.org/functest-xtesting/plain/upper-constraints.txt?h=$BRANCH \
         /src/functest-xtesting && \
-    rm -r /src/functest-xtesting && \
-    bash -c "mkdir -p /home/opnfv/xtesting/results/robot"
+    rm -r /src/functest-xtesting
 CMD ["run_tests", "-t", "all"]

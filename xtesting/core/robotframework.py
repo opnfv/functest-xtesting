@@ -53,7 +53,7 @@ class RobotFramework(testcase.TestCase):
     """RobotFramework runner."""
 
     __logger = logging.getLogger(__name__)
-    dir_results = "/home/opnfv/xtesting/results"
+    dir_results = "/var/lib/xtesting/results"
 
     def __init__(self, **kwargs):
         self.res_dir = os.path.join(self.dir_results, 'robot')

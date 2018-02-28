@@ -69,6 +69,7 @@ tiers:
             -
                 case_name: fifth
                 project_name: xtesting
+                enabled: false
                 criteria: 100
                 blocking: false
                 description: ''
