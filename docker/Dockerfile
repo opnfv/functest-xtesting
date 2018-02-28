@@ -3,9 +3,7 @@ FROM alpine:3.7
 ARG BRANCH=master
 ARG OPENSTACK_TAG=stable/pike
 
-RUN apk --no-cache add --update \
-        python libffi libssl1.0 libjpeg-turbo py-pip bash \
-        grep sed wget ca-certificates git && \
+RUN apk --no-cache add --update python py-pip bash git && \
     git clone https://gerrit.opnfv.org/gerrit/functest-xtesting /src/functest-xtesting && \
     (cd /src/functest-xtesting && git fetch origin $BRANCH && git checkout FETCH_HEAD) && \
     pip install --no-cache-dir --src /src \
