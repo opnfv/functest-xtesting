@@ -1,10 +1,9 @@
----
 tiers:
     -
         name: samples
         order: 1
         ci_loop: 'daily'
-        description: ''
+        description : ''
         testcases:
             -
                 case_name: first
@@ -17,7 +16,7 @@ tiers:
                     installer: ''
                     scenario: ''
                 run:
-                    module: 'xtesting.samples.first'
+                    module: 'first'
                     class: 'Test'
 
             -
@@ -31,7 +30,7 @@ tiers:
                     installer: ''
                     scenario: ''
                 run:
-                    module: 'xtesting.samples.second'
+                    module: 'second'
                     class: 'Test'
 
             -
@@ -64,23 +63,4 @@ tiers:
                     module: 'xtesting.core.unit'
                     class: 'Suite'
                     args:
-                        name: 'xtesting.samples.fourth'
-
-            -
-                case_name: fifth
-                project_name: xtesting
-                criteria: 100
-                blocking: false
-                description: ''
-                dependencies:
-                    installer: ''
-                    scenario: ''
-                run:
-                    module: 'xtesting.core.robotframework'
-                    class: 'RobotFramework'
-                    args:
-                        suites:
-                            - /usr/lib/python2.7/site-packages/xtesting/HelloWorld.txt
-                        variable:
-                            - 'var01:foo'
-                            - 'var02:bar'
+                        name: 'fourth'
