@@ -21,14 +21,19 @@ class TierBuilderTesting(unittest.TestCase):
         self.dependency = {
             'installer': 'test_installer', 'scenario': 'test_scenario'}
         self.testcase = {
-            'dependencies': self.dependency, 'enabled': 'true',
+            'dependencies': self.dependency, 'enabled': True,
             'case_name': 'test_name', 'criteria': 'test_criteria',
+            'blocking': 'test_blocking', 'description': 'test_desc',
+            'project_name': 'project_name'}
+        self.testcase_disabled = {
+            'dependencies': self.dependency, 'enabled': False,
+            'case_name': 'test_name_disabled', 'criteria': 'test_criteria',
             'blocking': 'test_blocking', 'description': 'test_desc',
             'project_name': 'project_name'}
         self.dic_tier = {
             'name': 'test_tier', 'order': 'test_order',
             'ci_loop': 'test_ci_loop', 'description': 'test_desc',
-            'testcases': [self.testcase]}
+            'testcases': [self.testcase, self.testcase_disabled]}
         self.mock_yaml = mock.Mock()
         attrs = {'get.return_value': [self.dic_tier]}
         self.mock_yaml.configure_mock(**attrs)
@@ -59,6 +64,12 @@ class TierBuilderTesting(unittest.TestCase):
     def test_get_test_present_test(self):
         self.assertEqual(self.tierbuilder.get_test('test_name'),
                          self.tier_obj.get_test('test_name'))
+
+    def test_get_test_disabled(self):
+        self.assertEqual(self.tierbuilder.get_test('test_name_disabled'), None)
+        self.assertEqual(self.tier_obj.get_test('test_name_disabled'), None)
+        self.assertEqual(
+            self.tier_obj.get_skipped_test()[0].name, 'test_name_disabled')
 
     def test_get_test_missing_test(self):
         self.assertEqual(self.tierbuilder.get_test('test_name2'),
