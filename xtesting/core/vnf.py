@@ -13,14 +13,7 @@ import logging
 import time
 import uuid
 
-from snaps.config.user import UserConfig
-from snaps.config.project import ProjectConfig
-from snaps.openstack.create_user import OpenStackUser
-from snaps.openstack.create_project import OpenStackProject
-from snaps.openstack.tests import openstack_tests
-
 from xtesting.core import testcase
-from xtesting.utils import constants
 
 __author__ = ("Morgan Richomme <morgan.richomme@orange.com>, "
               "Valentin Boucher <valentin.boucher@orange.com>")
@@ -97,43 +90,12 @@ class VnfOnBoarding(testcase.TestCase):
         """
         Prepare the environment for VNF testing:
 
-            * Creation of a user,
-            * Creation of a tenant,
-            * Allocation admin role to the user on this tenant
-
         Returns base.TestCase.EX_OK if preparation is successfull
 
         Raise VnfPreparationException in case of problem
         """
-        try:
-            self.__logger.info(
-                "Prepare VNF: %s, description: %s", self.case_name,
-                self.tenant_description)
-            snaps_creds = openstack_tests.get_credentials(
-                os_env_file=constants.ENV_FILE)
-
-            self.os_project = OpenStackProject(
-                snaps_creds,
-                ProjectConfig(
-                    name=self.tenant_name,
-                    description=self.tenant_description
-                ))
-            self.os_project.create()
-            self.created_object.append(self.os_project)
-            user_creator = OpenStackUser(
-                snaps_creds,
-                UserConfig(
-                    name=self.user_name,
-                    password=str(uuid.uuid4()),
-                    roles={'admin': self.tenant_name}))
-            user_creator.create()
-            self.created_object.append(user_creator)
-            self.snaps_creds = user_creator.get_os_creds(self.tenant_name)
-
-            return testcase.TestCase.EX_OK
-        except Exception:  # pylint: disable=broad-except
-            self.__logger.exception("Exception raised during VNF preparation")
-            raise VnfPreparationException
+        self.__logger.exception("VNF must be prepared")
+        raise VnfPreparationException
 
     def deploy_orchestrator(self):
         """

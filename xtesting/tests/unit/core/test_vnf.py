@@ -16,9 +16,6 @@ import mock
 
 from xtesting.core import vnf
 from xtesting.core import testcase
-from xtesting.utils import constants
-
-from snaps.openstack.os_credentials import OSCreds
 
 
 class VnfBaseTesting(unittest.TestCase):
@@ -107,45 +104,9 @@ class VnfBaseTesting(unittest.TestCase):
                                   return_value=True):
             self.assertEqual(self.test.run(), testcase.TestCase.EX_OK)
 
-    @mock.patch('xtesting.core.vnf.OpenStackUser')
-    @mock.patch('xtesting.core.vnf.OpenStackProject')
-    @mock.patch('snaps.openstack.tests.openstack_tests.get_credentials',
-                side_effect=Exception)
-    def test_prepare_exc1(self, *args):
-        with self.assertRaises(Exception):
+    def test_prepare(self):
+        with self.assertRaises(vnf.VnfPreparationException):
             self.test.prepare()
-        args[0].assert_called_with(os_env_file=constants.ENV_FILE)
-        args[1].assert_not_called()
-        args[2].assert_not_called()
-
-    @mock.patch('xtesting.core.vnf.OpenStackUser')
-    @mock.patch('xtesting.core.vnf.OpenStackProject', side_effect=Exception)
-    @mock.patch('snaps.openstack.tests.openstack_tests.get_credentials')
-    def test_prepare_exc2(self, *args):
-        with self.assertRaises(Exception):
-            self.test.prepare()
-        args[0].assert_called_with(os_env_file=constants.ENV_FILE)
-        args[1].assert_called_with(mock.ANY, mock.ANY)
-        args[2].assert_not_called()
-
-    @mock.patch('xtesting.core.vnf.OpenStackUser', side_effect=Exception)
-    @mock.patch('xtesting.core.vnf.OpenStackProject')
-    @mock.patch('snaps.openstack.tests.openstack_tests.get_credentials')
-    def test_prepare_exc3(self, *args):
-        with self.assertRaises(Exception):
-            self.test.prepare()
-        args[0].assert_called_with(os_env_file=constants.ENV_FILE)
-        args[1].assert_called_with(mock.ANY, mock.ANY)
-        args[2].assert_called_with(mock.ANY, mock.ANY)
-
-    @mock.patch('xtesting.core.vnf.OpenStackUser')
-    @mock.patch('xtesting.core.vnf.OpenStackProject')
-    @mock.patch('snaps.openstack.tests.openstack_tests.get_credentials')
-    def test_prepare_default(self, *args):
-        self.assertEqual(self.test.prepare(), testcase.TestCase.EX_OK)
-        args[0].assert_called_with(os_env_file=constants.ENV_FILE)
-        args[1].assert_called_with(mock.ANY, mock.ANY)
-        args[2].assert_called_with(mock.ANY, mock.ANY)
 
     def test_deploy_vnf_unimplemented(self):
         with self.assertRaises(vnf.VnfDeploymentException):
@@ -157,16 +118,6 @@ class VnfBaseTesting(unittest.TestCase):
 
     def test_deploy_orch_unimplemented(self):
         self.assertTrue(self.test.deploy_orchestrator())
-
-    @mock.patch('snaps.openstack.tests.openstack_tests.get_credentials',
-                return_value=OSCreds(
-                    username='user', password='pass',
-                    auth_url='http://foo.com:5000/v3', project_name='bar'),
-                side_effect=Exception)
-    def test_prepare_keystone_client_ko(self, *args):
-        with self.assertRaises(vnf.VnfPreparationException):
-            self.test.prepare()
-        args[0].assert_called_once()
 
     def test_vnf_clean_exc(self):
         obj = mock.Mock()
