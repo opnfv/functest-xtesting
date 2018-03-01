@@ -14,14 +14,11 @@ import os
 import prettytable
 
 INPUTS = {
-    'EXTERNAL_NETWORK': None,
     'CI_LOOP': 'daily',
     'DEPLOY_SCENARIO': 'os-nosdn-nofeature-noha',
     'INSTALLER_TYPE': None,
-    'SDN_CONTROLLER_IP': None,
     'BUILD_TAG': None,
     'NODE_NAME': None,
-    'POD_ARCH': None,
     'TEST_DB_URL': 'http://testresults.opnfv.org/test/api/v1/results',
     'ENERGY_RECORDER_API_URL': 'http://energy.opnfv.fr/resources',
     'ENERGY_RECORDER_API_USER': None,
