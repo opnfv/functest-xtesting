@@ -165,10 +165,7 @@ class Runner(object):
                     test_case.run()
                 if self.report_flag:
                     test_case.push_to_db()
-                if test.get_project() == "xtesting":
-                    result = test_case.is_successful()
-                else:
-                    result = testcase.TestCase.EX_OK
+                result = test_case.is_successful()
                 LOGGER.info("Test result:\n\n%s\n", test_case)
                 if self.clean_flag:
                     test_case.clean()
