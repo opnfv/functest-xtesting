@@ -192,8 +192,7 @@ class Runner(object):
                 test_case = self.executed_test_cases[test.get_name()]
                 if test_case.is_successful() != testcase.TestCase.EX_OK:
                     LOGGER.error("The test case '%s' failed.", test.get_name())
-                    if test.get_project() == "xtesting":
-                        self.overall_result = Result.EX_ERROR
+                    self.overall_result = Result.EX_ERROR
                     if test.is_blocking():
                         raise BlockingTestFailed(
                             "The test case {} failed and is blocking".format(
