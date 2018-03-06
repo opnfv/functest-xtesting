@@ -9,11 +9,13 @@
 
 # pylint: disable=missing-docstring
 
+import six
+
 from xtesting.core import feature
 
 
 class Test(feature.Feature):
 
     def execute(self, **kwargs):
-        print "Hello World"
+        six.print_("Hello World")
         return 0

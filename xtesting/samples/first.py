@@ -11,6 +11,8 @@
 
 import time
 
+import six
+
 from xtesting.core import testcase
 
 
@@ -18,7 +20,7 @@ class Test(testcase.TestCase):
 
     def run(self, **kwargs):
         self.start_time = time.time()
-        print "Hello World"
+        six.print_("Hello World")
         self.result = 100
         self.stop_time = time.time()
         return testcase.TestCase.EX_OK
