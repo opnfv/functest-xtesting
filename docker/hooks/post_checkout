@@ -1,0 +1,8 @@
+#!/bin/bash
+
+from="multiarch/alpine:arm64-v3.7"
+if [ "$(uname -i)" == "aarch64" ]; then
+sed -i "s|^FROM.*$|FROM ${from}|" Dockerfile;
+fi
+
+exit $?
