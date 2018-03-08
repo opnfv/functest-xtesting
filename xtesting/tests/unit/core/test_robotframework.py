@@ -118,6 +118,7 @@ class RunTesting(unittest.TestCase):
     suites = ["foo"]
     variable = []
     variablefile = []
+    include = []
 
     def setUp(self):
         self.test = robotframework.RobotFramework(
@@ -132,7 +133,7 @@ class RunTesting(unittest.TestCase):
             self.assertEqual(
                 self.test.run(
                     suites=self.suites, variable=self.variable,
-                    variablefile=self.variablefile),
+                    variablefile=self.variablefile, include=self.include),
                 self.test.EX_RUN_ERROR)
             args[0].assert_not_called()
             mock_method.asser_not_called()
@@ -156,7 +157,7 @@ class RunTesting(unittest.TestCase):
             args[0].assert_called_once_with(
                 *self.suites, log='NONE', output=self.test.xml_file,
                 report='NONE', stdout=mock.ANY, variable=self.variable,
-                variablefile=self.variablefile)
+                variablefile=self.variablefile, include=self.include)
             mock_method.assert_called_once_with()
 
     @mock.patch('os.makedirs', side_effect=OSError(errno.EEXIST, ''))
@@ -175,12 +176,12 @@ class RunTesting(unittest.TestCase):
         self.assertEqual(
             self.test.run(
                 suites=self.suites, variable=self.variable,
-                variablefile=self.variablefile),
+                variablefile=self.variablefile, include=self.include),
             status)
         args[0].assert_called_once_with(
             *self.suites, log='NONE', output=self.test.xml_file,
             report='NONE', stdout=mock.ANY, variable=self.variable,
-            variablefile=self.variablefile)
+            variablefile=self.variablefile, include=self.include)
         args[1].assert_called_once_with(self.test.res_dir)
 
     def test_parse_results_exc(self):

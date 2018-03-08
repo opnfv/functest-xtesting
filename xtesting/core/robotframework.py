@@ -96,6 +96,7 @@ class RobotFramework(testcase.TestCase):
             suites = kwargs["suites"]
             variable = kwargs.get("variable", [])
             variablefile = kwargs.get("variablefile", [])
+            include = kwargs.get("include", [])
         except KeyError:
             self.__logger.exception("Mandatory args were not passed")
             return self.EX_RUN_ERROR
@@ -110,7 +111,7 @@ class RobotFramework(testcase.TestCase):
             return self.EX_RUN_ERROR
         stream = StringIO()
         robot.run(*suites, variable=variable, variablefile=variablefile,
-                  output=self.xml_file, log='NONE',
+                  include=include, output=self.xml_file, log='NONE',
                   report='NONE', stdout=stream)
         self.__logger.info("\n" + stream.getvalue())
         self.__logger.info("Results were successfully generated")
