@@ -67,6 +67,24 @@
       "revId": "ba3cee148b65e3d81e845fcd899c2652cdc7e18b",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_493b673a",
+        "filename": "build.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6883
+      },
+      "writtenOn": "2018-03-08T16:45:10Z",
+      "side": 1,
+      "message": "Unless you run \"./build.sh manifest\", manifest won\u0027t be executed, same with build.",
+      "parentUuid": "5a3f45e8_580fb730",
+      "revId": "ba3cee148b65e3d81e845fcd899c2652cdc7e18b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
