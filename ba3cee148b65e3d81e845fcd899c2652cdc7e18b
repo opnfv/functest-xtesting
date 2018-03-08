@@ -85,6 +85,24 @@
       "revId": "ba3cee148b65e3d81e845fcd899c2652cdc7e18b",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_a9266b14",
+        "filename": "build.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2018-03-08T17:00:10Z",
+      "side": 1,
+      "message": "Agree here. But publishing manifest could be ok only if both arch are built. Here the purpose of this patchset differs from the scope of Functest\u0027s build.sh (it\u0027s jenkins centric).",
+      "parentUuid": "5a3f45e8_493b673a",
+      "revId": "ba3cee148b65e3d81e845fcd899c2652cdc7e18b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
