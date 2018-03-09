@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_7879ce2e",
+        "filename": "build.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6883
+      },
+      "writtenOn": "2018-03-09T09:34:30Z",
+      "side": 1,
+      "message": "But I think if ${arch_tag} comes from jenkins, it will be aarch64",
+      "range": {
+        "startLine": 19,
+        "startChar": 12,
+        "endLine": 19,
+        "endChar": 15
+      },
+      "revId": "9541cccdf6a7d50234e8670df3b5b1ee9e50c839",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
