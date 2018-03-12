@@ -1,0 +1,28 @@
+sudo: required
+language: bash
+services: docker
+language: generic
+
+before_script:
+  - sudo apt-get -y install qemu-user-static
+  - sudo -E docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+  - (cd .. && git clone https://github.com/estesp/manifest-tool)
+  - (cd ../manifest-tool && sudo -E make && sudo -E make install)
+
+jobs:
+  include:
+    - stage: build xtesting images
+      script: sudo -E bash build.sh
+      env:
+        - REPO="${DOCKER_USERNAME}"
+        - arch="amd64"
+    - script: sudo -E bash build.sh
+      env:
+        - REPO="${DOCKER_USERNAME}"
+        - arch="arm64"
+    - stage: publish xtesting manifests
+      script: >
+        sudo manifest-tool push from-args \
+          --platforms linux/amd64,linux/arm64 \
+          --template ${DOCKER_USERNAME}/xtesting:ARCH-latest \
+          --target ${DOCKER_USERNAME}/xtesting:latest

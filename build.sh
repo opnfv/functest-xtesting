@@ -9,7 +9,7 @@ set -xe
 
 repo=${REPO:-opnfv}
 tag=${BRANCH:-latest}
-arch=${arch_tag-"\
+arch=${arch-"\
 amd64 \
 arm64"}
 image="xtesting"
