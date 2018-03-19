@@ -113,20 +113,18 @@ class TestCase(object):
         self.description = description
         self.project = project
 
-    @staticmethod
-    def is_none(item):
-        return item is None or item == ""
-
     def is_compatible(self, ci_installer, ci_scenario):
         try:
-            if not self.is_none(ci_installer):
-                if re.search(self.dependency.get_installer(),
-                             ci_installer) is None:
+            if not ci_installer:
+                if self.dependency.get_installer():
                     return False
-            if not self.is_none(ci_scenario):
-                if re.search(self.dependency.get_scenario(),
-                             ci_scenario) is None:
+            elif not re.search(self.dependency.get_installer(), ci_installer):
+                return False
+            if not ci_scenario:
+                if self.dependency.get_scenario():
                     return False
+            elif not re.search(self.dependency.get_scenario(), ci_scenario):
+                return False
             return True
         except TypeError:
             return False

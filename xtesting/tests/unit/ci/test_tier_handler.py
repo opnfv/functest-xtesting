@@ -80,12 +80,6 @@ class TierHandlerTesting(unittest.TestCase):
     def test_get_ci_loop(self):
         self.assertEqual(self.tier.get_ci_loop(), 'test_ci_loop')
 
-    def test_testcase_is_none_in_item(self):
-        self.assertEqual(tier_handler.TestCase.is_none("item"), False)
-
-    def test_testcase_is_none_no_item(self):
-        self.assertEqual(tier_handler.TestCase.is_none(None), True)
-
     def test_testcase_is_compatible(self):
         self.assertEqual(
             self.testcase.is_compatible('test_installer', 'test_scenario'),
