@@ -1,6 +1,7 @@
 # Xtesting
 
-[Cédric Ollivier](mailto:cedric.ollivier@orange.com)
+[Cédric Ollivier](mailto:cedric.ollivier@orange.com) &
+[Morgan Richomme](mailto:morgan.richomme@orange.com)
 
 2018/03/23
 
@@ -9,15 +10,27 @@
 ## Why Xtesting?
 
 
+### Functest framework
+
+- handle all interactions with OPNFV CI/CD components (entry points,
+results publication, status codes, etc.)
+- ease the development of third-party testcases by offering multiple drivers:
+python, bash, unittest, robotframework and vnf.
+
+**It has worked very well for E-release, but updates were required for
+the next ones**
+
+
 ### Internal needs
 
-- Functest has to verify Kubernetes deployment but its former Framework was
+- Functest has to verify Kubernetes deployment but
+[its former framework](http://testresults.opnfv.org/functest/framework/) was
 linked to OpenStack (e.g. credentials sourcing, rally verifiers, etc.)
 - hosting both OpenStack and Kubernetes in the same python package would
 increase dependencies and then complexify
 [container slicing](http://testresults.opnfv.org/functest/dockerslicing/)
 
-**Why not refactoring the first Functest Framework?**
+**Why not refactoring the first Functest framework?**
 
 
 ### External needs
@@ -37,14 +50,14 @@ integration**
 ## What's been done for Fraser?
 
 
-### Framework
+### Xtesting framework
 
-- Functest Framework were moved to a new xtesting repository
+- Functest framework were moved to a new xtesting repository
 (functest only hosts OpenStack testcases)
 - it has been updated and improved to follow all Xtesting technical
 guidelines:
   - unlink to **OpenStack** and **OPNFV**
-  - support both python2 and python3
+  - support both python2 and python3 (required by **Functional Gating**)
   - be fully covered by unit tests and well rated by pylint (10/10)
 
 
@@ -52,7 +65,7 @@ guidelines:
 
 - Xtesting is released as [a python package](https://pypi.python.org/pypi/xtesting/)
 and then is unlinked to OPNFV Milestones (Functest python package now depends
-it)
+on it)
 - [opnfv/xtesting](https://hub.docker.com/r/opnfv/xtesting/) is proposed to
 build third-parties containers (both amd64 and arm64 architectures).
 - the API documentation is automatically built
@@ -130,6 +143,8 @@ the classical ONAP testing virtual machine (**> 1GB**).
 ## Benefits
 
 - Xtesting allows a proper design inside OPNFV
-- it helps other LFN projects:
+- Xtesting and Functest help other LFN projects:
   - verifying the infrastructure on top of which the components are deployed
   - ease verifying the components as well in the same CI/CD toolchain
+
+  **All contributions coming from LFN projects are more than welcome!**
