@@ -1,7 +1,6 @@
 # Xtesting
 
-[Cédric Ollivier](mailto:cedric.ollivier@orange.com) &
-[Morgan Richomme](mailto:morgan.richomme@orange.com)
+[Cédric Ollivier](mailto:cedric.ollivier@orange.com)
 
 2018/03/23
 
@@ -15,7 +14,7 @@
 - handle all interactions with OPNFV CI/CD components (entry points,
 results publication, status codes, etc.)
 - ease the development of third-party testcases by offering multiple drivers:
-python, bash, unittest, robotframework and vnf.
+Python, Bash, unittest, Robot Framework and VNF.
 
 **It has worked very well for E-release, but updates were required for
 the next ones**
@@ -26,7 +25,7 @@ the next ones**
 - Functest has to verify Kubernetes deployment but
 [its former framework](http://testresults.opnfv.org/functest/framework/) was
 linked to OpenStack (e.g. credentials sourcing, rally verifiers, etc.)
-- hosting both OpenStack and Kubernetes in the same python package would
+- hosting both OpenStack and Kubernetes in the same Python package would
 increase dependencies and then complexify
 [container slicing](http://testresults.opnfv.org/functest/dockerslicing/)
 
@@ -35,8 +34,8 @@ increase dependencies and then complexify
 
 ### External needs
 
-- Functest python and containers framework could be very useful out of OPNFV
-(ease developing testcases, manage requirements and offer lighweight docker
+- Functest Python and containers framework could be very useful out of OPNFV
+(ease developing testcases, manage requirements and offer lightweight Docker
 images)
 - a new Functest design could simplify test integration in a complete
 [OPNFV-based CI/CD toolchain](http://docs.opnfv.org/en/stable-euphrates/testing/ecosystem/overview.html)
@@ -57,14 +56,14 @@ integration**
 - it has been updated and improved to follow all Xtesting technical
 guidelines:
   - unlink to **OpenStack** and **OPNFV**
-  - support both python2 and python3 (required by **Functional Gating**)
+  - support both Python2 and Python3 (required by **Functional Gating**)
   - be fully covered by unit tests and well rated by pylint (10/10)
 
 
 ### Xtesting deliverables
 
-- Xtesting is released as [a python package](https://pypi.python.org/pypi/xtesting/)
-and then is unlinked to OPNFV Milestones (Functest python package now depends
+- Xtesting is released as [a Python package](https://pypi.python.org/pypi/xtesting/)
+and then is unlinked to OPNFV Milestones (Functest Python package now depends
 on it)
 - [opnfv/xtesting](https://hub.docker.com/r/opnfv/xtesting/) is proposed to
 build third-parties containers (both amd64 and arm64 architectures).
@@ -73,7 +72,7 @@ build third-parties containers (both amd64 and arm64 architectures).
 
 
 
-## Functest & Xtesting in ONAP OpenLab
+## Functest & Xtesting in Orange ONAP OpenLab
 
 
 ### first verify the infrastructure via Functest
@@ -122,11 +121,11 @@ build third-parties containers (both amd64 and arm64 architectures).
 
 ### then run ONAP HealthCheck
 
-- All tests are run by a specialized docker container(**<100 MB**) instead of
+- All tests are run by a specialized Docker container(**<100 MB**) instead of
 the classical ONAP testing virtual machine (**> 1GB**).
 - the container mainly inherits from opnfv/xtesting and is completed by:
-  - python dependencies
-  - all ONAP robotframework files retrieved from the original repositories
+  - Python dependencies
+  - all ONAP Robot Framework files retrieved from the original repositories
   - testcases.yaml describing the testcases
 
 [Orange-OpenSource/xtesting-onap-robot](https://github.com/Orange-OpenSource/xtesting-onap-robot/)
