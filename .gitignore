@@ -17,3 +17,7 @@ nosetests.xml
 .tox
 *.out
 *.pdf
+build
+dist
+AUTHORS
+ChangeLog
