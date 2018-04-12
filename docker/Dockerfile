@@ -1,7 +1,7 @@
 FROM alpine:3.7
 
 ARG BRANCH=master
-ARG OPENSTACK_TAG=stable/pike
+ARG OPENSTACK_TAG=stable/queens
 
 RUN apk --no-cache add --update python py-pip bash git && \
     git clone https://gerrit.opnfv.org/gerrit/functest-xtesting /src/functest-xtesting && \
