@@ -40,16 +40,21 @@ class Feature(testcase.TestCase):
                 "Cannot get module name %s. Using %s as fallback",
                 kwargs, self.case_name)
             self.logger = logging.getLogger(self.case_name)
+        Feature.configure_logger(self.logger, self.result_file)
+
+    @staticmethod
+    def configure_logger(logger, result_file):
+        """Configure the logger to print in result_file."""
         handler = logging.StreamHandler()
         handler.setLevel(logging.WARN)
-        self.logger.addHandler(handler)
-        handler = logging.FileHandler(self.result_file)
+        logger.addHandler(handler)
+        handler = logging.FileHandler(result_file)
         handler.setLevel(logging.DEBUG)
-        self.logger.addHandler(handler)
+        logger.addHandler(handler)
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
+        logger.addHandler(handler)
 
     def execute(self, **kwargs):
         """Execute the Python method.
