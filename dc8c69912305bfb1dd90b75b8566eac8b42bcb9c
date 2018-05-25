@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a494da4_01683cb9",
+        "filename": "xtesting/ci/logging.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2018-05-25T13:08:03Z",
+      "side": 1,
+      "message": "I will update the patchset to allow all namespaces to print in log instead. Xtesting is OPNFV agnostic\n\nThank you",
+      "revId": "dc8c69912305bfb1dd90b75b8566eac8b42bcb9c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
