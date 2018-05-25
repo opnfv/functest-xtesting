@@ -29,33 +29,6 @@ class Feature(testcase.TestCase):
     __logger = logging.getLogger(__name__)
     dir_results = "/var/lib/xtesting/results"
 
-    def __init__(self, **kwargs):
-        super(Feature, self).__init__(**kwargs)
-        self.result_file = "{}/{}.log".format(self.dir_results, self.case_name)
-        try:
-            module = kwargs['run']['module']
-            self.logger = logging.getLogger(module)
-        except KeyError:
-            self.__logger.warning(
-                "Cannot get module name %s. Using %s as fallback",
-                kwargs, self.case_name)
-            self.logger = logging.getLogger(self.case_name)
-        Feature.configure_logger(self.logger, self.result_file)
-
-    @staticmethod
-    def configure_logger(logger, result_file):
-        """Configure the logger to print in result_file."""
-        handler = logging.StreamHandler()
-        handler.setLevel(logging.WARN)
-        logger.addHandler(handler)
-        handler = logging.FileHandler(result_file)
-        handler.setLevel(logging.DEBUG)
-        logger.addHandler(handler)
-        formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-
     def execute(self, **kwargs):
         """Execute the Python method.
 
@@ -104,7 +77,6 @@ class Feature(testcase.TestCase):
                 self.result = 100
         except Exception:  # pylint: disable=broad-except
             self.__logger.exception("%s FAILED", self.project_name)
-        self.__logger.info("Test result is stored in '%s'", self.result_file)
         self.stop_time = time.time()
         return exit_code
 
@@ -113,6 +85,10 @@ class BashFeature(Feature):
     """Class designed to run any bash command."""
 
     __logger = logging.getLogger(__name__)
+
+    def __init__(self, **kwargs):
+        super(BashFeature, self).__init__(**kwargs)
+        self.result_file = "{}/{}.log".format(self.dir_results, self.case_name)
 
     def execute(self, **kwargs):
         """Execute the cmd passed as arg
@@ -131,6 +107,8 @@ class BashFeature(Feature):
                 proc = subprocess.Popen(cmd.split(), stdout=f_stdout,
                                         stderr=subprocess.STDOUT)
             ret = proc.wait()
+            self.__logger.info(
+                "Test result is stored in '%s'", self.result_file)
             if ret != 0:
                 self.__logger.error("Execute command: %s failed", cmd)
         except KeyError:
