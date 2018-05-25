@@ -38,19 +38,6 @@ class FeatureTestingBase(unittest.TestCase):
         self.assertEqual(self.feature.start_time, 1)
         self.assertEqual(self.feature.stop_time, 2)
 
-    def test_logger_module_ko(self):
-        with mock.patch('six.moves.builtins.open'):
-            self.feature = feature.Feature(
-                project_name=self._project_name, case_name=self._case_name)
-            self.assertEqual(self.feature.logger.name, self._case_name)
-
-    def test_logger_module(self):
-        with mock.patch('six.moves.builtins.open'):
-            self.feature = feature.Feature(
-                project_name=self._project_name, case_name=self._case_name,
-                run={'module': 'bar'})
-            self.assertEqual(self.feature.logger.name, 'bar')
-
 
 class FeatureTesting(FeatureTestingBase):
 
