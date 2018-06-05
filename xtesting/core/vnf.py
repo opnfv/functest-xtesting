@@ -75,8 +75,8 @@ class VnfOnBoarding(testcase.TestCase):
                     self.deploy_vnf() and
                     self.test_vnf()):
                 self.stop_time = time.time()
-                # Calculation with different weight depending on the steps TODO
-                self.result = 100
+                if self.result == 0:
+                    self.result = 100
                 return testcase.TestCase.EX_OK
             self.result = 0
             self.stop_time = time.time()
