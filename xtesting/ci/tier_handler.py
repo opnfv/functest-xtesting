@@ -10,7 +10,6 @@
 """Tier and TestCase classes to wrap the testcases config file"""
 # pylint: disable=missing-docstring
 
-import re
 import textwrap
 
 import prettytable
@@ -36,12 +35,11 @@ def split_text(text, max_len):
 
 class Tier(object):
 
-    def __init__(self, name, order, ci_loop, description=""):
+    def __init__(self, name, order, description=""):
         self.tests_array = []
         self.skipped_tests_array = []
         self.name = name
         self.order = order
-        self.ci_loop = ci_loop
         self.description = description
 
     def add_test(self, testcase):
@@ -84,16 +82,13 @@ class Tier(object):
     def get_order(self):
         return self.order
 
-    def get_ci_loop(self):
-        return self.ci_loop
-
     def __str__(self):
         msg = prettytable.PrettyTable(
             header_style='upper', padding_width=5,
-            field_names=['tiers', 'order', 'CI Loop', 'description',
+            field_names=['tiers', 'order', 'description',
                          'testcases'])
         msg.add_row(
-            [self.name, self.order, self.ci_loop,
+            [self.name, self.order,
              textwrap.fill(self.description, width=40),
              textwrap.fill(' '.join([str(x.get_name(
                  )) for x in self.get_tests()]), width=40)])
@@ -102,26 +97,15 @@ class Tier(object):
 
 class TestCase(object):
 
-    def __init__(self, name, enabled, dependency, criteria, blocking,
+    def __init__(self, name, enabled, criteria, blocking,
                  description="", project=""):
         # pylint: disable=too-many-arguments
         self.name = name
         self.enabled = enabled
-        self.dependency = dependency
         self.criteria = criteria
         self.blocking = blocking
         self.description = description
         self.project = project
-
-    def is_compatible(self, ci_installer, ci_scenario):
-        try:
-            if not re.search(self.dependency.get_installer(), ci_installer):
-                return False
-            if not re.search(self.dependency.get_scenario(), ci_scenario):
-                return False
-            return True
-        except TypeError:
-            return False
 
     def get_name(self):
         return self.name
@@ -141,26 +125,7 @@ class TestCase(object):
     def __str__(self):
         msg = prettytable.PrettyTable(
             header_style='upper', padding_width=5,
-            field_names=['test case', 'description', 'criteria', 'dependency'])
+            field_names=['test case', 'description', 'criteria'])
         msg.add_row([self.name, textwrap.fill(self.description, width=40),
-                     self.criteria, self.dependency])
+                     self.criteria])
         return msg.get_string()
-
-
-class Dependency(object):
-
-    def __init__(self, installer='.*', scenario='.*'):
-        self.installer = installer
-        self.scenario = scenario
-
-    def get_installer(self):
-        return self.installer
-
-    def get_scenario(self):
-        return self.scenario
-
-    def __str__(self):
-        delimitator = "\n" if self.get_installer(
-            ) and self.get_scenario() else ""
-        return "{}{}{}".format(self.get_installer(), delimitator,
-                               self.get_scenario())

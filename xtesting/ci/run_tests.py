@@ -202,15 +202,12 @@ class Runner(object):
         tiers_to_run = []
         msg = prettytable.PrettyTable(
             header_style='upper', padding_width=5,
-            field_names=['tiers', 'order', 'CI Loop', 'description',
+            field_names=['tiers', 'order', 'description',
                          'testcases'])
         for tier in self.tiers.get_tiers():
-            ci_loop = env.get('CI_LOOP')
-            if (tier.get_tests() and
-                    re.search(ci_loop, tier.get_ci_loop()) is not None):
+            if tier.get_tests():
                 tiers_to_run.append(tier)
                 msg.add_row([tier.get_name(), tier.get_order(),
-                             tier.get_ci_loop(),
                              textwrap.fill(tier.description, width=40),
                              textwrap.fill(' '.join([str(x.get_name(
                                  )) for x in tier.get_tests()]), width=40)])

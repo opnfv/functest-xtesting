@@ -153,6 +153,7 @@ class RunTestsTesting(unittest.TestCase):
                         return_value=test_run_dict):
             self.runner.clean_flag = True
             self.runner.run_test(mock_test)
+
         args[0].assert_called_with('test_name')
         args[1].assert_called_with('test_module')
         self.assertEqual(self.runner.overall_result,
@@ -178,15 +179,7 @@ class RunTestsTesting(unittest.TestCase):
     def test_run_all_default(self, *mock_methods):
         os.environ['CI_LOOP'] = 'test_ci_loop'
         self.runner.run_all()
-        mock_methods[1].assert_not_called()
         self.assertTrue(mock_methods[2].called)
-
-    @mock.patch('xtesting.ci.run_tests.LOGGER.info')
-    @mock.patch('xtesting.ci.run_tests.Runner.summary')
-    def test_run_all_missing_tier(self, *mock_methods):
-        os.environ['CI_LOOP'] = 'loop_re_not_available'
-        self.runner.run_all()
-        self.assertTrue(mock_methods[1].called)
 
     @mock.patch('xtesting.ci.run_tests.Runner.source_envfile',
                 side_effect=Exception)

@@ -3,7 +3,6 @@ tiers:
     -
         name: samples
         order: 1
-        ci_loop: 'daily'
         description: ''
         testcases:
             -
