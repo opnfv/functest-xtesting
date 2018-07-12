@@ -22,9 +22,9 @@ import os
 import re
 import sys
 import textwrap
-import pkg_resources
 
 import enum
+import pkg_resources
 import prettytable
 import six
 import yaml
@@ -92,8 +92,6 @@ class Runner(object):
         self.clean_flag = True
         self.report_flag = False
         self.tiers = tier_builder.TierBuilder(
-            env.get('INSTALLER_TYPE'),
-            env.get('DEPLOY_SCENARIO'),
             pkg_resources.resource_filename('xtesting', 'ci/testcases.yaml'))
 
     @staticmethod

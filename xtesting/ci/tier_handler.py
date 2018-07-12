@@ -115,15 +115,9 @@ class TestCase(object):
 
     def is_compatible(self, ci_installer, ci_scenario):
         try:
-            if not ci_installer:
-                if self.dependency.get_installer():
-                    return False
-            elif not re.search(self.dependency.get_installer(), ci_installer):
+            if not re.search(self.dependency.get_installer(), ci_installer):
                 return False
-            if not ci_scenario:
-                if self.dependency.get_scenario():
-                    return False
-            elif not re.search(self.dependency.get_scenario(), ci_scenario):
+            if not re.search(self.dependency.get_scenario(), ci_scenario):
                 return False
             return True
         except TypeError:
@@ -155,7 +149,7 @@ class TestCase(object):
 
 class Dependency(object):
 
-    def __init__(self, installer, scenario):
+    def __init__(self, installer='.*', scenario='.*'):
         self.installer = installer
         self.scenario = scenario
 

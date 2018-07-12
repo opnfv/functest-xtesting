@@ -13,9 +13,6 @@ tiers:
                 blocking: true
                 clean_flag: false
                 description: ''
-                dependencies:
-                    installer: ''
-                    scenario: ''
                 run:
                     module: 'xtesting.samples.first'
                     class: 'Test'
@@ -27,9 +24,6 @@ tiers:
                 blocking: true
                 clean_flag: false
                 description: ''
-                dependencies:
-                    installer: ''
-                    scenario: ''
                 run:
                     module: 'xtesting.samples.second'
                     class: 'Test'
@@ -41,9 +35,6 @@ tiers:
                 blocking: true
                 clean_flag: false
                 description: ''
-                dependencies:
-                    installer: ''
-                    scenario: ''
                 run:
                     module: 'xtesting.core.feature'
                     class: 'BashFeature'
@@ -57,9 +48,6 @@ tiers:
                 blocking: true
                 clean_flag: false
                 description: ''
-                dependencies:
-                    installer: ''
-                    scenario: ''
                 run:
                     module: 'xtesting.core.unit'
                     class: 'Suite'
@@ -72,10 +60,8 @@ tiers:
                 enabled: false
                 criteria: 100
                 blocking: false
+                clean_flag: false
                 description: ''
-                dependencies:
-                    installer: ''
-                    scenario: ''
                 run:
                     module: 'xtesting.core.robotframework'
                     class: 'RobotFramework'
