@@ -19,21 +19,19 @@ from xtesting.ci import tier_builder
 class TierBuilderTesting(unittest.TestCase):
 
     def setUp(self):
-        self.dependency = {
-            'installer': 'test_installer', 'scenario': 'test_scenario'}
         self.testcase = {
-            'dependencies': self.dependency, 'enabled': True,
+            'enabled': True,
             'case_name': 'test_name', 'criteria': 'test_criteria',
             'blocking': 'test_blocking', 'description': 'test_desc',
             'project_name': 'project_name'}
         self.testcase_disabled = {
-            'dependencies': self.dependency, 'enabled': False,
+            'enabled': False,
             'case_name': 'test_name_disabled', 'criteria': 'test_criteria',
             'blocking': 'test_blocking', 'description': 'test_desc',
             'project_name': 'project_name'}
         self.dic_tier = {
             'name': 'test_tier', 'order': 'test_order',
-            'ci_loop': 'test_ci_loop', 'description': 'test_desc',
+            'description': 'test_desc',
             'testcases': [self.testcase, self.testcase_disabled]}
         self.mock_yaml = mock.Mock()
         attrs = {'get.return_value': [self.dic_tier]}
@@ -96,7 +94,6 @@ class TierBuilderTesting(unittest.TestCase):
         message = str(self.tierbuilder)
         self.assertTrue('test_tier' in message)
         self.assertTrue('test_order' in message)
-        self.assertTrue('test_ci_loop' in message)
         self.assertTrue('test_desc' in message)
         self.assertTrue('test_name' in message)
 

@@ -178,7 +178,6 @@ class RunTestsTesting(unittest.TestCase):
     def test_run_all_default(self, *mock_methods):
         os.environ['CI_LOOP'] = 'test_ci_loop'
         self.runner.run_all()
-        mock_methods[1].assert_not_called()
         self.assertTrue(mock_methods[2].called)
 
     @mock.patch('xtesting.ci.run_tests.LOGGER.info')

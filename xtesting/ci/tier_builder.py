@@ -9,6 +9,7 @@
 
 """TierBuilder class to parse testcases config file"""
 
+import re
 import yaml
 
 from xtesting.ci import tier_handler
@@ -43,34 +44,32 @@ class TierBuilder(object):
         for dic_tier in self.dic_tier_array:
             tier = tier_handler.Tier(
                 name=dic_tier['name'], order=dic_tier['order'],
-                ci_loop=dic_tier['ci_loop'],
                 description=dic_tier['description'])
 
             for dic_testcase in dic_tier['testcases']:
-                if not dic_testcase.get('dependencies'):
-                    installer = '.*'
-                    scenario = '.*'
-                else:
-                    installer = dic_testcase['dependencies'].get(
-                        'installer', '.*')
-                    scenario = dic_testcase['dependencies'].get(
-                        'scenario', '.*')
-                dep = tier_handler.Dependency(installer, scenario)
-
                 testcase = tier_handler.TestCase(
                     name=dic_testcase['case_name'],
                     enabled=dic_testcase.get('enabled', True),
-                    dependency=dep, criteria=dic_testcase['criteria'],
+                    criteria=dic_testcase['criteria'],
                     blocking=dic_testcase['blocking'],
                     description=dic_testcase['description'],
                     project=dic_testcase['project_name'])
-                if (testcase.is_compatible(self.ci_installer,
-                                           self.ci_scenario) and
-                        testcase.is_enabled()):
-                    tier.add_test(testcase)
+                if not dic_testcase.get('dependencies'):
+                    if testcase.is_enabled():
+                        tier.add_test(testcase)
+                    else:
+                        tier.skip_test(testcase)
                 else:
-                    tier.skip_test(testcase)
-
+                    for dependency in dic_testcase['dependencies']:
+                        kenv = dependency.keys()[0]
+                        if not re.search(dependency[kenv], env.get(kenv)):
+                            tier.skip_test(testcase)
+                            break
+                    else:
+                        if testcase.is_enabled():
+                            tier.add_test(testcase)
+                        else:
+                            tier.skip_test(testcase)
             self.tier_objects.append(tier)
 
     def get_tiers(self):
