@@ -8,6 +8,7 @@
 # pylint: disable=missing-docstring
 
 import logging
+import os
 import unittest
 
 import mock
@@ -41,8 +42,9 @@ class TierBuilderTesting(unittest.TestCase):
         with mock.patch('xtesting.ci.tier_builder.yaml.safe_load',
                         return_value=self.mock_yaml), \
                 mock.patch('six.moves.builtins.open', mock.mock_open()):
-            self.tierbuilder = tier_builder.TierBuilder(
-                'test_installer', 'test_scenario', 'testcases_file')
+            os.environ["INSTALLER_TYPE"] = 'test_installer'
+            os.environ["DEPLOY_SCENARIO"] = 'test_scenario'
+            self.tierbuilder = tier_builder.TierBuilder('testcases_file')
         self.tier_obj = self.tierbuilder.tier_objects[0]
 
     def test_get_tiers(self):

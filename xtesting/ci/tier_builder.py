@@ -11,15 +11,16 @@
 
 import yaml
 
-import xtesting.ci.tier_handler as th
+from xtesting.ci import tier_handler
+from xtesting.utils import env
 
 
 class TierBuilder(object):
     # pylint: disable=missing-docstring
 
-    def __init__(self, ci_installer, ci_scenario, testcases_file):
-        self.ci_installer = ci_installer
-        self.ci_scenario = ci_scenario
+    def __init__(self, testcases_file):
+        self.ci_installer = env.get('INSTALLER_TYPE')
+        self.ci_scenario = env.get('DEPLOY_SCENARIO')
         self.testcases_file = testcases_file
         self.dic_tier_array = None
         self.tier_objects = []
@@ -40,17 +41,23 @@ class TierBuilder(object):
 
         del self.tier_objects[:]
         for dic_tier in self.dic_tier_array:
-            tier = th.Tier(
+            tier = tier_handler.Tier(
                 name=dic_tier['name'], order=dic_tier['order'],
                 ci_loop=dic_tier['ci_loop'],
                 description=dic_tier['description'])
 
             for dic_testcase in dic_tier['testcases']:
-                installer = dic_testcase['dependencies']['installer']
-                scenario = dic_testcase['dependencies']['scenario']
-                dep = th.Dependency(installer, scenario)
+                if not dic_testcase.get('dependencies'):
+                    installer = '.*'
+                    scenario = '.*'
+                else:
+                    installer = dic_testcase['dependencies'].get(
+                        'installer', '.*')
+                    scenario = dic_testcase['dependencies'].get(
+                        'scenario', '.*')
+                dep = tier_handler.Dependency(installer, scenario)
 
-                testcase = th.TestCase(
+                testcase = tier_handler.TestCase(
                     name=dic_testcase['case_name'],
                     enabled=dic_testcase.get('enabled', True),
                     dependency=dep, criteria=dic_testcase['criteria'],

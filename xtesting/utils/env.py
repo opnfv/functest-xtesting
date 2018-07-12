@@ -16,7 +16,7 @@ import prettytable
 INPUTS = {
     'CI_LOOP': 'daily',
     'DEPLOY_SCENARIO': 'os-nosdn-nofeature-noha',
-    'INSTALLER_TYPE': None,
+    'INSTALLER_TYPE': 'unknown',
     'BUILD_TAG': None,
     'NODE_NAME': None,
     'TEST_DB_URL': 'http://testresults.opnfv.org/test/api/v1/results',
