@@ -15,11 +15,10 @@ import logging
 import os
 import unittest
 
-from xtesting.core import testcase
-
 import mock
 import requests
 
+from xtesting.core import testcase
 
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
@@ -108,6 +107,14 @@ class TestCaseTesting(unittest.TestCase):
             testcase.TestCase.EX_PUSH_TO_DB_ERROR)
         mock_function.assert_not_called()
 
+    @mock.patch('requests.post')
+    def test_pushdb_skipped_test(self, mock_function=None):
+        self.test.is_skipped = True
+        self.assertEqual(
+            self.test.push_to_db(),
+            testcase.TestCase.EX_PUSH_TO_DB_ERROR)
+        mock_function.assert_not_called()
+
     def _get_data(self):
         return {
             "build_tag": os.environ['BUILD_TAG'],
@@ -158,6 +165,10 @@ class TestCaseTesting(unittest.TestCase):
             data=json.dumps(self._get_data(), sort_keys=True),
             headers=self._headers)
 
+    def test_check_requirements(self):
+        self.test.check_requirements()
+        self.assertEqual(self.test.is_skipped, False)
+
     def test_check_criteria_missing(self):
         self.test.criteria = None
         self.assertEqual(self.test.is_successful(),
@@ -183,6 +194,11 @@ class TestCaseTesting(unittest.TestCase):
         self.test.result = 'PASS'
         self.assertEqual(self.test.is_successful(),
                          testcase.TestCase.EX_OK)
+
+    def test_check_result_skip(self):
+        self.test.is_skipped = True
+        self.assertEqual(self.test.is_successful(),
+                         testcase.TestCase.EX_TESTCASE_SKIPPED)
 
     def test_check_result_lt(self):
         self.test.result = 50
@@ -233,6 +249,10 @@ class TestCaseTesting(unittest.TestCase):
         self.test.stop_time = 180
         self.assertEqual(self.test.get_duration(), "02:59")
 
+    def test_get_duration_skipped_test(self):
+        self.test.is_skipped = True
+        self.assertEqual(self.test.get_duration(), "00:00")
+
     def test_str_project_name_ko(self):
         self.test.project_name = None
         self.assertIn("<xtesting.core.testcase.TestCase object at",
@@ -267,6 +287,14 @@ class TestCaseTesting(unittest.TestCase):
         self.assertIn(self._case_name, message)
         self.assertIn(duration, message)
         self.assertIn('FAIL', message)
+
+    def test_str_skip(self):
+        self.test.is_skipped = True
+        message = str(self.test)
+        self.assertIn(self._project_name, message)
+        self.assertIn(self._case_name, message)
+        self.assertIn("00:00", message)
+        self.assertIn('SKIP', message)
 
     def test_clean(self):
         self.assertEqual(self.test.clean(), None)

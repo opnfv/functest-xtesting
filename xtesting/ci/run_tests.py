@@ -146,7 +146,6 @@ class Runner(object):
         if not test.is_enabled():
             raise TestNotEnabled(
                 "The test case {} is not enabled".format(test.get_name()))
-        LOGGER.info("Running test case '%s'...", test.get_name())
         result = testcase.TestCase.EX_RUN_ERROR
         run_dict = self.get_run_dict(test.get_name())
         if run_dict:
@@ -156,6 +155,11 @@ class Runner(object):
                 test_dict = Runner.get_dict_by_test(test.get_name())
                 test_case = cls(**test_dict)
                 self.executed_test_cases[test.get_name()] = test_case
+                test_case.check_requirements()
+                if test_case.is_skipped:
+                    LOGGER.info("Skipping test case '%s'...", test.get_name())
+                    return testcase.TestCase.EX_TESTCASE_SKIPPED
+                LOGGER.info("Running test case '%s'...", test.get_name())
                 try:
                     kwargs = run_dict['args']
                     test_case.run(**kwargs)
@@ -177,18 +181,16 @@ class Runner(object):
 
     def run_tier(self, tier):
         """Run one tier"""
-        tier_name = tier.get_name()
         tests = tier.get_tests()
         if not tests:
             LOGGER.info("There are no supported test cases in this tier "
                         "for the given scenario")
             self.overall_result = Result.EX_ERROR
         else:
-            LOGGER.info("Running tier '%s'", tier_name)
             for test in tests:
                 self.run_test(test)
                 test_case = self.executed_test_cases[test.get_name()]
-                if test_case.is_successful() != testcase.TestCase.EX_OK:
+                if test_case.is_successful() == test_case.EX_TESTCASE_FAILED:
                     LOGGER.error("The test case '%s' failed.", test.get_name())
                     self.overall_result = Result.EX_ERROR
                     if test.is_blocking():
@@ -272,8 +274,11 @@ class Runner(object):
                     msg.add_row([test.get_name(), test.get_project(),
                                  each_tier.get_name(), "00:00", "SKIP"])
                 else:
-                    result = 'PASS' if(test_case.is_successful(
-                        ) == test_case.EX_OK) else 'FAIL'
+                    if test_case.is_skipped:
+                        result = 'SKIP'
+                    else:
+                        result = 'PASS' if(test_case.is_successful(
+                            ) == test_case.EX_OK) else 'FAIL'
                     msg.add_row(
                         [test_case.case_name, test_case.project_name,
                          self.tiers.get_tier_name(test_case.case_name),
