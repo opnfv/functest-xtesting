@@ -151,6 +151,7 @@ class Runner(object):
         run_dict = self.get_run_dict(test.get_name())
         if run_dict:
             try:
+                LOGGER.info("Loading test case '%s'...", test.get_name())
                 module = importlib.import_module(run_dict['module'])
                 cls = getattr(module, run_dict['class'])
                 test_dict = Runner.get_dict_by_test(test.get_name())
@@ -240,7 +241,7 @@ class Runner(object):
                 elif self.tiers.get_test(kwargs['test']):
                     result = self.run_test(
                         self.tiers.get_test(kwargs['test']))
-                    if result != testcase.TestCase.EX_OK:
+                    if result == testcase.TestCase.EX_TESTCASE_FAILED:
                         LOGGER.error("The test case '%s' failed.",
                                      kwargs['test'])
                         self.overall_result = Result.EX_ERROR
