@@ -16,17 +16,15 @@ import os
 import re
 import requests
 
-from xtesting.utils import decorators
-from xtesting.utils import env
-
-
 import prettytable
 
+from xtesting.utils import decorators
+from xtesting.utils import env
 
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
 
-class TestCase(object):
+class TestCase(object):  # pylint: disable=too-many-instance-attributes
     """Base model for single test case."""
 
     EX_OK = os.EX_OK
@@ -41,6 +39,9 @@ class TestCase(object):
     EX_TESTCASE_FAILED = os.EX_SOFTWARE - 2
     """results are false"""
 
+    EX_TESTCASE_SKIPPED = os.EX_SOFTWARE - 3
+    """requirements are unmet"""
+
     _job_name_rule = "(dai|week)ly-(.+?)-[0-9]*"
     _headers = {'Content-Type': 'application/json'}
     __logger = logging.getLogger(__name__)
@@ -53,13 +54,17 @@ class TestCase(object):
         self.result = 0
         self.start_time = 0
         self.stop_time = 0
+        self.is_skipped = False
 
     def __str__(self):
         try:
             assert self.project_name
             assert self.case_name
-            result = 'PASS' if(self.is_successful(
-                ) == TestCase.EX_OK) else 'FAIL'
+            if self.is_skipped:
+                result = 'SKIP'
+            else:
+                result = 'PASS' if(self.is_successful(
+                    ) == TestCase.EX_OK) else 'FAIL'
             msg = prettytable.PrettyTable(
                 header_style='upper', padding_width=5,
                 field_names=['test case', 'project', 'duration',
@@ -79,6 +84,8 @@ class TestCase(object):
             "XX:XX" otherwise.
         """
         try:
+            if self.is_skipped:
+                return "00:00"
             assert self.start_time
             assert self.stop_time
             if self.stop_time < self.start_time:
@@ -99,9 +106,12 @@ class TestCase(object):
 
         Returns:
             TestCase.EX_OK if result is 'PASS'.
+            TestCase.EX_TESTCASE_SKIPPED if test case is skipped.
             TestCase.EX_TESTCASE_FAILED otherwise.
         """
         try:
+            if self.is_skipped:
+                return TestCase.EX_TESTCASE_SKIPPED
             assert self.criteria
             assert self.result is not None
             if (not isinstance(self.result, str) and
@@ -120,6 +130,13 @@ class TestCase(object):
         except AssertionError:
             self.__logger.error("Please run test before checking the results")
         return TestCase.EX_TESTCASE_FAILED
+
+    def check_requirements(self):  # pylint: disable=no-self-use
+        """Check the requirements of the test case.
+
+        It can be overriden on purpose.
+        """
+        self.is_skipped = False
 
     def run(self, **kwargs):
         """Run the test case.
@@ -177,6 +194,8 @@ class TestCase(object):
             TestCase.EX_PUSH_TO_DB_ERROR otherwise.
         """
         try:
+            if self.is_skipped:
+                return TestCase.EX_PUSH_TO_DB_ERROR
             assert self.project_name
             assert self.case_name
             assert self.start_time
