@@ -171,6 +171,12 @@ class Runner(object):
                 LOGGER.exception("Cannot import module %s", run_dict['module'])
             except AttributeError:
                 LOGGER.exception("Cannot get class %s", run_dict['class'])
+            except Exception:  # pylint: disable=broad-except
+                LOGGER.exception(
+                    "\n\nPlease fix the testcase %s.\n"
+                    "All exceptions should be caught by the testcase instead!"
+                    "\n\n",
+                    test.get_name())
         else:
             raise Exception("Cannot import the class for the test case.")
         return result
