@@ -17,6 +17,7 @@ import os
 
 import robot.api
 from robot.errors import RobotError
+from robot.reporting import resultwriter
 import robot.run
 from robot.utils.robottime import timestamp_to_secs
 from six import StringIO
@@ -77,6 +78,15 @@ class RobotFramework(testcase.TestCase):
         self.details['description'] = result.suite.name
         self.details['tests'] = visitor.get_data()
 
+    def generate_report(self):
+        """Generate html and xunit outputs"""
+        result = robot.api.ExecutionResult(self.xml_file)
+        writer = resultwriter.ResultWriter(result)
+        return writer.write_results(
+            report='{}/report.html'.format(self.res_dir),
+            log='{}/log.html'.format(self.res_dir),
+            xunit='{}/xunit.xml'.format(self.res_dir))
+
     def run(self, **kwargs):
         """Run the RobotFramework suites
 
@@ -113,11 +123,12 @@ class RobotFramework(testcase.TestCase):
         robot.run(*suites, variable=variable, variablefile=variablefile,
                   include=include, output=self.xml_file, log='NONE',
                   report='NONE', stdout=stream)
-        self.__logger.info("\n" + stream.getvalue())
-        self.__logger.info("Results were successfully generated")
+        self.__logger.info("\n%s", stream.getvalue())
         try:
             self.parse_results()
             self.__logger.info("Results were successfully parsed")
+            assert self.generate_report() == 0
+            self.__logger.info("Results were successfully generated")
         except RobotError as ex:
             self.__logger.error("Run suites before publishing: %s", ex.message)
             return self.EX_RUN_ERROR
