@@ -110,6 +110,32 @@ class ParseResultTesting(unittest.TestCase):
         self._test_result(self._config, 100)
 
 
+class GenerateReportTesting(unittest.TestCase):
+
+    """The class testing RobotFramework.generate_report()."""
+    # pylint: disable=missing-docstring
+
+    def setUp(self):
+        self.test = robotframework.RobotFramework(
+            case_name='robot', project_name='xtesting')
+
+    @mock.patch('robot.reporting.resultwriter.ResultWriter.write_results',
+                side_effect=Exception)
+    def test_exc(self, args):  # pylint: disable=unused-argument
+        with self.assertRaises(Exception):
+            self.test.generate_report()
+
+    @mock.patch('robot.reporting.resultwriter.ResultWriter.write_results',
+                return_value=1)
+    def test_err(self, args):  # pylint: disable=unused-argument
+        self.assertEqual(self.test.generate_report(), 1)
+
+    @mock.patch('robot.reporting.resultwriter.ResultWriter.write_results',
+                return_value=0)
+    def test_ok(self, args):  # pylint: disable=unused-argument
+        self.assertEqual(self.test.generate_report(), 0)
+
+
 class RunTesting(unittest.TestCase):
 
     """The class testing RobotFramework.run()."""
@@ -129,7 +155,8 @@ class RunTesting(unittest.TestCase):
 
     @mock.patch('robot.run')
     def _test_makedirs_exc(self, *args):
-        with mock.patch.object(self.test, 'parse_results') as mock_method:
+        with mock.patch.object(self.test, 'parse_results') as mock_method, \
+                mock.patch.object(self.test, 'generate_report') as mmethod:
             self.assertEqual(
                 self.test.run(
                     suites=self.suites, variable=self.variable,
@@ -137,6 +164,7 @@ class RunTesting(unittest.TestCase):
                 self.test.EX_RUN_ERROR)
             args[0].assert_not_called()
             mock_method.asser_not_called()
+            mmethod.asser_not_called()
 
     @mock.patch('os.makedirs', side_effect=Exception)
     def test_makedirs_exc(self, *args):
@@ -150,7 +178,9 @@ class RunTesting(unittest.TestCase):
 
     @mock.patch('robot.run')
     def _test_makedirs(self, *args):
-        with mock.patch.object(self.test, 'parse_results') as mock_method:
+        with mock.patch.object(self.test, 'parse_results') as mock_method, \
+                mock.patch.object(self.test, 'generate_report',
+                                  return_value=0) as mmethod:
             self.assertEqual(
                 self.test.run(suites=self.suites, variable=self.variable),
                 self.test.EX_OK)
@@ -159,6 +189,7 @@ class RunTesting(unittest.TestCase):
                 report='NONE', stdout=mock.ANY, variable=self.variable,
                 variablefile=self.variablefile, include=self.include)
             mock_method.assert_called_once_with()
+            mmethod.assert_called_once_with()
 
     @mock.patch('os.makedirs', side_effect=OSError(errno.EEXIST, ''))
     def test_makedirs_oserror17(self, *args):
@@ -186,15 +217,53 @@ class RunTesting(unittest.TestCase):
 
     def test_parse_results_exc(self):
         with mock.patch.object(self.test, 'parse_results',
-                               side_effect=Exception) as mock_method:
+                               side_effect=Exception) as mock_method, \
+                mock.patch.object(self.test, 'generate_report') as mmethod:
             self._test_parse_results(self.test.EX_RUN_ERROR)
             mock_method.assert_called_once_with()
+            mmethod.asser_not_called()
 
     def test_parse_results_robot_error(self):
         with mock.patch.object(self.test, 'parse_results',
-                               side_effect=RobotError('foo')) as mock_method:
+                               side_effect=RobotError('foo')) as mock_method, \
+                mock.patch.object(self.test, 'generate_report') as mmethod:
             self._test_parse_results(self.test.EX_RUN_ERROR)
             mock_method.assert_called_once_with()
+            mmethod.asser_not_called()
+
+    @mock.patch('os.makedirs')
+    @mock.patch('robot.run')
+    def _test_generate_report(self, status, *args):
+        with mock.patch.object(self.test, 'parse_results') as mock_method:
+            self.assertEqual(
+                self.test.run(
+                    suites=self.suites, variable=self.variable,
+                    variablefile=self.variablefile, include=self.include),
+                status)
+        args[0].assert_called_once_with(
+            *self.suites, log='NONE', output=self.test.xml_file,
+            report='NONE', stdout=mock.ANY, variable=self.variable,
+            variablefile=self.variablefile, include=self.include)
+        args[1].assert_called_once_with(self.test.res_dir)
+        mock_method.assert_called_once_with()
+
+    def test_generate_report_exc(self):
+        with mock.patch.object(self.test, 'generate_report',
+                               side_effect=Exception) as mmethod:
+            self._test_generate_report(self.test.EX_RUN_ERROR)
+            mmethod.assert_called_once_with()
+
+    def test_generate_report_err(self):
+        with mock.patch.object(self.test, 'generate_report',
+                               return_value=1) as mmethod:
+            self._test_generate_report(self.test.EX_RUN_ERROR)
+            mmethod.assert_called_once_with()
+
+    def test_generate_report(self):
+        with mock.patch.object(self.test, 'generate_report',
+                               return_value=0) as mmethod:
+            self._test_generate_report(self.test.EX_OK)
+            mmethod.assert_called_once_with()
 
 
 if __name__ == "__main__":
