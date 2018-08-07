@@ -65,13 +65,13 @@ class Tier(object):
 
     def get_test(self, test_name):
         if self.is_test(test_name):
-            for test in self.tests_array:
+            for test in self.tests_array + self.skipped_tests_array:
                 if test.get_name() == test_name:
                     return test
         return None
 
     def is_test(self, test_name):
-        for test in self.tests_array:
+        for test in self.tests_array + self.skipped_tests_array:
             if test.get_name() == test_name:
                 return True
         return False
