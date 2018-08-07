@@ -49,11 +49,6 @@ class BlockingTestFailed(Exception):
     pass
 
 
-class TestNotEnabled(Exception):
-    """Exception when the test is not enabled"""
-    pass
-
-
 class RunTestsParser(object):
     """Parser to run tests"""
     # pylint: disable=too-few-public-methods
@@ -144,8 +139,13 @@ class Runner(object):
     def run_test(self, test):
         """Run one test case"""
         if not test.is_enabled():
-            raise TestNotEnabled(
-                "The test case {} is not enabled".format(test.get_name()))
+            msg = prettytable.PrettyTable(
+                header_style='upper', padding_width=5,
+                field_names=['test case', 'project', 'duration',
+                             'result'])
+            msg.add_row([test.get_name(), test.get_project(), "00:00", "SKIP"])
+            LOGGER.info("Test result:\n\n%s\n", msg)
+            return testcase.TestCase.EX_TESTCASE_SKIPPED
         result = testcase.TestCase.EX_RUN_ERROR
         run_dict = self.get_run_dict(test.get_name())
         if run_dict:
