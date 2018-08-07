@@ -68,8 +68,9 @@ class TierBuilderTesting(unittest.TestCase):
                          self.tier_obj.get_test('test_name'))
 
     def test_get_test_disabled(self):
-        self.assertEqual(self.tierbuilder.get_test('test_name_disabled'), None)
-        self.assertEqual(self.tier_obj.get_test('test_name_disabled'), None)
+        self.assertEqual(
+            self.tierbuilder.get_test('test_name_disabled'),
+            self.tier_obj.get_test('test_name_disabled'))
         self.assertEqual(
             self.tier_obj.get_skipped_test()[0].name, 'test_name_disabled')
 
