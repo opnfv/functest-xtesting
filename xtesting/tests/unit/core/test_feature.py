@@ -18,6 +18,19 @@ from xtesting.core import feature
 from xtesting.core import testcase
 
 
+class FakeTestCase(feature.Feature):
+
+    def execute(self, **kwargs):
+        pass
+
+
+class AbstractFeatureTesting(unittest.TestCase):
+
+    def test_run_unimplemented(self):
+        with self.assertRaises(TypeError):
+            feature.Feature(case_name="feature", project_name="xtesting")
+
+
 class FeatureTestingBase(unittest.TestCase):
 
     _case_name = "foo"
@@ -46,7 +59,7 @@ class FeatureTesting(FeatureTestingBase):
         # what will break these unit tests.
         logging.disable(logging.CRITICAL)
         with mock.patch('six.moves.builtins.open'):
-            self.feature = feature.Feature(
+            self.feature = FakeTestCase(
                 project_name=self._project_name, case_name=self._case_name)
 
     def test_run_exc(self):

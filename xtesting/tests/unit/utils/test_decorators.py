@@ -28,6 +28,13 @@ FILE = '{}/null'.format(DIR)
 URL = 'file://{}'.format(FILE)
 
 
+class FakeTestCase(testcase.TestCase):
+    # pylint: disable=missing-docstring
+
+    def run(self, **kwargs):
+        pass
+
+
 class DecoratorsTesting(unittest.TestCase):
     # pylint: disable=missing-docstring
 
@@ -66,7 +73,7 @@ class DecoratorsTesting(unittest.TestCase):
         return json.dumps(data, sort_keys=True)
 
     def _get_testcase(self):
-        test = testcase.TestCase(
+        test = FakeTestCase(
             project_name=self._project_name, case_name=self._case_name)
         test.start_time = self._start_time
         test.stop_time = self._stop_time
