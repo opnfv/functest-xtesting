@@ -7,6 +7,8 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 
+# pylint: disable=missing-docstring
+
 """Define the class required to fully cover testcase."""
 
 from datetime import datetime
@@ -23,10 +25,22 @@ from xtesting.core import testcase
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
 
-class TestCaseTesting(unittest.TestCase):
-    """The class testing TestCase."""
+class FakeTestCase(testcase.TestCase):
+    # pylint: disable=too-many-instance-attributes
 
-    # pylint: disable=missing-docstring,too-many-public-methods
+    def run(self, **kwargs):
+        return testcase.TestCase.EX_OK
+
+
+class AbstractTestCaseTesting(unittest.TestCase):
+
+    def test_run_unimplemented(self):
+        with self.assertRaises(TypeError):
+            testcase.TestCase(case_name="base", project_name="xtesting")
+
+
+class TestCaseTesting(unittest.TestCase):
+    # pylint: disable=too-many-instance-attributes,too-many-public-methods
 
     _case_name = "base"
     _project_name = "xtesting"
@@ -35,8 +49,8 @@ class TestCaseTesting(unittest.TestCase):
     _headers = {'Content-Type': 'application/json'}
 
     def setUp(self):
-        self.test = testcase.TestCase(case_name=self._case_name,
-                                      project_name=self._project_name)
+        self.test = FakeTestCase(
+            case_name=self._case_name, project_name=self._project_name)
         self.test.start_time = 1
         self.test.stop_time = 2
         self.test.result = 100
@@ -47,9 +61,8 @@ class TestCaseTesting(unittest.TestCase):
         os.environ['NODE_NAME'] = "node_name"
         os.environ['BUILD_TAG'] = "foo-daily-master-bar"
 
-    def test_run_unimplemented(self):
-        self.assertEqual(self.test.run(),
-                         testcase.TestCase.EX_RUN_ERROR)
+    def test_run_fake(self):
+        self.assertEqual(self.test.run(), testcase.TestCase.EX_OK)
 
     def _test_pushdb_missing_attribute(self):
         self.assertEqual(self.test.push_to_db(),
@@ -255,13 +268,11 @@ class TestCaseTesting(unittest.TestCase):
 
     def test_str_project_name_ko(self):
         self.test.project_name = None
-        self.assertIn("<xtesting.core.testcase.TestCase object at",
-                      str(self.test))
+        self.assertIn("FakeTestCase object at", str(self.test))
 
     def test_str_case_name_ko(self):
         self.test.case_name = None
-        self.assertIn("<xtesting.core.testcase.TestCase object at",
-                      str(self.test))
+        self.assertIn("FakeTestCase object at", str(self.test))
 
     def test_str_pass(self):
         duration = '01:01'

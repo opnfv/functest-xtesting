@@ -9,6 +9,7 @@
 
 """Define the parent class of all Xtesting TestCases."""
 
+import abc
 from datetime import datetime
 import json
 import logging
@@ -17,6 +18,7 @@ import re
 import requests
 
 import prettytable
+import six
 
 from xtesting.utils import decorators
 from xtesting.utils import env
@@ -24,7 +26,9 @@ from xtesting.utils import env
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
 
-class TestCase(object):  # pylint: disable=too-many-instance-attributes
+@six.add_metaclass(abc.ABCMeta)
+class TestCase(object):
+    # pylint: disable=too-many-instance-attributes
     """Base model for single test case."""
 
     EX_OK = os.EX_OK
@@ -138,6 +142,7 @@ class TestCase(object):  # pylint: disable=too-many-instance-attributes
         """
         self.is_skipped = False
 
+    @abc.abstractmethod
     def run(self, **kwargs):
         """Run the test case.
 
@@ -156,13 +161,7 @@ class TestCase(object):  # pylint: disable=too-many-instance-attributes
 
         Args:
             kwargs: Arbitrary keyword arguments.
-
-        Returns:
-            TestCase.EX_RUN_ERROR.
         """
-        # pylint: disable=unused-argument
-        self.__logger.error("Run must be implemented")
-        return TestCase.EX_RUN_ERROR
 
     @decorators.can_dump_request_to_file
     def push_to_db(self):

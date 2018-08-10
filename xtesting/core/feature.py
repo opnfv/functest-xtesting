@@ -13,21 +13,25 @@ Feature is considered as TestCase offered by Third-party. It offers
 helpers to run any python method or any bash command.
 """
 
+import abc
 import logging
 import subprocess
 import time
 
+import six
 from xtesting.core import testcase
 
 __author__ = ("Serena Feng <feng.xiaowei@zte.com.cn>, "
               "Cedric Ollivier <cedric.ollivier@orange.com>")
 
 
+@six.add_metaclass(abc.ABCMeta)
 class Feature(testcase.TestCase):
     """Base model for single feature."""
 
     __logger = logging.getLogger(__name__)
 
+    @abc.abstractmethod
     def execute(self, **kwargs):
         """Execute the Python method.
 
@@ -39,12 +43,7 @@ class Feature(testcase.TestCase):
 
         Args:
             kwargs: Arbitrary keyword arguments.
-
-        Returns:
-            -1.
         """
-        # pylint: disable=unused-argument,no-self-use
-        return -1
 
     def run(self, **kwargs):
         """Run the feature.

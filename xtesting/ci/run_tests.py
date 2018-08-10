@@ -15,7 +15,6 @@
 
 import argparse
 import errno
-import importlib
 import logging
 import logging.config
 import os
@@ -27,6 +26,7 @@ import enum
 import pkg_resources
 import prettytable
 import six
+from stevedore import driver
 import yaml
 
 from xtesting.ci import tier_builder
@@ -151,10 +151,12 @@ class Runner(object):
         if run_dict:
             try:
                 LOGGER.info("Loading test case '%s'...", test.get_name())
-                module = importlib.import_module(run_dict['module'])
-                cls = getattr(module, run_dict['class'])
                 test_dict = Runner.get_dict_by_test(test.get_name())
-                test_case = cls(**test_dict)
+                test_case = driver.DriverManager(
+                    namespace='xtesting.testcase',
+                    name=run_dict['name'],
+                    invoke_on_load=True,
+                    invoke_kwds=test_dict).driver
                 self.executed_test_cases[test.get_name()] = test_case
                 test_case.check_requirements()
                 if test_case.is_skipped:

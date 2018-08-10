@@ -28,6 +28,13 @@ FILE = '{}/null'.format(DIR)
 URL = 'file://{}'.format(FILE)
 
 
+class FakeTestCase(testcase.TestCase):
+    # pylint: disable=missing-docstring
+
+    def run(self, **kwargs):
+        return testcase.TestCase.EX_OK
+
+
 class DecoratorsTesting(unittest.TestCase):
     # pylint: disable=missing-docstring
 
@@ -66,13 +73,17 @@ class DecoratorsTesting(unittest.TestCase):
         return json.dumps(data, sort_keys=True)
 
     def _get_testcase(self):
-        test = testcase.TestCase(
+        test = FakeTestCase(
             project_name=self._project_name, case_name=self._case_name)
         test.start_time = self._start_time
         test.stop_time = self._stop_time
         test.result = 100
         test.details = {}
         return test
+
+    def test_run_fake(self):
+        test = self._get_testcase()
+        self.assertEqual(test.run(), testcase.TestCase.EX_OK)
 
     @mock.patch('requests.post')
     def test_http_shema(self, *args):

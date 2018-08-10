@@ -13,8 +13,7 @@ tiers:
                 clean_flag: false
                 description: ''
                 run:
-                    module: 'xtesting.samples.first'
-                    class: 'Test'
+                    name: 'first'
 
             -
                 case_name: second
@@ -24,8 +23,7 @@ tiers:
                 clean_flag: false
                 description: ''
                 run:
-                    module: 'xtesting.samples.second'
-                    class: 'Test'
+                    name: 'second'
 
             -
                 case_name: third
@@ -35,8 +33,7 @@ tiers:
                 clean_flag: false
                 description: ''
                 run:
-                    module: 'xtesting.core.feature'
-                    class: 'BashFeature'
+                    name: 'bashfeature'
                     args:
                         cmd: 'echo -n Hello World; exit 0'
 
@@ -48,8 +45,7 @@ tiers:
                 clean_flag: false
                 description: ''
                 run:
-                    module: 'xtesting.core.unit'
-                    class: 'Suite'
+                    name: 'unit'
                     args:
                         name: 'xtesting.samples.fourth'
 

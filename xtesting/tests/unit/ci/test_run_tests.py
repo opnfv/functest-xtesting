@@ -20,6 +20,10 @@ from xtesting.core.testcase import TestCase
 class FakeModule(TestCase):
 
     def run(self, **kwargs):
+        self.start_time = 0
+        self.stop_time = 1
+        self.criteria = 100
+        self.result = 100
         return TestCase.EX_OK
 
 
@@ -140,9 +144,8 @@ class RunTestsTesting(unittest.TestCase):
         msg = "Cannot import the class for the test case."
         self.assertTrue(msg in str(context.exception))
 
-    @mock.patch('importlib.import_module', name="module",
-                return_value=mock.Mock(test_class=mock.Mock(
-                    side_effect=FakeModule)))
+    @mock.patch('stevedore.driver.DriverManager',
+                return_value=mock.Mock(driver=FakeModule()))
     @mock.patch('xtesting.ci.run_tests.Runner.get_dict_by_test')
     def test_run_tests_default(self, *args):
         mock_test = mock.Mock()
@@ -151,14 +154,15 @@ class RunTestsTesting(unittest.TestCase):
                   'is_enabled.return_value': True,
                   'needs_clean.return_value': True}
         mock_test.configure_mock(**kwargs)
-        test_run_dict = {'module': 'test_module',
-                         'class': 'test_class'}
+        test_run_dict = {'name': 'test_module'}
         with mock.patch('xtesting.ci.run_tests.Runner.get_run_dict',
                         return_value=test_run_dict):
             self.runner.clean_flag = True
-            self.runner.run_test(mock_test)
+            self.assertEqual(self.runner.run_test(mock_test), TestCase.EX_OK)
         args[0].assert_called_with('test_name')
-        args[1].assert_called_with('test_module')
+        args[1].assert_called_with(
+            invoke_kwds=mock.ANY, invoke_on_load=True, name='test_module',
+            namespace='xtesting.testcase')
         self.assertEqual(self.runner.overall_result,
                          run_tests.Result.EX_OK)
 
@@ -170,8 +174,7 @@ class RunTestsTesting(unittest.TestCase):
                   'is_enabled.return_value': False,
                   'needs_clean.return_value': True}
         mock_test.configure_mock(**kwargs)
-        test_run_dict = {'module': 'test_module',
-                         'class': 'test_class'}
+        test_run_dict = {'name': 'test_name'}
         with mock.patch('xtesting.ci.run_tests.Runner.get_run_dict',
                         return_value=test_run_dict):
             self.runner.clean_flag = True
