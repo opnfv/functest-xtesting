@@ -102,12 +102,13 @@ class Tier(object):
 
 class TestCase(object):
 
-    def __init__(self, name, enabled, dependency, criteria, blocking,
+    def __init__(self, name, enabled, dependency, skipped, criteria, blocking,
                  description="", project=""):
         # pylint: disable=too-many-arguments
         self.name = name
         self.enabled = enabled
         self.dependency = dependency
+        self.skipped = skipped
         self.criteria = criteria
         self.blocking = blocking
         self.description = description
@@ -128,6 +129,9 @@ class TestCase(object):
 
     def is_enabled(self):
         return self.enabled
+
+    def is_skipped(self):
+        return self.skipped
 
     def get_criteria(self):
         return self.criteria

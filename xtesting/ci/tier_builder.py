@@ -60,7 +60,8 @@ class TierBuilder(object):
                 testcase = tier_handler.TestCase(
                     name=dic_testcase['case_name'],
                     enabled=dic_testcase.get('enabled', True),
-                    dependency=dep, criteria=dic_testcase['criteria'],
+                    dependency=dep, skipped=False,
+                    criteria=dic_testcase['criteria'],
                     blocking=dic_testcase['blocking'],
                     description=dic_testcase['description'],
                     project=dic_testcase['project_name'])
@@ -69,6 +70,7 @@ class TierBuilder(object):
                         testcase.is_enabled()):
                     tier.add_test(testcase)
                 else:
+                    testcase.skipped = True
                     tier.skip_test(testcase)
 
             self.tier_objects.append(tier)
