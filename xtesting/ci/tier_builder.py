@@ -45,11 +45,11 @@ class TierBuilder(object):
             tier = tier_handler.Tier(
                 name=dic_tier['name'], order=dic_tier['order'],
                 description=dic_tier['description'])
-
             for dic_testcase in dic_tier['testcases']:
                 testcase = tier_handler.TestCase(
                     name=dic_testcase['case_name'],
                     enabled=dic_testcase.get('enabled', True),
+                    skipped=False,
                     criteria=dic_testcase['criteria'],
                     blocking=dic_testcase['blocking'],
                     description=dic_testcase['description'],
@@ -58,17 +58,20 @@ class TierBuilder(object):
                     if testcase.is_enabled():
                         tier.add_test(testcase)
                     else:
+                        testcase.skipped = True
                         tier.skip_test(testcase)
                 else:
                     for dependency in dic_testcase['dependencies']:
                         kenv = dependency.keys()[0]
                         if not re.search(dependency[kenv], env.get(kenv)):
+                            testcase.skipped = True
                             tier.skip_test(testcase)
                             break
                     else:
                         if testcase.is_enabled():
                             tier.add_test(testcase)
                         else:
+                            testcase.skipped = True
                             tier.skip_test(testcase)
             self.tier_objects.append(tier)
 
