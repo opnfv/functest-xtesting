@@ -130,6 +130,8 @@ class RunTestsTesting(unittest.TestCase):
     def test_run_tests_import_exception(self, *args):
         mock_test = mock.Mock()
         kwargs = {'get_name.return_value': 'test_name',
+                  'is_skipped.return_value': False,
+                  'is_enabled.return_value': True,
                   'needs_clean.return_value': False}
         mock_test.configure_mock(**kwargs)
         with self.assertRaises(Exception) as context:
@@ -145,6 +147,8 @@ class RunTestsTesting(unittest.TestCase):
     def test_run_tests_default(self, *args):
         mock_test = mock.Mock()
         kwargs = {'get_name.return_value': 'test_name',
+                  'is_skipped.return_value': False,
+                  'is_enabled.return_value': True,
                   'needs_clean.return_value': True}
         mock_test.configure_mock(**kwargs)
         test_run_dict = {'module': 'test_module',
@@ -153,9 +157,44 @@ class RunTestsTesting(unittest.TestCase):
                         return_value=test_run_dict):
             self.runner.clean_flag = True
             self.runner.run_test(mock_test)
-
         args[0].assert_called_with('test_name')
         args[1].assert_called_with('test_module')
+        self.assertEqual(self.runner.overall_result,
+                         run_tests.Result.EX_OK)
+
+    @mock.patch('xtesting.ci.run_tests.Runner.get_dict_by_test')
+    def test_run_tests_disabled(self, *args):
+        mock_test = mock.Mock()
+        kwargs = {'get_name.return_value': 'test_name',
+                  'is_skipped.return_value': False,
+                  'is_enabled.return_value': False,
+                  'needs_clean.return_value': True}
+        mock_test.configure_mock(**kwargs)
+        test_run_dict = {'module': 'test_module',
+                         'class': 'test_class'}
+        with mock.patch('xtesting.ci.run_tests.Runner.get_run_dict',
+                        return_value=test_run_dict):
+            self.runner.clean_flag = True
+            self.runner.run_test(mock_test)
+        args[0].assert_not_called()
+        self.assertEqual(self.runner.overall_result,
+                         run_tests.Result.EX_OK)
+
+    @mock.patch('xtesting.ci.run_tests.Runner.get_dict_by_test')
+    def test_run_tests_skipped(self, *args):
+        mock_test = mock.Mock()
+        kwargs = {'get_name.return_value': 'test_name',
+                  'is_skipped.return_value': True,
+                  'is_enabled.return_value': True,
+                  'needs_clean.return_value': True}
+        mock_test.configure_mock(**kwargs)
+        test_run_dict = {'module': 'test_module',
+                         'class': 'test_class'}
+        with mock.patch('xtesting.ci.run_tests.Runner.get_run_dict',
+                        return_value=test_run_dict):
+            self.runner.clean_flag = True
+            self.runner.run_test(mock_test)
+        args[0].assert_not_called()
         self.assertEqual(self.runner.overall_result,
                          run_tests.Result.EX_OK)
 
