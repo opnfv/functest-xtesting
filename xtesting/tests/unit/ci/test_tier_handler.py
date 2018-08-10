@@ -29,7 +29,7 @@ class TierHandlerTesting(unittest.TestCase):
         self.tier = tier_handler.Tier(
             'test_tier', 'test_order', 'test_ci_loop', description='test_desc')
         self.testcase = tier_handler.TestCase(
-            'test_name', 'true', self.mock_depend, 'test_criteria',
+            'test_name', 'true', False, self.mock_depend, 'test_criteria',
             True, description='test_desc', project='project_name')
         self.dependency = tier_handler.Dependency(
             'test_installer', 'test_scenario')

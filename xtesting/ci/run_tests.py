@@ -138,7 +138,7 @@ class Runner(object):
 
     def run_test(self, test):
         """Run one test case"""
-        if not test.is_enabled():
+        if not test.is_enabled() or test.is_skipped():
             msg = prettytable.PrettyTable(
                 header_style='upper', padding_width=5,
                 field_names=['test case', 'project', 'duration',
