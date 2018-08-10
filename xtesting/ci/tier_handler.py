@@ -100,14 +100,15 @@ class Tier(object):
         return msg.get_string()
 
 
-class TestCase(object):
+class TestCase(object):  # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, name, enabled, dependency, criteria, blocking,
+    def __init__(self, name, enabled, skipped, dependency, criteria, blocking,
                  description="", project=""):
         # pylint: disable=too-many-arguments
         self.name = name
         self.enabled = enabled
         self.dependency = dependency
+        self.skipped = skipped
         self.criteria = criteria
         self.blocking = blocking
         self.description = description
@@ -128,6 +129,9 @@ class TestCase(object):
 
     def is_enabled(self):
         return self.enabled
+
+    def is_skipped(self):
+        return self.skipped
 
     def get_criteria(self):
         return self.criteria

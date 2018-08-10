@@ -45,7 +45,6 @@ class TierBuilder(object):
                 name=dic_tier['name'], order=dic_tier['order'],
                 ci_loop=dic_tier['ci_loop'],
                 description=dic_tier['description'])
-
             for dic_testcase in dic_tier['testcases']:
                 if not dic_testcase.get('dependencies'):
                     installer = '.*'
@@ -60,6 +59,7 @@ class TierBuilder(object):
                 testcase = tier_handler.TestCase(
                     name=dic_testcase['case_name'],
                     enabled=dic_testcase.get('enabled', True),
+                    skipped=False,
                     dependency=dep, criteria=dic_testcase['criteria'],
                     blocking=dic_testcase['blocking'],
                     description=dic_testcase['description'],
@@ -69,6 +69,7 @@ class TierBuilder(object):
                         testcase.is_enabled()):
                     tier.add_test(testcase)
                 else:
+                    testcase.skipped = True
                     tier.skip_test(testcase)
 
             self.tier_objects.append(tier)
