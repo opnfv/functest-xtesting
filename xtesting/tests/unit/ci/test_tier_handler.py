@@ -25,7 +25,7 @@ class TierHandlerTesting(unittest.TestCase):
         self.tier = tier_handler.Tier(
             'test_tier', 'test_order', 'test_desc')
         self.testcase = tier_handler.TestCase(
-            'test_name', 'true', 'test_criteria',
+            'test_name', 'true', False, 'test_criteria',
             True, description='test_desc', project='project_name')
         self.testcase.str = self.testcase.__str__()
         self.tier.str = self.tier.__str__()
