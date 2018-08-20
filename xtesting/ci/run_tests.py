@@ -146,7 +146,7 @@ class Runner(object):
             msg.add_row([test.get_name(), test.get_project(), "00:00", "SKIP"])
             LOGGER.info("Test result:\n\n%s\n", msg)
             return testcase.TestCase.EX_TESTCASE_SKIPPED
-        result = testcase.TestCase.EX_RUN_ERROR
+        result = testcase.TestCase.EX_TESTCASE_FAILED
         run_dict = self.get_run_dict(test.get_name())
         if run_dict:
             try:
