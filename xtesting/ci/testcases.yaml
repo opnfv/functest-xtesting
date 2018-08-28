@@ -58,8 +58,7 @@ tiers:
                 clean_flag: false
                 description: ''
                 run:
-                    module: 'xtesting.core.robotframework'
-                    class: 'RobotFramework'
+                    name: 'robotframework'
                     args:
                         suites:
                             - /usr/lib/python2.7/site-packages/xtesting/samples/HelloWorld.txt
