@@ -1,0 +1,7 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-by: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-at: Wed, 29 Aug 2018 14:38:19 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/61543
+Project: functest-xtesting
+Branch: refs/heads/stable/fraser
