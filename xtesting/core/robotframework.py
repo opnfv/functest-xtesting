@@ -127,7 +127,7 @@ class RobotFramework(testcase.TestCase):
         try:
             self.parse_results()
             self.__logger.info("Results were successfully parsed")
-            assert self.generate_report() == 0
+            self.generate_report()
             self.__logger.info("Results were successfully generated")
         except RobotError as ex:
             self.__logger.error("Run suites before publishing: %s", ex.message)
