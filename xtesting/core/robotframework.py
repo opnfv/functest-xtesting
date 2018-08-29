@@ -57,9 +57,9 @@ class RobotFramework(testcase.TestCase):
     dir_results = "/var/lib/xtesting/results"
 
     def __init__(self, **kwargs):
-        self.res_dir = os.path.join(self.dir_results, 'robot')
-        self.xml_file = os.path.join(self.res_dir, 'output.xml')
         super(RobotFramework, self).__init__(**kwargs)
+        self.res_dir = os.path.join(self.dir_results, self.case_name)
+        self.xml_file = os.path.join(self.res_dir, 'output.xml')
 
     def parse_results(self):
         """Parse output.xml and get the details in it."""
