@@ -283,7 +283,7 @@ class RunTesting(unittest.TestCase):
     def test_generate_report_err(self):
         with mock.patch.object(self.test, 'generate_report',
                                return_value=1) as mmethod:
-            self._test_generate_report(self.test.EX_RUN_ERROR)
+            self._test_generate_report(self.test.EX_OK)
             mmethod.assert_called_once_with()
 
     def test_generate_report(self):
