@@ -1,0 +1,10 @@
+---
+- defaults:
+    name: global
+    repo: 'opnfv'
+    branch: 'stable/fraser'
+    tag: 'fraser'
+
+- defaults:
+    name: xtesting-defaults
+    prefix: '/home/opnfv/xtesting'
