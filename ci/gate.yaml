@@ -1,0 +1,62 @@
+---
+- xtesting-buildparameters: &xtesting-buildparameters
+    name: 'xtesting-buildparameters'
+    parameters:
+      - string:
+          name: branch
+          default: '{branch}'
+
+- functest-projectparameters: &xtesting-projectparameters
+    name: 'xtesting-projectparameters'
+    current-parameters: true
+
+- scm:
+    name: xtesting-gerrit
+    scm:
+      - git:
+          url: https://gerrit.opnfv.org/gerrit/functest-xtesting
+          refspec: '+refs/changes/*:refs/changes/*'
+          branches:
+            - ${branch}
+
+- job-template:
+    name: '{repo}-xtesting-{tag}-build'
+    <<: *xtesting-buildparameters
+    scm:
+      - xtesting-gerrit
+    builders:
+      - shell: |
+          cd docker
+          docker build \
+            --pull=false --no-cache --force-rm=true \
+            --build-arg BRANCH=${{branch}} \
+            -t {repo}/xtesting:{tag} .
+
+- project:
+    name: '{repo}-xtesting-{tag}-build'
+    jobs:
+      - '{repo}-xtesting-{tag}-build'
+
+- job-template:
+    name: '{repo}-xtesting-{tag}-gate'
+    project-type: multijob
+    <<: *xtesting-buildparameters
+    builders:
+      - multijob:
+          name: build container
+          projects:
+            - name: '{repo}-xtesting-{tag}-build'
+              <<: *xtesting-projectparameters
+      - multijob:
+          name: samples
+          projects:
+            - name: '{repo}-xtesting-first-{tag}-run'
+            - name: '{repo}-xtesting-second-{tag}-run'
+            - name: '{repo}-xtesting-third-{tag}-run'
+            - name: '{repo}-xtesting-fourth-{tag}-run'
+            - name: '{repo}-xtesting-fifth-{tag}-run'
+
+- project:
+    name: '{repo}-xtesting-{tag}-gate'
+    jobs:
+      - '{repo}-xtesting-{tag}-gate'

@@ -1,0 +1,32 @@
+---
+- job-template:
+    name: '{repo}-xtesting-{tag}-pull'
+    builders:
+      - shell: docker pull {repo}/xtesting:{tag}
+
+- project:
+    name: '{repo}-xtesting-{tag}-pull'
+    jobs:
+      - '{repo}-xtesting-{tag}-pull'
+
+- job-template:
+    name: '{repo}-xtesting-{tag}-daily'
+    project-type: multijob
+    builders:
+      - multijob:
+          name: pull container
+          projects:
+            - name: '{repo}-xtesting-{tag}-pull'
+      - multijob:
+          name: samples
+          projects:
+            - name: '{repo}-xtesting-first-{tag}-run'
+            - name: '{repo}-xtesting-second-{tag}-run'
+            - name: '{repo}-xtesting-third-{tag}-run'
+            - name: '{repo}-xtesting-fourth-{tag}-run'
+            - name: '{repo}-xtesting-fifth-{tag}-run'
+
+- project:
+    name: '{repo}-xtesting-{tag}-daily'
+    jobs:
+      - '{repo}-xtesting-{tag}-daily'

@@ -1,0 +1,20 @@
+---
+- job-template:
+    name: '{repo}-xtesting-{test}-{tag}-run'
+    defaults: 'xtesting-defaults'
+    builders:
+      - shell: |
+          docker run \
+            -v {prefix}/results/$JOB_NAME-$BUILD_ID:/var/lib/xtesting/results \
+            {repo}/xtesting:{tag} run_tests -t {test}
+
+- project:
+    name: '{repo}-xtesting-{test}-{tag}-run'
+    test:
+      - first
+      - second
+      - third
+      - fourth
+      - fifth
+    jobs:
+      - '{repo}-xtesting-{test}-{tag}-run'
