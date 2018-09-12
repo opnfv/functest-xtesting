@@ -8,7 +8,7 @@
 set -xe
 
 repo=${REPO:-opnfv}
-tag=${BRANCH:-latest}
+tag=${BRANCH:-gambia}
 arch=${arch-"\
 amd64 \
 arm64"}
