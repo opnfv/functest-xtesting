@@ -1,6 +1,6 @@
 FROM alpine:3.8
 
-ARG BRANCH=master
+ARG BRANCH=stable/hunter
 ARG OPENSTACK_TAG=stable/rocky
 
 RUN apk --no-cache add --update python py-pip bash git && \
