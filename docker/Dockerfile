@@ -1,6 +1,6 @@
 FROM alpine:3.8
 
-ARG BRANCH=master
+ARG BRANCH=stable/gambia
 ARG OPENSTACK_TAG=stable/queens
 
 RUN apk --no-cache add --update python py-pip bash git && \
