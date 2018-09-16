@@ -2,8 +2,8 @@
 - defaults:
     name: global
     repo: 'opnfv'
-    branch: 'master'
-    tag: 'latest'
+    branch: 'stable/gambia'
+    tag: 'gambia'
 
 - defaults:
     name: xtesting-defaults
