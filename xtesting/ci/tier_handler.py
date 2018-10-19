@@ -7,8 +7,9 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 
+# pylint: disable=missing-docstring,too-many-instance-attributes
+
 """Tier and TestCase classes to wrap the testcases config file"""
-# pylint: disable=missing-docstring
 
 import textwrap
 
@@ -99,7 +100,7 @@ class TestCase(object):
 
     def __init__(self, name, enabled, skipped, criteria, blocking,
                  description="", project=""):
-        # pylint: disable=too-many-arguments,too-many-instance-attributes
+        # pylint: disable=too-many-arguments
         self.name = name
         self.enabled = enabled
         self.skipped = skipped
