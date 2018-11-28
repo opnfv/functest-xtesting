@@ -10,6 +10,7 @@
 # pylint: disable=missing-docstring
 
 import logging
+import subprocess
 import unittest
 
 import mock
@@ -84,33 +85,31 @@ class BashFeatureTesting(FeatureTestingBase):
             self.feature = feature.BashFeature(
                 project_name=self._project_name, case_name=self._case_name)
 
-    @mock.patch('subprocess.Popen')
+    @mock.patch('subprocess.check_call')
     def test_run_no_cmd(self, mock_subproc):
+        delattr(FeatureTesting, "_cmd")
         self.assertEqual(
             self.feature.run(), testcase.TestCase.EX_RUN_ERROR)
         mock_subproc.assert_not_called()
 
-    @mock.patch('subprocess.Popen')
+    @mock.patch('subprocess.check_call',
+                side_effect=subprocess.CalledProcessError(0, '', ''))
     def test_run_ko(self, mock_subproc):
+        setattr(FeatureTesting, "_cmd", "run_bar_tests.py")
         with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
-            mock_obj = mock.Mock()
-            attrs = {'wait.return_value': 1}
-            mock_obj.configure_mock(**attrs)
-
-            mock_subproc.return_value = mock_obj
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
-            mopen.assert_called_once_with(self._output_file, "w+")
+        mopen.assert_called_once_with(self._output_file, "w+")
+        mock_subproc.assert_called_once_with(
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
 
-    @mock.patch('subprocess.Popen')
+    @mock.patch('subprocess.check_call')
     def test_run(self, mock_subproc):
+        setattr(FeatureTesting, "_cmd", "run_bar_tests.py")
         with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
-            mock_obj = mock.Mock()
-            attrs = {'wait.return_value': 0}
-            mock_obj.configure_mock(**attrs)
-
-            mock_subproc.return_value = mock_obj
             self._test_run(testcase.TestCase.EX_OK)
-            mopen.assert_called_once_with(self._output_file, "w+")
+        mopen.assert_called_once_with(self._output_file, "w+")
+        mock_subproc.assert_called_once_with(
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
 
 
 if __name__ == "__main__":
