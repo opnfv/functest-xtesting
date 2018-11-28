@@ -23,4 +23,3 @@ class Test(testcase.TestCase):
         six.print_("Hello World")
         self.result = 100
         self.stop_time = time.time()
-        return testcase.TestCase.EX_OK
