@@ -99,17 +99,15 @@ class BashFeature(Feature):
             0 if cmd returns 0,
             -1 otherwise.
         """
-        ret = -1
         try:
             cmd = kwargs["cmd"]
             with open(self.result_file, 'w+') as f_stdout:
-                proc = subprocess.Popen(cmd.split(), stdout=f_stdout,
-                                        stderr=subprocess.STDOUT)
-            ret = proc.wait()
-            self.__logger.info(
-                "Test result is stored in '%s'", self.result_file)
-            if ret != 0:
-                self.__logger.error("Execute command: %s failed", cmd)
+                subprocess.check_call(
+                    cmd, shell=True, stdout=f_stdout, stderr=subprocess.STDOUT)
+            return 0
         except KeyError:
             self.__logger.error("Please give cmd as arg. kwargs: %s", kwargs)
-        return ret
+        except subprocess.CalledProcessError:
+            self.__logger.error("Execute command: %s failed", cmd)
+        finally:
+            return -1
