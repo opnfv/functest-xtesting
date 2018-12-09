@@ -1,0 +1,66 @@
+---
+tiers:
+    -
+        name: samples
+        order: 1
+        description: ''
+        testcases:
+            -
+                case_name: first
+                project_name: xtesting
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'first'
+
+            -
+                case_name: second
+                project_name: xtesting
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'second'
+
+            -
+                case_name: third
+                project_name: xtesting
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'echo -n Hello World; exit 0'
+
+            -
+                case_name: fourth
+                project_name: xtesting
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'unit'
+                    args:
+                        name: 'xtesting.samples.fourth'
+
+            -
+                case_name: fifth
+                project_name: xtesting
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'robotframework'
+                    args:
+                        suites:
+                            - /usr/lib/python2.7/site-packages/xtesting/samples/HelloWorld.txt
+                        variable:
+                            - 'var01:foo'
+                            - 'var02:bar'
