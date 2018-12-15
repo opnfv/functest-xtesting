@@ -11,3 +11,4 @@ sphinx-rtd-theme
 yamllint
 doc8 # Apache-2.0
 bashate # Apache-2.0
+ansible-lint
