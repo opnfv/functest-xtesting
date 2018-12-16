@@ -14,8 +14,11 @@ helpers to run any python method or any bash command.
 """
 
 import abc
+import errno
 import logging
+import os
 import subprocess
+import sys
 import time
 
 import six
@@ -86,8 +89,8 @@ class BashFeature(Feature):
 
     def __init__(self, **kwargs):
         super(BashFeature, self).__init__(**kwargs)
-        dir_results = "/var/lib/xtesting/results"
-        self.result_file = "{}/{}.log".format(dir_results, self.case_name)
+        self.res_dir = "/var/lib/xtesting/results/{}".format(self.case_name)
+        self.result_file = "{}/{}.log".format(self.res_dir, self.case_name)
 
     def execute(self, **kwargs):
         """Execute the cmd passed as arg
@@ -101,12 +104,26 @@ class BashFeature(Feature):
         """
         try:
             cmd = kwargs["cmd"]
-            with open(self.result_file, 'w+') as f_stdout:
-                subprocess.check_call(
-                    cmd, shell=True, stdout=f_stdout, stderr=subprocess.STDOUT)
-            return 0
+            console = kwargs["console"] if "console" in kwargs else False
+            try:
+                os.makedirs(self.res_dir)
+            except OSError as ex:
+                if ex.errno != errno.EEXIST:
+                    self.__logger.exception("Cannot create %s", self.res_dir)
+                    return -1
+            with open(self.result_file, 'w') as f_stdout:
+                self.__logger.info("Calling %s", cmd)
+                process = subprocess.Popen(
+                    cmd, shell=True, stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT)
+                for line in iter(process.stdout.readline, ''):
+                    if console:
+                        sys.stdout.write(line)
+                    f_stdout.write(line)
+                process.wait()
+            with open(self.result_file, 'r') as f_stdin:
+                self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
+            return process.returncode
         except KeyError:
             self.__logger.error("Please give cmd as arg. kwargs: %s", kwargs)
-        except subprocess.CalledProcessError:
-            self.__logger.error("Execute command: %s failed", cmd)
         return -1
