@@ -10,3 +10,6 @@ robotframework>=3.0
 mock # BSD
 PrettyTable<0.8 # BSD
 six # MIT
+python-subunit # Apache-2.0/BSD
+os-testr # Apache-2.0
+junitxml
