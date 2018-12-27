@@ -62,7 +62,7 @@ class TierBuilder(object):
                         tier.skip_test(testcase)
                 else:
                     for dependency in dic_testcase['dependencies']:
-                        kenv = dependency.keys()[0]
+                        kenv = list(dependency.keys())[0]
                         if not re.search(dependency[kenv],
                                          env.get(kenv) or ''):
                             testcase.skipped = True
