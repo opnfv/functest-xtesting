@@ -2,10 +2,12 @@
 - hosts: 127.0.0.1
   roles:
     - role: collivier.xtesting
+      docker_tags:
+        - hunter:
+            branch: stable/hunter
       suites:
         - repo: opnfv
           container: xtesting
-          tag: hunter
           tests:
             - first
             - second
