@@ -6,7 +6,7 @@
           name: branch
           default: '{branch}'
 
-- functest-projectparameters: &xtesting-projectparameters
+- xtesting-projectparameters: &xtesting-projectparameters
     name: 'xtesting-projectparameters'
     current-parameters: true
 
