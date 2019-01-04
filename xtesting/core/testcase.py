@@ -224,7 +224,7 @@ class TestCase(object):
                 headers=self._headers)
             req.raise_for_status()
             self.__logger.info(
-                "The results were successfully pushed to DB %s", url)
+                "The results were successfully pushed to DB")
         except AssertionError:
             self.__logger.exception(
                 "Please run test before publishing the results")
