@@ -1,5 +1,5 @@
 ---
-- hosts: 127.0.0.1
+- hosts: opnfv
   roles:
     - role: collivier.xtesting
       docker_tags:
