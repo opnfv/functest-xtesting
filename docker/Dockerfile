@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.9
 
 ARG BRANCH=stable/hunter
 ARG OPENSTACK_TAG=stable/rocky
