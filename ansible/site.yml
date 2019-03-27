@@ -1,4 +1,7 @@
 ---
 - hosts: 127.0.0.1
   roles:
-    - collivier.xtesting
+    - role: collivier.xtesting
+      docker_tags:
+        - hunter:
+            branch: stable/iruya
