@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da01753e_34aae819",
+        "filename": "doc/ons2019/ons2019.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 2965
+      },
+      "writtenOn": "2019-04-03T06:23:48Z",
+      "side": 1,
+      "message": "open source",
+      "revId": "657198e01d44c20610ea7b007dfeb7608a5996c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da01753e_94bbd471",
+        "filename": "doc/ons2019/ons2019.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 2965
+      },
+      "writtenOn": "2019-04-03T06:23:48Z",
+      "side": 1,
+      "message": "end users",
+      "revId": "657198e01d44c20610ea7b007dfeb7608a5996c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da01753e_f4afc029",
+        "filename": "doc/ons2019/ons2019.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 2965
+      },
+      "writtenOn": "2019-04-03T06:23:48Z",
+      "side": 1,
+      "message": "tests",
+      "revId": "657198e01d44c20610ea7b007dfeb7608a5996c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da01753e_d4ac3c38",
+        "filename": "doc/ons2019/ons2019.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 2965
+      },
+      "writtenOn": "2019-04-03T06:23:48Z",
+      "side": 1,
+      "message": "And: can be removed",
+      "revId": "657198e01d44c20610ea7b007dfeb7608a5996c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
