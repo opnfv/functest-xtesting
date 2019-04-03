@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da01753e_e87c0075",
+        "filename": "doc/ons2019/ons2019.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 6865
+      },
+      "writtenOn": "2019-04-03T15:46:11Z",
+      "side": 1,
+      "message": "or open-source\nthe spelling opensource with and w/o Capital letters seems to be now widely accepted although",
+      "parentUuid": "da01753e_34aae819",
+      "revId": "657198e01d44c20610ea7b007dfeb7608a5996c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da01753e_94bbd471",
         "filename": "doc/ons2019/ons2019.md",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-04-03T06:23:48Z",
       "side": 1,
       "message": "end users",
+      "revId": "657198e01d44c20610ea7b007dfeb7608a5996c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da01753e_88873461",
+        "filename": "doc/ons2019/ons2019.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6865
+      },
+      "writtenOn": "2019-04-03T15:46:11Z",
+      "side": 1,
+      "message": "or end-users\n\ncf https://forum.wordreference.com/threads/english-spelling-today-vs-to-day.36641/",
+      "parentUuid": "da01753e_94bbd471",
       "revId": "657198e01d44c20610ea7b007dfeb7608a5996c6",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
