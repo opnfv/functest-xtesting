@@ -1,0 +1,8 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Morgan Richomme <morgan.richomme@orange.com>
+Code-Review+1: Guillaume Lambert <guillaume.lambert@orange.com>
+Submitted-by: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-at: Wed, 03 Apr 2019 23:53:35 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/67470
+Project: functest-xtesting
+Branch: refs/heads/master
