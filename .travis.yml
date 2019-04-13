@@ -28,6 +28,6 @@ jobs:
     - stage: publish xtesting manifests
       script: >
         sudo manifest-tool push from-args \
-          --platforms linux/amd64,linux,arm,linux/arm64 \
+          --platforms linux/amd64,linux/arm,linux/arm64 \
           --template ${DOCKER_USERNAME}/xtesting:ARCH-hunter \
           --target ${DOCKER_USERNAME}/xtesting:hunter
