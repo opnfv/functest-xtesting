@@ -15,6 +15,7 @@ import prettytable
 
 INPUTS = {
     'CI_LOOP': 'daily',
+    'DEBUG': 'false',
     'DEPLOY_SCENARIO': 'os-nosdn-nofeature-noha',
     'INSTALLER_TYPE': 'unknown',
     'BUILD_TAG': None,
