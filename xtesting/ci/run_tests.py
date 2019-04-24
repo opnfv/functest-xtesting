@@ -315,8 +315,12 @@ def main():
         if ex.errno != errno.EEXIST:
             six.print_("Cannot create /var/lib/xtesting/results/")
             return testcase.TestCase.EX_RUN_ERROR
-    logging.config.fileConfig(pkg_resources.resource_filename(
-        'xtesting', 'ci/logging.ini'))
+    if env.get('DEBUG').lower() == 'true':
+        logging.config.fileConfig(pkg_resources.resource_filename(
+            'xtesting', 'ci/logging.debug.ini'))
+    else:
+        logging.config.fileConfig(pkg_resources.resource_filename(
+            'xtesting', 'ci/logging.ini'))
     logging.captureWarnings(True)
     parser = RunTestsParser()
     args = parser.parse_args(sys.argv[1:])
