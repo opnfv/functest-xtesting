@@ -61,7 +61,7 @@ tiers:
                     name: 'robotframework'
                     args:
                         suites:
-                            - /usr/lib/python2.7/site-packages/xtesting/samples/HelloWorld.txt
+                            - /usr/lib/python3.6/site-packages/xtesting/samples/HelloWorld.txt
                         variable:
                             - 'var01:foo'
                             - 'var02:bar'
