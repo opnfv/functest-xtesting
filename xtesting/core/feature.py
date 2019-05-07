@@ -111,10 +111,10 @@ class BashFeature(Feature):
                 process = subprocess.Popen(
                     cmd, shell=True, stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT)
-                for line in iter(process.stdout.readline, ''):
+                for line in iter(process.stdout.readline, b''):
                     if console:
-                        sys.stdout.write(line)
-                    f_stdout.write(line)
+                        sys.stdout.write(line.decode("utf-8"))
+                    f_stdout.write(line.decode("utf-8"))
                 process.wait()
             with open(self.result_file, 'r') as f_stdin:
                 self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())

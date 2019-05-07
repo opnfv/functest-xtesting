@@ -59,7 +59,7 @@ class SuiteTesting(unittest.TestCase):
                 return_value=mock.Mock(
                     communicate=mock.Mock(return_value=("foo", "bar"))))
     def test_generate_xunit_ok(self, *args):
-        stream = six.StringIO()
+        stream = six.BytesIO()
         with mock.patch('six.moves.builtins.open',
                         mock.mock_open()) as mock_open:
             self.psrunner.generate_xunit(stream)
@@ -96,7 +96,7 @@ class SuiteTesting(unittest.TestCase):
         with mock.patch('six.moves.builtins.open', mock.mock_open()) as m_open:
             self.assertEqual(self.psrunner.run(), status)
         m_open.assert_called_once_with(
-            '{}/subunit_stream'.format(self.psrunner.res_dir), 'w')
+            '{}/subunit_stream'.format(self.psrunner.res_dir), 'wb')
         self.assertEqual(self.psrunner.is_successful(), result)
         args[0].assert_called_once_with(self.psrunner.suite)
         args[1].assert_not_called()
@@ -115,7 +115,7 @@ class SuiteTesting(unittest.TestCase):
         with mock.patch('six.moves.builtins.open', mock.mock_open()) as m_open:
             self.assertEqual(self.psrunner.run(name=name), status)
         m_open.assert_called_once_with(
-            '{}/subunit_stream'.format(self.psrunner.res_dir), 'w')
+            '{}/subunit_stream'.format(self.psrunner.res_dir), 'wb')
         self.assertEqual(self.psrunner.is_successful(), result)
         args[0].assert_called_once_with(self.psrunner.suite)
         args[1].assert_called_once_with()

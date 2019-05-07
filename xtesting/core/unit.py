@@ -48,7 +48,7 @@ class Suite(testcase.TestCase):
         stats = subprocess.Popen(
             ['subunit-stats'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         output, _ = stats.communicate(stream.read())
-        cls.__logger.info("\n\n%s", output)
+        cls.__logger.info("\n\n%s", output.decode("utf-8"))
 
     def generate_xunit(self, stream):
         """Generate junit report from subunit stream
@@ -62,7 +62,7 @@ class Suite(testcase.TestCase):
                 ['subunit2junitxml'], stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE)
             output, _ = stats.communicate(stream.read())
-            xml.write(output)
+            xml.write(output.decode("utf-8"))
 
     def generate_html(self, stream):
         """Generate html report from subunit stream
@@ -113,12 +113,12 @@ class Suite(testcase.TestCase):
             self.start_time = time.time()
             if not os.path.isdir(self.res_dir):
                 os.makedirs(self.res_dir)
-            stream = six.StringIO()
+            stream = six.BytesIO()
             result = SubunitTestRunner(
                 stream=stream, verbosity=2).run(self.suite).decorated
             self.generate_stats(stream)
             self.generate_xunit(stream)
-            with open('{}/subunit_stream'.format(self.res_dir), 'w') as subfd:
+            with open('{}/subunit_stream'.format(self.res_dir), 'wb') as subfd:
                 stream.seek(0)
                 shutil.copyfileobj(stream, subfd)
             self.generate_html('{}/subunit_stream'.format(self.res_dir))
