@@ -48,7 +48,7 @@ class Suite(testcase.TestCase):
         stats = subprocess.Popen(
             ['subunit-stats'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         output, _ = stats.communicate(stream.read())
-        cls.__logger.info("\n\n%s", output.decode("utf-8"))
+        cls.__logger.info("\n\n%s", output.decode())
 
     def generate_xunit(self, stream):
         """Generate junit report from subunit stream
@@ -62,7 +62,7 @@ class Suite(testcase.TestCase):
                 ['subunit2junitxml'], stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE)
             output, _ = stats.communicate(stream.read())
-            xml.write(output.decode("utf-8"))
+            xml.write(output.decode())
 
     def generate_html(self, stream):
         """Generate html report from subunit stream
