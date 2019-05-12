@@ -115,8 +115,8 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run_ko2(self, *args):
-        stream = six.StringIO()
-        stream.write("foo")
+        stream = six.BytesIO()
+        stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 1}
         args[0].configure_mock(**attrs)
@@ -131,8 +131,8 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run1(self, *args):
-        stream = six.StringIO()
-        stream.write("foo")
+        stream = six.BytesIO()
+        stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
         args[0].configure_mock(**attrs)
@@ -147,8 +147,8 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run2(self, *args):
-        stream = six.StringIO()
-        stream.write("foo")
+        stream = six.BytesIO()
+        stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
         args[0].configure_mock(**attrs)
@@ -163,8 +163,8 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run3(self, *args):
-        stream = six.StringIO()
-        stream.write("foo")
+        stream = six.BytesIO()
+        stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
         args[0].configure_mock(**attrs)
@@ -180,8 +180,8 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=False)
     @mock.patch('subprocess.Popen')
     def test_run4(self, *args):
-        stream = six.StringIO()
-        stream.write("foo")
+        stream = six.BytesIO()
+        stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
         args[0].configure_mock(**attrs)
