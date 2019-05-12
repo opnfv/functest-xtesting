@@ -34,7 +34,7 @@ class SuiteTesting(unittest.TestCase):
 
     @mock.patch('subprocess.Popen',
                 return_value=mock.Mock(
-                    communicate=mock.Mock(return_value=("foo", "bar"))))
+                    communicate=mock.Mock(return_value=(b"foo", b"bar"))))
     def test_generate_stats_ok(self, *args):
         stream = six.StringIO()
         self.psrunner.generate_stats(stream)
@@ -57,7 +57,7 @@ class SuiteTesting(unittest.TestCase):
 
     @mock.patch('subprocess.Popen',
                 return_value=mock.Mock(
-                    communicate=mock.Mock(return_value=("foo", "bar"))))
+                    communicate=mock.Mock(return_value=(b"foo", b"bar"))))
     def test_generate_xunit_ok(self, *args):
         stream = six.BytesIO()
         with mock.patch('six.moves.builtins.open',
