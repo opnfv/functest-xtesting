@@ -113,8 +113,8 @@ class BashFeature(Feature):
                     stderr=subprocess.STDOUT)
                 for line in iter(process.stdout.readline, b''):
                     if console:
-                        sys.stdout.write(line.decode())
-                    f_stdout.write(line.decode())
+                        sys.stdout.write(line.decode("utf-8"))
+                    f_stdout.write(line.decode("utf-8"))
                 process.wait()
             with open(self.result_file, 'r') as f_stdin:
                 self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
