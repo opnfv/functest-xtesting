@@ -20,10 +20,7 @@ INPUTS = {
     'INSTALLER_TYPE': 'unknown',
     'BUILD_TAG': None,
     'NODE_NAME': None,
-    'TEST_DB_URL': 'http://testresults.opnfv.org/test/api/v1/results',
-    'ENERGY_RECORDER_API_URL': 'http://energy.opnfv.fr/resources',
-    'ENERGY_RECORDER_API_USER': None,
-    'ENERGY_RECORDER_API_PASSWORD': None
+    'TEST_DB_URL': 'http://testresults.opnfv.org/test/api/v1/results'
 }
 
 
