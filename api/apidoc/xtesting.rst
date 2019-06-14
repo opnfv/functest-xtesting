@@ -13,6 +13,5 @@ Subpackages
 
     xtesting.ci
     xtesting.core
-    xtesting.energy
     xtesting.utils
 
