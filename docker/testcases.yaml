@@ -63,3 +63,18 @@ tiers:
                         variable:
                             - 'var01:foo'
                             - 'var02:bar'
+
+            -
+                case_name: sixth
+                project_name: xtesting
+                criteria: 100
+                blocking: false
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'behaveframework'
+                    args:
+                        suites:
+                            - /usr/lib/python3.6/site-packages/xtesting/samples/features/
+                        tags:
+                            - foo

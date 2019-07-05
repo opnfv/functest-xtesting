@@ -11,6 +11,7 @@ Submodules
 
 .. toctree::
 
+   xtesting.core.behaveframework
    xtesting.core.feature
    xtesting.core.robotframework
    xtesting.core.testcase
