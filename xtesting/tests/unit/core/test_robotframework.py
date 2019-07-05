@@ -9,7 +9,6 @@
 
 """Define the classes required to fully cover robot."""
 
-import errno
 import logging
 import os
 import unittest
@@ -194,14 +193,11 @@ class RunTesting(unittest.TestCase):
             mmethod.asser_not_called()
 
     @mock.patch('os.makedirs', side_effect=Exception)
+    @mock.patch('os.path.exists', return_value=False)
     def test_makedirs_exc(self, *args):
         self._test_makedirs_exc()
         args[0].assert_called_once_with(self.test.res_dir)
-
-    @mock.patch('os.makedirs', side_effect=OSError)
-    def test_makedirs_oserror(self, *args):
-        self._test_makedirs_exc()
-        args[0].assert_called_once_with(self.test.res_dir)
+        args[1].assert_called_once_with(self.test.res_dir)
 
     @mock.patch('robot.run')
     def _test_makedirs(self, *args):
@@ -218,15 +214,19 @@ class RunTesting(unittest.TestCase):
             mock_method.assert_called_once_with()
             mmethod.assert_called_once_with()
 
-    @mock.patch('os.makedirs', side_effect=OSError(errno.EEXIST, ''))
+    @mock.patch('os.makedirs')
+    @mock.patch('os.path.exists', return_value=True)
     def test_makedirs_oserror17(self, *args):
         self._test_makedirs()
         args[0].assert_called_once_with(self.test.res_dir)
+        args[1].assert_not_called()
 
     @mock.patch('os.makedirs')
+    @mock.patch('os.path.exists', return_value=False)
     def test_makedirs(self, *args):
         self._test_makedirs()
         args[0].assert_called_once_with(self.test.res_dir)
+        args[1].assert_called_once_with(self.test.res_dir)
 
     @mock.patch('os.makedirs')
     @mock.patch('robot.run')

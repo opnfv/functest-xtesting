@@ -1,4 +1,13 @@
 ---
 - hosts: 127.0.0.1
   roles:
-    - collivier.xtesting
+    - role: collivier.xtesting
+      suites:
+        - container: xtesting
+          tests:
+            - first
+            - second
+            - third
+            - fourth
+            - fifth
+            - sixth

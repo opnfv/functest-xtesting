@@ -11,7 +11,6 @@
 
 from __future__ import division
 
-import errno
 import logging
 import os
 
@@ -110,15 +109,12 @@ class RobotFramework(testcase.TestCase):
         except KeyError:
             self.__logger.exception("Mandatory args were not passed")
             return self.EX_RUN_ERROR
-        try:
-            os.makedirs(self.res_dir)
-        except OSError as ex:
-            if ex.errno != errno.EEXIST:
+        if not os.path.exists(self.res_dir):
+            try:
+                os.makedirs(self.res_dir)
+            except Exception:  # pylint: disable=broad-except
                 self.__logger.exception("Cannot create %s", self.res_dir)
                 return self.EX_RUN_ERROR
-        except Exception:  # pylint: disable=broad-except
-            self.__logger.exception("Cannot create %s", self.res_dir)
-            return self.EX_RUN_ERROR
         stream = StringIO()
         robot.run(*suites, variable=variable, variablefile=variablefile,
                   include=include, output=self.xml_file, log='NONE',
