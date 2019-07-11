@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1390850_7d31922b",
+        "filename": "upper-constraints.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2019-07-11T07:42:52Z",
+      "side": 1,
+      "message": "it must be pinned here (1.2.6)",
+      "revId": "8963e832f43f6104b3bb8c606365a6d7cc39798c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66816f39_45856874",
+        "filename": "xtesting/core/behaveframework.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2019-07-11T07:42:52Z",
+      "side": 1,
+      "message": "we could remove it from the time being.",
+      "revId": "8963e832f43f6104b3bb8c606365a6d7cc39798c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
