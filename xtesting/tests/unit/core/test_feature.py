@@ -29,6 +29,7 @@ class FakeTestCase(feature.Feature):
 class AbstractFeatureTesting(unittest.TestCase):
 
     def test_run_unimplemented(self):
+        # pylint: disable=abstract-class-instantiated
         with self.assertRaises(TypeError):
             feature.Feature(case_name="feature", project_name="xtesting")
 
