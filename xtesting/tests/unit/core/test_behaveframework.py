@@ -66,11 +66,10 @@ class ParseResultTesting(unittest.TestCase):
         data = [{'status': 'passed'}, {'status': 'passed'}]
         self._test_result(data, 100)
 
-    def test_count(self):
+    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    def test_count(self, *args):  # pylint: disable=unused-argument
         self._response.extend([{'status': 'failed'}, {'status': 'skipped'}])
-        with mock.patch('six.moves.builtins.open', mock.mock_open()), \
-                mock.patch('json.load', mock.Mock(
-                    return_value=self._response)):
+        with mock.patch('json.load', mock.Mock(return_value=self._response)):
             self.test.parse_results()
             self.assertEqual(self.test.details['pass_tests'], 1)
             self.assertEqual(self.test.details['fail_tests'], 1)
