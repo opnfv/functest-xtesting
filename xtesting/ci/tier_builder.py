@@ -16,7 +16,7 @@ from xtesting.ci import tier_handler
 from xtesting.utils import env
 
 
-class TierBuilder(object):
+class TierBuilder():
     # pylint: disable=missing-docstring
 
     def __init__(self, testcases_file):

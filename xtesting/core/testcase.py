@@ -27,7 +27,7 @@ __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
 
 @six.add_metaclass(abc.ABCMeta)
-class TestCase(object):
+class TestCase():
     # pylint: disable=too-many-instance-attributes
     """Base model for single test case."""
 
