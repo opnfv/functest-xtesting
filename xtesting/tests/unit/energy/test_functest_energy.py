@@ -287,11 +287,11 @@ class EnergyRecorderTest(unittest.TestCase):
         EnergyRecorder.energy_recorder_api = None
         EnergyRecorder.load_config()
 
-        self.assertEquals(
+        self.assertEqual(
             EnergyRecorder.energy_recorder_api["auth"],
             ("user", "password")
         )
-        self.assertEquals(
+        self.assertEqual(
             EnergyRecorder.energy_recorder_api["uri"],
             "http://pod-uri:8888/recorders/environment/MOCK_POD"
         )
@@ -304,8 +304,8 @@ class EnergyRecorderTest(unittest.TestCase):
         self._set_env_nocreds()
         EnergyRecorder.energy_recorder_api = None
         EnergyRecorder.load_config()
-        self.assertEquals(EnergyRecorder.energy_recorder_api["auth"], None)
-        self.assertEquals(
+        self.assertEqual(EnergyRecorder.energy_recorder_api["auth"], None)
+        self.assertEqual(
             EnergyRecorder.energy_recorder_api["uri"],
             "http://pod-uri:8888/recorders/environment/MOCK_POD"
         )
@@ -319,7 +319,7 @@ class EnergyRecorderTest(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 EnergyRecorder.energy_recorder_api = None
                 EnergyRecorder.load_config()
-            self.assertEquals(EnergyRecorder.energy_recorder_api, None)
+            self.assertEqual(EnergyRecorder.energy_recorder_api, None)
 
     @mock.patch("xtesting.energy.energy.requests.get",
                 return_value=API_KO)
@@ -329,8 +329,8 @@ class EnergyRecorderTest(unittest.TestCase):
         self._set_env_creds()
         EnergyRecorder.energy_recorder_api = None
         EnergyRecorder.load_config()
-        self.assertEquals(EnergyRecorder.energy_recorder_api["available"],
-                          False)
+        self.assertEqual(EnergyRecorder.energy_recorder_api["available"],
+                         False)
 
     @mock.patch('xtesting.energy.energy.requests.get',
                 return_value=RECORDER_OK)
