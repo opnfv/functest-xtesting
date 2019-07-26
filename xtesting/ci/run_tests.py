@@ -46,10 +46,9 @@ class Result(enum.Enum):
 
 class BlockingTestFailed(Exception):
     """Exception when the blocking test fails"""
-    pass
 
 
-class RunTestsParser(object):
+class RunTestsParser():
     """Parser to run tests"""
     # pylint: disable=too-few-public-methods
 
@@ -78,7 +77,7 @@ class RunTestsParser(object):
         return vars(self.parser.parse_args(argv))
 
 
-class Runner(object):
+class Runner():
     """Runner class"""
 
     def __init__(self):

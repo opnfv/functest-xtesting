@@ -1,3 +1,5 @@
 robotframework===3.1.1
 bandit===1.1.0
 behave===1.2.6
+pylint===1.9.5;python_version=='2.7'
+pylint===2.3.1;python_version=='3.7'
