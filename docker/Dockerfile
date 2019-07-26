@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.10
 
 ARG BRANCH=master
 ARG OPENSTACK_TAG=master

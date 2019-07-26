@@ -34,7 +34,7 @@ def split_text(text, max_len):
     return lines
 
 
-class Tier(object):
+class Tier():
 
     def __init__(self, name, order, description=""):
         self.tests_array = []
@@ -96,7 +96,7 @@ class Tier(object):
         return msg.get_string()
 
 
-class TestCase(object):
+class TestCase():
 
     def __init__(self, name, enabled, skipped, criteria, blocking,
                  description="", project=""):

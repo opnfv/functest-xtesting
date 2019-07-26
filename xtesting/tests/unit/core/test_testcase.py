@@ -35,6 +35,7 @@ class FakeTestCase(testcase.TestCase):
 class AbstractTestCaseTesting(unittest.TestCase):
 
     def test_run_unimplemented(self):
+        # pylint: disable=abstract-class-instantiated
         with self.assertRaises(TypeError):
             testcase.TestCase(case_name="base", project_name="xtesting")
 
