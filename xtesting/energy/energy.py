@@ -48,7 +48,7 @@ def enable_recording(method):
                   attribute
     """
     @wraps(method)
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):  # pylint: disable=unused-argument
         """
         Record energy during method execution (implementation).
 
