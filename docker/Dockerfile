@@ -1,7 +1,7 @@
 FROM alpine:3.10
 
-ARG BRANCH=master
-ARG OPENSTACK_TAG=master
+ARG BRANCH=stable/jerma
+ARG OPENSTACK_TAG=stable/train
 
 RUN apk --no-cache add --update python3 bash git && \
     apk --no-cache add --virtual .build-deps --update \
