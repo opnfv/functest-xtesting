@@ -3,8 +3,8 @@
   roles:
     - role: collivier.xtesting
       docker_tags:
-        - iruya:
-            branch: stable/iruya
+        - jerma:
+            branch: stable/jerma
       builds:
         dependencies:
           - repo: _
