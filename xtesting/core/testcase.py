@@ -17,8 +17,11 @@ import os
 import re
 import requests
 
+import boto3
+import botocore
 import prettytable
 import six
+from six.moves import urllib
 
 from xtesting.utils import decorators
 from xtesting.utils import env
@@ -46,6 +49,10 @@ class TestCase(object):
     EX_TESTCASE_SKIPPED = os.EX_SOFTWARE - 3
     """requirements are unmet"""
 
+    EX_PUBLISH_ARTIFACTS_ERROR = os.EX_SOFTWARE - 4
+    """publish_artifacts() failed"""
+
+    dir_results = "/var/lib/xtesting/results"
     _job_name_rule = "(dai|week)ly-(.+?)-[0-9]*"
     _headers = {'Content-Type': 'application/json'}
     __logger = logging.getLogger(__name__)
@@ -59,6 +66,7 @@ class TestCase(object):
         self.start_time = 0
         self.stop_time = 0
         self.is_skipped = False
+        self.res_dir = "{}/{}".format(self.dir_results, self.case_name)
 
     def __str__(self):
         try:
@@ -236,6 +244,64 @@ class TestCase(object):
             self.__logger.exception("The results cannot be pushed to DB")
             return TestCase.EX_PUSH_TO_DB_ERROR
         return TestCase.EX_OK
+
+    def publish_artifacts(self):
+        """Push the artifacts to the S3 repository.
+
+        It allows publishing the artifacts.
+
+        It could be overriden if the common implementation is not
+        suitable.
+
+        The credentials must be configured before publishing the artifacts:
+
+            * fill ~/.aws/credentials or ~/.boto,
+            * set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in env.
+
+        The next vars must be set in env:
+
+            * S3_ENDPOINT_URL (http://127.0.0.1:9000),
+            * S3_DST_URL (s3://xtesting/prefix),
+            * HTTP_DST_URL (http://127.0.0.1/prefix).
+
+        Returns:
+            TestCase.EX_OK if artifacts were published to repository.
+            TestCase.EX_PUBLISH_ARTIFACTS_ERROR otherwise.
+        """
+        try:
+            b3resource = boto3.resource(
+                's3', endpoint_url=os.environ["S3_ENDPOINT_URL"])
+            dst_s3_url = os.environ["S3_DST_URL"]
+            bucket = urllib.parse.urlparse(dst_s3_url).netloc
+            path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
+            output_str = "\n"
+            for root, _, files in os.walk(self.dir_results):
+                for pub_file in files:
+                    # pylint: disable=no-member
+                    b3resource.Bucket(bucket).upload_file(
+                        os.path.join(root, pub_file),
+                        os.path.join(path, os.path.relpath(
+                            os.path.join(root, pub_file),
+                            start=self.dir_results)))
+                    dst_http_url = os.environ["HTTP_DST_URL"]
+                    output_str += "\n{}".format(
+                        os.path.join(dst_http_url, os.path.relpath(
+                            os.path.join(root, pub_file),
+                            start=self.dir_results)))
+            self.__logger.info(
+                "All artifacts were successfully published: %s\n", output_str)
+            return TestCase.EX_OK
+        except KeyError as ex:
+            self.__logger.error("Please check env var: %s", str(ex))
+            return TestCase.EX_PUBLISH_ARTIFACTS_ERROR
+        except botocore.exceptions.NoCredentialsError:
+            self.__logger.error(
+                "Please fill ~/.aws/credentials, ~/.boto or set "
+                "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in env")
+            return TestCase.EX_PUBLISH_ARTIFACTS_ERROR
+        except Exception:  # pylint: disable=broad-except
+            self.__logger.exception("Cannot publish the artifacts")
+            return TestCase.EX_PUBLISH_ARTIFACTS_ERROR
 
     def clean(self):
         """Clean the resources.
