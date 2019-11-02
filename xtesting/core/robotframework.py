@@ -57,7 +57,6 @@ class RobotFramework(testcase.TestCase):
 
     def __init__(self, **kwargs):
         super(RobotFramework, self).__init__(**kwargs)
-        self.res_dir = os.path.join(self.dir_results, self.case_name)
         self.xml_file = os.path.join(self.res_dir, 'output.xml')
 
     def parse_results(self):
