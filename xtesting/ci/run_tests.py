@@ -65,6 +65,9 @@ class RunTestsParser():
         self.parser.add_argument("-r", "--report", help="Push results to "
                                  "database (default=false).",
                                  action="store_true")
+        self.parser.add_argument("-p", "--push", help="Push artifacts to "
+                                 "S3 repository (default=false).",
+                                 action="store_true")
 
     def parse_args(self, argv=None):
         """Parse arguments.
@@ -85,6 +88,7 @@ class Runner():
         self.overall_result = Result.EX_OK
         self.clean_flag = True
         self.report_flag = False
+        self.push_flag = False
         self.tiers = tier_builder.TierBuilder(
             pkg_resources.resource_filename('xtesting', 'ci/testcases.yaml'))
 
@@ -174,6 +178,8 @@ class Runner():
                 LOGGER.info("Test result:\n\n%s\n", test_case)
                 if self.clean_flag:
                     test_case.clean()
+                if self.push_flag:
+                    test_case.publish_artifacts()
             except ImportError:
                 LOGGER.exception("Cannot import module %s", run_dict['module'])
             except AttributeError:
@@ -226,12 +232,14 @@ class Runner():
         for tier in tiers_to_run:
             self.run_tier(tier)
 
-    def main(self, **kwargs):
+    def main(self, **kwargs):  # pylint: disable=too-many-branches
         """Entry point of class Runner"""
         if 'noclean' in kwargs:
             self.clean_flag = not kwargs['noclean']
         if 'report' in kwargs:
             self.report_flag = kwargs['report']
+        if 'push' in kwargs:
+            self.push_flag = kwargs['push']
         try:
             LOGGER.info("Deployment description:\n\n%s\n", env.string())
             self.source_envfile()

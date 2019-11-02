@@ -32,7 +32,6 @@ class BehaveFramework(testcase.TestCase):
 
     def __init__(self, **kwargs):
         super(BehaveFramework, self).__init__(**kwargs)
-        self.res_dir = os.path.join(self.dir_results, self.case_name)
         self.json_file = os.path.join(self.res_dir, 'output.json')
         self.total_tests = 0
         self.pass_tests = 0
