@@ -88,7 +88,6 @@ class BashFeature(Feature):
 
     def __init__(self, **kwargs):
         super(BashFeature, self).__init__(**kwargs)
-        self.res_dir = "/var/lib/xtesting/results/{}".format(self.case_name)
         self.result_file = "{}/{}.log".format(self.res_dir, self.case_name)
 
     def execute(self, **kwargs):

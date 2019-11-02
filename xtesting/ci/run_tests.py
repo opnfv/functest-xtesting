@@ -65,6 +65,9 @@ class RunTestsParser():
         self.parser.add_argument("-r", "--report", help="Push results to "
                                  "database (default=false).",
                                  action="store_true")
+        self.parser.add_argument("-p", "--push", help="Push artifacts to "
+                                 "S3 repository (default=false).",
+                                 action="store_true")
 
     def parse_args(self, argv=None):
         """Parse arguments.
@@ -174,6 +177,8 @@ class Runner():
                 LOGGER.info("Test result:\n\n%s\n", test_case)
                 if self.clean_flag:
                     test_case.clean()
+                if self.push_flag:
+                    test_case.publish_artifacts()
             except ImportError:
                 LOGGER.exception("Cannot import module %s", run_dict['module'])
             except AttributeError:
@@ -232,6 +237,8 @@ class Runner():
             self.clean_flag = not kwargs['noclean']
         if 'report' in kwargs:
             self.report_flag = kwargs['report']
+        if 'push' in kwargs:
+            self.push_flag = kwargs['push']
         try:
             LOGGER.info("Deployment description:\n\n%s\n", env.string())
             self.source_envfile()
