@@ -34,7 +34,6 @@ class Suite(testcase.TestCase):
 
     def __init__(self, **kwargs):
         super(Suite, self).__init__(**kwargs)
-        self.res_dir = "/var/lib/xtesting/results/{}".format(self.case_name)
         self.suite = None
 
     @classmethod
