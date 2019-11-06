@@ -15,11 +15,12 @@ import json
 import logging
 import os
 import re
-import requests
+import sys
 
 import boto3
 import botocore
 import prettytable
+import requests
 import six
 from six.moves import urllib
 
@@ -245,7 +246,7 @@ class TestCase():
             return TestCase.EX_PUSH_TO_DB_ERROR
         return TestCase.EX_OK
 
-    def publish_artifacts(self):
+    def publish_artifacts(self):  # pylint: disable=too-many-locals
         """Push the artifacts to the S3 repository.
 
         It allows publishing the artifacts.
@@ -272,13 +273,26 @@ class TestCase():
             b3resource = boto3.resource(
                 's3', endpoint_url=os.environ["S3_ENDPOINT_URL"])
             dst_s3_url = os.environ["S3_DST_URL"]
-            bucket = urllib.parse.urlparse(dst_s3_url).netloc
+            bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
+            try:
+                b3resource.meta.client.head_bucket(Bucket=bucket_name)
+            except botocore.exceptions.ClientError as exc:
+                error_code = exc.response['Error']['Code']
+                if error_code == '404':
+                    # pylint: disable=no-member
+                    b3resource.create_bucket(Bucket=bucket_name)
+                else:
+                    typ, value, traceback = sys.exc_info()
+                    six.reraise(typ, value, traceback)
+            except Exception:  # pylint: disable=broad-except
+                typ, value, traceback = sys.exc_info()
+                six.reraise(typ, value, traceback)
             path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
             output_str = "\n"
             for root, _, files in os.walk(self.dir_results):
                 for pub_file in files:
                     # pylint: disable=no-member
-                    b3resource.Bucket(bucket).upload_file(
+                    b3resource.Bucket(bucket_name).upload_file(
                         os.path.join(root, pub_file),
                         os.path.join(path, os.path.relpath(
                             os.path.join(root, pub_file),
