@@ -340,6 +340,25 @@ class TestCaseTesting(unittest.TestCase):
             's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
 
     @mock.patch('boto3.resource')
+    def test_publish_artifacts_exc4(self, *args):
+        args[0].return_value.meta.client.head_bucket.side_effect = Exception
+        self.assertEqual(self.test.publish_artifacts(),
+                         testcase.TestCase.EX_PUBLISH_ARTIFACTS_ERROR)
+        args[0].assert_called_once_with(
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+
+    @mock.patch('boto3.resource')
+    def test_publish_artifacts_exc5(self, *args):
+        error_response = {'Error': {'Code': '403'}}
+        mock_head_bucket = args[0].return_value.meta.client.head_bucket
+        mock_head_bucket.side_effect = botocore.exceptions.ClientError(
+            error_response, 'Foo')
+        self.assertEqual(self.test.publish_artifacts(),
+                         testcase.TestCase.EX_PUBLISH_ARTIFACTS_ERROR)
+        args[0].assert_called_once_with(
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+
+    @mock.patch('boto3.resource')
     @mock.patch('os.walk', return_value=[])
     def test_publish_artifacts1(self, *args):
         self.assertEqual(self.test.publish_artifacts(),
@@ -349,15 +368,30 @@ class TestCaseTesting(unittest.TestCase):
             's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
 
     @mock.patch('boto3.resource')
+    @mock.patch('os.walk', return_value=[])
+    def test_publish_artifacts2(self, *args):
+        error_response = {'Error': {'Code': '404'}}
+        mock_head_bucket = args[1].return_value.meta.client.head_bucket
+        mock_head_bucket.side_effect = botocore.exceptions.ClientError(
+            error_response, 'NoSuchBucket')
+        self.assertEqual(self.test.publish_artifacts(),
+                         testcase.TestCase.EX_OK)
+        args[0].assert_called_once_with(self.test.dir_results)
+        args[1].assert_called_once_with(
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+
+
+    @mock.patch('boto3.resource')
     @mock.patch('os.walk',
                 return_value=[
                     (testcase.TestCase.dir_results, ('',), ('bar',))])
-    def test_publish_artifacts2(self, *args):
+    def test_publish_artifacts3(self, *args):
         self.assertEqual(self.test.publish_artifacts(),
                          testcase.TestCase.EX_OK)
         args[0].assert_called_once_with(self.test.dir_results)
         expected = [
             mock.call('s3', endpoint_url=os.environ['S3_ENDPOINT_URL']),
+            mock.call().meta.client.head_bucket(Bucket='xtesting'),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/bar', 'prefix/bar')]
