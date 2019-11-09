@@ -20,6 +20,7 @@ INPUTS = {
     'BUILD_TAG': None,
     'NODE_NAME': None,
     'TEST_DB_URL': 'http://testresults.opnfv.org/test/api/v1/results',
+    'TEST_DB_EXT_URL': None,
     'S3_ENDPOINT_URL': None,
     'S3_DST_URL': None,
     'HTTP_DST_URL': None
