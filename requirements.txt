@@ -8,6 +8,7 @@ enum34;python_version=='2.7' or python_version=='2.6' or python_version=='3.3' #
 requests!=2.20.0 # Apache-2.0
 robotframework>=3.0
 behave>=1.2.6
+behave-html-formatter>=0.9.4
 mock # BSD
 PrettyTable<0.8 # BSD
 six # MIT
