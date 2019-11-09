@@ -14,7 +14,9 @@ from __future__ import division
 import logging
 import os
 import time
+
 import json
+import six
 
 from behave.__main__ import main as behave_main
 
@@ -102,8 +104,12 @@ class BehaveFramework(testcase.TestCase):
                 self.__logger.exception("Cannot create %s", self.res_dir)
                 return self.EX_RUN_ERROR
         config = ['--tags='+','.join(tags),
-                  '--format=json',
-                  '--outfile='+self.json_file]
+                  '--junit', '--junit-directory={}'.format(self.res_dir),
+                  '--format=json', '--outfile={}'.format(self.json_file)]
+        if six.PY3:
+            html_file = os.path.join(self.res_dir, 'output.html')
+            config += ['--format=behave_html_formatter:HTMLFormatter',
+                       '--outfile={}'.format(html_file)]
         for feature in suites:
             config.append(feature)
         self.start_time = time.time()
