@@ -58,6 +58,7 @@ class TestCaseTesting(unittest.TestCase):
         self.test.result = 100
         self.test.details = {"Hello": "World"}
         os.environ['TEST_DB_URL'] = TestCaseTesting._test_db_url
+        os.environ['TEST_DB_EXT_URL'] = TestCaseTesting._test_db_url
         os.environ['INSTALLER_TYPE'] = "installer_type"
         os.environ['DEPLOY_SCENARIO'] = "scenario"
         os.environ['NODE_NAME'] = "node_name"
