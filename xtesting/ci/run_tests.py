@@ -172,14 +172,14 @@ class Runner():
                     test_case.run(**kwargs)
                 except KeyError:
                     test_case.run()
-                if self.report_flag:
-                    test_case.push_to_db()
                 result = test_case.is_successful()
                 LOGGER.info("Test result:\n\n%s\n", test_case)
                 if self.clean_flag:
                     test_case.clean()
                 if self.push_flag:
                     test_case.publish_artifacts()
+                if self.report_flag:
+                    test_case.push_to_db()
             except ImportError:
                 LOGGER.exception("Cannot import module %s", run_dict['module'])
             except AttributeError:
