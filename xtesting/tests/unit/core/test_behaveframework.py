@@ -10,9 +10,12 @@
 """Define the classes required to fully cover behave."""
 
 import logging
+import os
 import unittest
 
 import mock
+import six
+
 from xtesting.core import behaveframework
 
 __author__ = "Deepak Chandella <deepak.chandella@orange.com>"
@@ -29,28 +32,27 @@ class ParseResultTesting(unittest.TestCase):
         self.test = behaveframework.BehaveFramework(
             case_name='behave', project_name='xtesting')
 
-    def test_raises_exc_open(self):
-        self.test.json_file = 'dummy_file'
-        self.test.response = self._response
-        with mock.patch('six.moves.builtins.open',
-                        mock.mock_open()) as mock_file:
-            mock_file.side_effect = IOError()
-            self.assertRaises(IOError, self.test.parse_results())
-        mock_file.assert_called_once_with('dummy_file')
+    @mock.patch('six.moves.builtins.open', side_effect=OSError)
+    def test_raises_exc_open(self, *args):  # pylint: disable=unused-argument
+        with self.assertRaises(OSError):
+            self.test.parse_results()
 
-    def test_raises_exc_key(self):
-        with mock.patch('six.moves.builtins.open', mock.mock_open()), \
-                mock.patch('json.load', return_value=[{'foo': 'bar'}]):
-            self.assertRaises(KeyError, self.test.parse_results())
+    @mock.patch('json.load', return_value=[{'foo': 'bar'}])
+    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    def test_raises_exc_key(self, *args):  # pylint: disable=unused-argument
+        with self.assertRaises(KeyError):
+            self.test.parse_results()
 
-    def test_raises_exe_zerodivision(self):
-        with mock.patch('six.moves.builtins.open', mock.mock_open()), \
-                mock.patch('json.load', mock.Mock(return_value=[])):
-            self.assertRaises(ZeroDivisionError, self.test.parse_results())
+    @mock.patch('json.load', return_value=[])
+    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    def test_raises_exe_zerodivision(self, *args):
+        # pylint: disable=unused-argument
+        with self.assertRaises(ZeroDivisionError):
+            self.test.parse_results()
 
     def _test_result(self, response, result):
         with mock.patch('six.moves.builtins.open', mock.mock_open()), \
-                mock.patch('json.load', mock.Mock(return_value=response)):
+                mock.patch('json.load', return_value=response):
             self.test.parse_results()
             self.assertEqual(self.test.result, result)
 
@@ -66,11 +68,10 @@ class ParseResultTesting(unittest.TestCase):
         data = [{'status': 'passed'}, {'status': 'passed'}]
         self._test_result(data, 100)
 
-    def test_count(self):
+    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    def test_count(self, *args):  # pylint: disable=unused-argument
         self._response.extend([{'status': 'failed'}, {'status': 'skipped'}])
-        with mock.patch('six.moves.builtins.open', mock.mock_open()), \
-                mock.patch('json.load', mock.Mock(
-                    return_value=self._response)):
+        with mock.patch('json.load', mock.Mock(return_value=self._response)):
             self.test.parse_results()
             self.assertEqual(self.test.details['pass_tests'], 1)
             self.assertEqual(self.test.details['fail_tests'], 1)
@@ -116,11 +117,17 @@ class RunTesting(unittest.TestCase):
             self.assertEqual(
                 self.test.run(suites=self.suites, tags=self.tags),
                 self.test.EX_OK)
-            args[0].assert_called_once_with(
-                ['--tags=',
-                 '--format=json',
-                 '--outfile={}'.format(self.test.json_file),
-                 'foo'])
+            html_file = os.path.join(self.test.res_dir, 'output.html')
+            args_list = [
+                '--tags=', '--junit',
+                '--junit-directory={}'.format(self.test.res_dir),
+                '--format=json', '--outfile={}'.format(self.test.json_file)]
+            if six.PY3:
+                args_list += [
+                    '--format=behave_html_formatter:HTMLFormatter',
+                    '--outfile={}'.format(html_file)]
+            args_list.append('foo')
+            args[0].assert_called_once_with(args_list)
             mock_method.assert_called_once_with()
 
     @mock.patch('os.makedirs')
@@ -144,11 +151,17 @@ class RunTesting(unittest.TestCase):
             self.test.run(
                 suites=self.suites, tags=self.tags),
             status)
-        args[0].assert_called_once_with(
-            ['--tags=',
-             '--format=json',
-             '--outfile={}'.format(self.test.json_file),
-             'foo'])
+        html_file = os.path.join(self.test.res_dir, 'output.html')
+        args_list = [
+            '--tags=', '--junit',
+            '--junit-directory={}'.format(self.test.res_dir),
+            '--format=json', '--outfile={}'.format(self.test.json_file)]
+        if six.PY3:
+            args_list += [
+                '--format=behave_html_formatter:HTMLFormatter',
+                '--outfile={}'.format(html_file)]
+        args_list.append('foo')
+        args[0].assert_called_once_with(args_list)
         args[1].assert_called_once_with(self.test.res_dir)
 
     def test_parse_results_exc(self):
@@ -156,6 +169,7 @@ class RunTesting(unittest.TestCase):
                                side_effect=Exception) as mock_method:
             self._test_parse_results(self.test.EX_RUN_ERROR)
             mock_method.assert_called_once_with()
+
 
 if __name__ == "__main__":
     logging.disable(logging.CRITICAL)
