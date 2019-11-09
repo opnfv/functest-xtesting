@@ -22,7 +22,10 @@ INPUTS = {
     'TEST_DB_URL': 'http://testresults.opnfv.org/test/api/v1/results',
     'ENERGY_RECORDER_API_URL': 'http://energy.opnfv.fr/resources',
     'ENERGY_RECORDER_API_USER': None,
-    'ENERGY_RECORDER_API_PASSWORD': None
+    'ENERGY_RECORDER_API_PASSWORD': None,
+    'S3_ENDPOINT_URL': None,
+    'S3_DST_URL': None,
+    'HTTP_DST_URL': None
 }
 
 
