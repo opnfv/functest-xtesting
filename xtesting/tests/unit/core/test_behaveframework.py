@@ -10,6 +10,7 @@
 """Define the classes required to fully cover behave."""
 
 import logging
+import os
 import unittest
 
 import mock
@@ -115,11 +116,13 @@ class RunTesting(unittest.TestCase):
             self.assertEqual(
                 self.test.run(suites=self.suites, tags=self.tags),
                 self.test.EX_OK)
+            html_file = os.path.join(self.test.res_dir, 'output.html')
             args[0].assert_called_once_with(
                 ['--tags=',
-                 '--format=json',
-                 '--outfile={}'.format(self.test.json_file),
-                 'foo'])
+                 '--junit', '--junit-directory={}'.format(self.test.res_dir),
+                 '--format=json', '--outfile={}'.format(self.test.json_file),
+                 '--format=behave_html_formatter:HTMLFormatter',
+                 '--outfile={}'.format(html_file), 'foo'])
             mock_method.assert_called_once_with()
 
     @mock.patch('os.makedirs')
@@ -143,11 +146,13 @@ class RunTesting(unittest.TestCase):
             self.test.run(
                 suites=self.suites, tags=self.tags),
             status)
+        html_file = os.path.join(self.test.res_dir, 'output.html')
         args[0].assert_called_once_with(
             ['--tags=',
-             '--format=json',
-             '--outfile={}'.format(self.test.json_file),
-             'foo'])
+             '--junit', '--junit-directory={}'.format(self.test.res_dir),
+             '--format=json', '--outfile={}'.format(self.test.json_file),
+             '--format=behave_html_formatter:HTMLFormatter',
+             '--outfile={}'.format(html_file), 'foo'])
         args[1].assert_called_once_with(self.test.res_dir)
 
     def test_parse_results_exc(self):

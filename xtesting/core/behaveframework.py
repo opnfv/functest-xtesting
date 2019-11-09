@@ -101,9 +101,12 @@ class BehaveFramework(testcase.TestCase):
             except Exception:  # pylint: disable=broad-except
                 self.__logger.exception("Cannot create %s", self.res_dir)
                 return self.EX_RUN_ERROR
+        html_file = os.path.join(self.res_dir, 'output.html')
         config = ['--tags='+','.join(tags),
-                  '--format=json',
-                  '--outfile='+self.json_file]
+                  '--junit', '--junit-directory={}'.format(self.res_dir),
+                  '--format=json', '--outfile={}'.format(self.json_file),
+                  '--format=behave_html_formatter:HTMLFormatter',
+                  '--outfile={}'.format(html_file)]
         for feature in suites:
             config.append(feature)
         self.start_time = time.time()
