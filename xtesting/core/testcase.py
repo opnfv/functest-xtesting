@@ -67,6 +67,8 @@ class TestCase():
         self.start_time = 0
         self.stop_time = 0
         self.is_skipped = False
+        self.output_log_name = 'xtesting.log'
+        self.output_debug_log_name = 'xtesting.debug.log'
         self.res_dir = "{}/{}".format(self.dir_results, self.case_name)
 
     def __str__(self):
@@ -294,9 +296,19 @@ class TestCase():
                 typ, value, traceback = sys.exc_info()
                 six.reraise(typ, value, traceback)
             path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
+            dst_http_url = os.environ["HTTP_DST_URL"]
             output_str = "\n"
             self.details["links"] = []
-            for root, _, files in os.walk(self.dir_results):
+            for log_file in [self.output_log_name, self.output_debug_log_name]:
+                if os.path.exists(os.path.join(self.dir_results, log_file)):
+                    # pylint: disable=no-member
+                    b3resource.Bucket(bucket_name).upload_file(
+                        os.path.join(self.dir_results, log_file),
+                        os.path.join(path, log_file))
+                    link = os.path.join(dst_http_url, log_file)
+                    output_str += "\n{}".format(link)
+                    self.details["links"].append(link)
+            for root, _, files in os.walk(self.res_dir):
                 for pub_file in files:
                     # pylint: disable=no-member
                     b3resource.Bucket(bucket_name).upload_file(
@@ -304,7 +316,6 @@ class TestCase():
                         os.path.join(path, os.path.relpath(
                             os.path.join(root, pub_file),
                             start=self.dir_results)))
-                    dst_http_url = os.environ["HTTP_DST_URL"]
                     link = os.path.join(dst_http_url, os.path.relpath(
                         os.path.join(root, pub_file),
                         start=self.dir_results))
