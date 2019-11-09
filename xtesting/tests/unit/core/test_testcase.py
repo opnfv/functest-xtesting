@@ -364,7 +364,7 @@ class TestCaseTesting(unittest.TestCase):
     def test_publish_artifacts1(self, *args):
         self.assertEqual(self.test.publish_artifacts(),
                          testcase.TestCase.EX_OK)
-        args[0].assert_called_once_with(self.test.dir_results)
+        args[0].assert_called_once_with(self.test.res_dir)
         args[1].assert_called_once_with(
             's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
 
@@ -377,10 +377,11 @@ class TestCaseTesting(unittest.TestCase):
             error_response, 'NoSuchBucket')
         self.assertEqual(self.test.publish_artifacts(),
                          testcase.TestCase.EX_OK)
-        args[0].assert_called_once_with(self.test.dir_results)
+        args[0].assert_called_once_with(self.test.res_dir)
         args[1].assert_called_once_with(
             's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
 
+    @mock.patch('os.path.exists', return_value=True)
     @mock.patch('boto3.resource')
     @mock.patch('os.walk',
                 return_value=[
@@ -388,10 +389,18 @@ class TestCaseTesting(unittest.TestCase):
     def test_publish_artifacts3(self, *args):
         self.assertEqual(self.test.publish_artifacts(),
                          testcase.TestCase.EX_OK)
-        args[0].assert_called_once_with(self.test.dir_results)
+        args[0].assert_called_once_with(self.test.res_dir)
         expected = [
             mock.call('s3', endpoint_url=os.environ['S3_ENDPOINT_URL']),
             mock.call().meta.client.head_bucket(Bucket='xtesting'),
+            mock.call().Bucket('xtesting'),
+            mock.call().Bucket().upload_file(
+                '/var/lib/xtesting/results/xtesting.log',
+                'prefix/xtesting.log'),
+            mock.call().Bucket('xtesting'),
+            mock.call().Bucket().upload_file(
+                '/var/lib/xtesting/results/xtesting.debug.log',
+                'prefix/xtesting.debug.log'),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/bar', 'prefix/bar')]
