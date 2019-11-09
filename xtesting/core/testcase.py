@@ -295,6 +295,7 @@ class TestCase(object):
                 six.reraise(typ, value, traceback)
             path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
             output_str = "\n"
+            self.details["links"] = []
             for root, _, files in os.walk(self.dir_results):
                 for pub_file in files:
                     # pylint: disable=no-member
@@ -304,10 +305,11 @@ class TestCase(object):
                             os.path.join(root, pub_file),
                             start=self.dir_results)))
                     dst_http_url = os.environ["HTTP_DST_URL"]
-                    output_str += "\n{}".format(
-                        os.path.join(dst_http_url, os.path.relpath(
-                            os.path.join(root, pub_file),
-                            start=self.dir_results)))
+                    link = os.path.join(dst_http_url, os.path.relpath(
+                        os.path.join(root, pub_file),
+                        start=self.dir_results))
+                    output_str += "\n{}".format(link)
+                    self.details["links"].append(link)
             self.__logger.info(
                 "All artifacts were successfully published: %s\n", output_str)
             return TestCase.EX_OK
