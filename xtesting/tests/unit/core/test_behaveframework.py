@@ -10,9 +10,12 @@
 """Define the classes required to fully cover behave."""
 
 import logging
+import os
 import unittest
 
 import mock
+import six
+
 from xtesting.core import behaveframework
 
 __author__ = "Deepak Chandella <deepak.chandella@orange.com>"
@@ -115,11 +118,17 @@ class RunTesting(unittest.TestCase):
             self.assertEqual(
                 self.test.run(suites=self.suites, tags=self.tags),
                 self.test.EX_OK)
-            args[0].assert_called_once_with(
-                ['--tags=',
-                 '--format=json',
-                 '--outfile={}'.format(self.test.json_file),
-                 'foo'])
+            html_file = os.path.join(self.test.res_dir, 'output.html')
+            args_list = [
+                '--tags=', '--junit',
+                '--junit-directory={}'.format(self.test.res_dir),
+                '--format=json', '--outfile={}'.format(self.test.json_file)]
+            if six.PY3:
+                args_list += [
+                    '--format=behave_html_formatter:HTMLFormatter',
+                    '--outfile={}'.format(html_file)]
+            args_list.append('foo')
+            args[0].assert_called_once_with(args_list)
             mock_method.assert_called_once_with()
 
     @mock.patch('os.makedirs')
@@ -143,11 +152,17 @@ class RunTesting(unittest.TestCase):
             self.test.run(
                 suites=self.suites, tags=self.tags),
             status)
-        args[0].assert_called_once_with(
-            ['--tags=',
-             '--format=json',
-             '--outfile={}'.format(self.test.json_file),
-             'foo'])
+        html_file = os.path.join(self.test.res_dir, 'output.html')
+        args_list = [
+            '--tags=', '--junit',
+            '--junit-directory={}'.format(self.test.res_dir),
+            '--format=json', '--outfile={}'.format(self.test.json_file)]
+        if six.PY3:
+            args_list += [
+                '--format=behave_html_formatter:HTMLFormatter',
+                '--outfile={}'.format(html_file)]
+        args_list.append('foo')
+        args[0].assert_called_once_with(args_list)
         args[1].assert_called_once_with(self.test.res_dir)
 
     def test_parse_results_exc(self):
