@@ -359,6 +359,7 @@ class TestCaseTesting(unittest.TestCase):
         args[0].assert_called_once_with(
             's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
 
+    @mock.patch('mimetypes.guess_type', return_value=(None, None))
     @mock.patch('boto3.resource')
     @mock.patch('os.walk', return_value=[])
     def test_publish_artifacts1(self, *args):
@@ -368,6 +369,7 @@ class TestCaseTesting(unittest.TestCase):
         args[1].assert_called_once_with(
             's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
 
+    @mock.patch('mimetypes.guess_type', return_value=(None, None))
     @mock.patch('boto3.resource')
     @mock.patch('os.walk', return_value=[])
     def test_publish_artifacts2(self, *args):
@@ -381,6 +383,7 @@ class TestCaseTesting(unittest.TestCase):
         args[1].assert_called_once_with(
             's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
 
+    @mock.patch('mimetypes.guess_type', return_value=(None, None))
     @mock.patch('os.path.exists', return_value=True)
     @mock.patch('boto3.resource')
     @mock.patch('os.walk',
@@ -396,16 +399,47 @@ class TestCaseTesting(unittest.TestCase):
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/xtesting.log',
-                'prefix/xtesting.log'),
+                'prefix/xtesting.log',
+                ExtraArgs={'ContentType': 'application/octet-stream'}),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/xtesting.debug.log',
-                'prefix/xtesting.debug.log'),
+                'prefix/xtesting.debug.log',
+                ExtraArgs={'ContentType': 'application/octet-stream'}),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
-                '/var/lib/xtesting/results/bar', 'prefix/bar')]
+                '/var/lib/xtesting/results/bar', 'prefix/bar',
+                ExtraArgs={'ContentType': 'application/octet-stream'})]
         self.assertEqual(args[1].mock_calls, expected)
 
+    @mock.patch('mimetypes.guess_type', return_value=('text/plain', None))
+    @mock.patch('os.path.exists', return_value=True)
+    @mock.patch('boto3.resource')
+    @mock.patch('os.walk',
+                return_value=[
+                    (testcase.TestCase.dir_results, ('',), ('bar',))])
+    def test_publish_artifacts4(self, *args):
+        self.assertEqual(self.test.publish_artifacts(),
+                         testcase.TestCase.EX_OK)
+        args[0].assert_called_once_with(self.test.res_dir)
+        expected = [
+            mock.call('s3', endpoint_url=os.environ['S3_ENDPOINT_URL']),
+            mock.call().meta.client.head_bucket(Bucket='xtesting'),
+            mock.call().Bucket('xtesting'),
+            mock.call().Bucket().upload_file(
+                '/var/lib/xtesting/results/xtesting.log',
+                'prefix/xtesting.log',
+                ExtraArgs={'ContentType': 'text/plain'}),
+            mock.call().Bucket('xtesting'),
+            mock.call().Bucket().upload_file(
+                '/var/lib/xtesting/results/xtesting.debug.log',
+                'prefix/xtesting.debug.log',
+                ExtraArgs={'ContentType': 'text/plain'}),
+            mock.call().Bucket('xtesting'),
+            mock.call().Bucket().upload_file(
+                '/var/lib/xtesting/results/bar', 'prefix/bar',
+                ExtraArgs={'ContentType': 'text/plain'})]
+        self.assertEqual(args[1].mock_calls, expected)
 
 if __name__ == "__main__":
     logging.disable(logging.CRITICAL)

@@ -13,6 +13,7 @@ import abc
 from datetime import datetime
 import json
 import logging
+import mimetypes
 import os
 import re
 import sys
@@ -301,21 +302,33 @@ class TestCase():
             self.details["links"] = []
             for log_file in [self.output_log_name, self.output_debug_log_name]:
                 if os.path.exists(os.path.join(self.dir_results, log_file)):
+                    abs_file = os.path.join(self.dir_results, log_file)
+                    mime_type = mimetypes.guess_type(abs_file)
+                    self.__logger.debug(
+                        "Publishing %s %s", abs_file, mime_type)
                     # pylint: disable=no-member
                     b3resource.Bucket(bucket_name).upload_file(
-                        os.path.join(self.dir_results, log_file),
-                        os.path.join(path, log_file))
+                        abs_file,
+                        os.path.join(path, log_file),
+                        ExtraArgs={'ContentType': mime_type[
+                            0] or 'application/octet-stream'})
                     link = os.path.join(dst_http_url, log_file)
                     output_str += "\n{}".format(link)
                     self.details["links"].append(link)
             for root, _, files in os.walk(self.res_dir):
                 for pub_file in files:
+                    abs_file = os.path.join(root, pub_file)
+                    mime_type = mimetypes.guess_type(abs_file)
+                    self.__logger.debug(
+                        "Publishing %s %s", abs_file, mime_type)
                     # pylint: disable=no-member
                     b3resource.Bucket(bucket_name).upload_file(
-                        os.path.join(root, pub_file),
+                        abs_file,
                         os.path.join(path, os.path.relpath(
                             os.path.join(root, pub_file),
-                            start=self.dir_results)))
+                            start=self.dir_results)),
+                        ExtraArgs={'ContentType': mime_type[
+                            0] or 'application/octet-stream'})
                     link = os.path.join(dst_http_url, os.path.relpath(
                         os.path.join(root, pub_file),
                         start=self.dir_results))
