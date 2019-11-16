@@ -3,7 +3,7 @@ FROM alpine:3.10
 ARG BRANCH=master
 ARG OPENSTACK_TAG=master
 
-RUN apk --no-cache add --update python3 bash git && \
+RUN apk --no-cache add --update python3 bash git mailcap && \
     apk --no-cache add --virtual .build-deps --update \
         python3-dev build-base && \
     git init /src/functest-xtesting && \
