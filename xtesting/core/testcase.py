@@ -19,6 +19,7 @@ import re
 import sys
 
 import boto3
+from boto3.s3.transfer import TransferConfig
 import botocore
 import prettytable
 import requests
@@ -282,6 +283,9 @@ class TestCase():
             b3resource = boto3.resource(
                 's3', endpoint_url=os.environ["S3_ENDPOINT_URL"])
             dst_s3_url = os.environ["S3_DST_URL"]
+            multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
+                "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
+            config = TransferConfig(multipart_threshold=multipart_threshold)
             bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
             try:
                 b3resource.meta.client.head_bucket(Bucket=bucket_name)
@@ -308,8 +312,7 @@ class TestCase():
                         "Publishing %s %s", abs_file, mime_type)
                     # pylint: disable=no-member
                     b3resource.Bucket(bucket_name).upload_file(
-                        abs_file,
-                        os.path.join(path, log_file),
+                        abs_file, os.path.join(path, log_file), Config=config,
                         ExtraArgs={'ContentType': mime_type[
                             0] or 'application/octet-stream'})
                     link = os.path.join(dst_http_url, log_file)
@@ -327,6 +330,7 @@ class TestCase():
                         os.path.join(path, os.path.relpath(
                             os.path.join(root, pub_file),
                             start=self.dir_results)),
+                        Config=config,
                         ExtraArgs={'ContentType': mime_type[
                             0] or 'application/octet-stream'})
                     link = os.path.join(dst_http_url, os.path.relpath(
