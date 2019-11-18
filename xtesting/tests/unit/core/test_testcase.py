@@ -400,15 +400,18 @@ class TestCaseTesting(unittest.TestCase):
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/xtesting.log',
                 'prefix/xtesting.log',
+                Config=mock.ANY,
                 ExtraArgs={'ContentType': 'application/octet-stream'}),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/xtesting.debug.log',
                 'prefix/xtesting.debug.log',
+                Config=mock.ANY,
                 ExtraArgs={'ContentType': 'application/octet-stream'}),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/bar', 'prefix/bar',
+                Config=mock.ANY,
                 ExtraArgs={'ContentType': 'application/octet-stream'})]
         self.assertEqual(args[1].mock_calls, expected)
 
@@ -429,15 +432,18 @@ class TestCaseTesting(unittest.TestCase):
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/xtesting.log',
                 'prefix/xtesting.log',
+                Config=mock.ANY,
                 ExtraArgs={'ContentType': 'text/plain'}),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/xtesting.debug.log',
                 'prefix/xtesting.debug.log',
+                Config=mock.ANY,
                 ExtraArgs={'ContentType': 'text/plain'}),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
                 '/var/lib/xtesting/results/bar', 'prefix/bar',
+                Config=mock.ANY,
                 ExtraArgs={'ContentType': 'text/plain'})]
         self.assertEqual(args[1].mock_calls, expected)
 
