@@ -85,6 +85,7 @@ class DecoratorsTesting(unittest.TestCase):
         test = self._get_testcase()
         self.assertEqual(test.run(), testcase.TestCase.EX_OK)
 
+    @mock.patch('re.sub')
     @mock.patch('requests.post')
     def test_http_shema(self, *args):
         os.environ['TEST_DB_URL'] = 'http://127.0.0.1'
