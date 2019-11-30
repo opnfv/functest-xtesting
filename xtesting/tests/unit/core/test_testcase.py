@@ -151,7 +151,8 @@ class TestCaseTesting(unittest.TestCase):
                 self.test.stop_time).strftime('%Y-%m-%d %H:%M:%S'),
             "version": "master"}
 
-    @mock.patch('re.sub')
+    @mock.patch('os.path.join', return_value='')
+    @mock.patch('re.sub', return_value='')
     @mock.patch('requests.post')
     def _test_pushdb_version(self, *args, **kwargs):
         payload = self._get_data()
