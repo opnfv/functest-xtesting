@@ -151,12 +151,13 @@ class TestCaseTesting(unittest.TestCase):
                 self.test.stop_time).strftime('%Y-%m-%d %H:%M:%S'),
             "version": "master"}
 
+    @mock.patch('re.sub')
     @mock.patch('requests.post')
-    def _test_pushdb_version(self, mock_function=None, **kwargs):
+    def _test_pushdb_version(self, *args, **kwargs):
         payload = self._get_data()
         payload["version"] = kwargs.get("version", "unknown")
         self.assertEqual(self.test.push_to_db(), testcase.TestCase.EX_OK)
-        mock_function.assert_called_once_with(
+        args[0].assert_called_once_with(
             os.environ['TEST_DB_URL'],
             data=json.dumps(payload, sort_keys=True),
             headers=self._headers)
