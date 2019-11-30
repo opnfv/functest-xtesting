@@ -237,13 +237,14 @@ class TestCase(object):
                 headers=self._headers)
             req.raise_for_status()
             if urllib.parse.urlparse(url).scheme != "file":
-                res_url = req.json()["href"]
-                if env.get('TEST_DB_EXT_URL'):
-                    res_url = res_url.replace(
-                        env.get('TEST_DB_URL'), env.get('TEST_DB_EXT_URL'))
+                # href must be postprocessed as OPNFV testapi is misconfigured
+                # (localhost is returned)
+                uid = re.sub(r'^.*/api/v1/results/*', '', req.json()["href"])
+                netloc = env.get('TEST_DB_EXT_URL') if env.get(
+                    'TEST_DB_EXT_URL') else env.get('TEST_DB_URL')
                 self.__logger.info(
                     "The results were successfully pushed to DB: \n\n%s\n",
-                    res_url)
+                    os.path.join(netloc, uid))
         except AssertionError:
             self.__logger.exception(
                 "Please run test before publishing the results")
