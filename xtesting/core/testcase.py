@@ -57,7 +57,7 @@ class TestCase(object):
 
     dir_results = "/var/lib/xtesting/results"
     _job_name_rule = "(dai|week)ly-(.+?)-[0-9]*"
-    _headers = {'Content-Type': 'application/json'}
+    headers = {'Content-Type': 'application/json'}
     __logger = logging.getLogger(__name__)
 
     def __init__(self, **kwargs):
@@ -234,7 +234,7 @@ class TestCase(object):
                 data["version"] = "unknown"
             req = requests.post(
                 url, data=json.dumps(data, sort_keys=True),
-                headers=self._headers)
+                headers=self.headers)
             req.raise_for_status()
             if urllib.parse.urlparse(url).scheme != "file":
                 # href must be postprocessed as OPNFV testapi is misconfigured
