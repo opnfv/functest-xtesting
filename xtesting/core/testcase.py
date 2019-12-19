@@ -13,14 +13,17 @@ import abc
 from datetime import datetime
 import json
 import logging
+import logging.config
 import mimetypes
 import os
 import re
 import sys
+import zipfile
 
 import boto3
 from boto3.s3.transfer import TransferConfig
 import botocore
+import pkg_resources
 import prettytable
 import requests
 import six
@@ -54,6 +57,12 @@ class TestCase():
 
     EX_PUBLISH_ARTIFACTS_ERROR = os.EX_SOFTWARE - 4
     """publish_artifacts() failed"""
+
+    EX_DUMP_FROM_DB_ERROR = os.EX_SOFTWARE - 5
+    """dump_db() failed"""
+
+    EX_DUMP_ARTIFACTS_ERROR = os.EX_SOFTWARE - 6
+    """dump_artifacts() failed"""
 
     dir_results = "/var/lib/xtesting/results"
     _job_name_rule = "(dai|week)ly-(.+?)-[0-9]*"
@@ -354,9 +363,160 @@ class TestCase():
             self.__logger.exception("Cannot publish the artifacts")
             return TestCase.EX_PUBLISH_ARTIFACTS_ERROR
 
+    @staticmethod
+    def dump_db():
+        """Dump all test campaign results from the DB.
+
+        It allows collecting all the results from the DB.
+
+        It could be overriden if the common implementation is not
+        suitable.
+
+        The next vars must be set in env:
+
+            * TEST_DB_URL,
+            * BUILD_TAG.
+
+        Returns:
+            TestCase.EX_OK if results were collected from DB.
+            TestCase.EX_DUMP_FROM_DB_ERROR otherwise.
+        """
+        try:
+            url = env.get('TEST_DB_URL')
+            req = requests.get(
+                "{}?build_tag={}".format(url, env.get('BUILD_TAG')),
+                headers=TestCase._headers)
+            req.raise_for_status()
+            TestCase.__logger.debug("data from DB: \n%s", req.json())
+            with open("{}.json".format(env.get('BUILD_TAG')), "w") as dfile:
+                json.dump(req.json(), dfile)
+        except Exception:  # pylint: disable=broad-except
+            TestCase.__logger.exception(
+                "The results cannot be collected from DB")
+            return TestCase.EX_DUMP_FROM_DB_ERROR
+        return TestCase.EX_OK
+
+    @staticmethod
+    def dump_artifacts():
+        """Dump all test campaign artifacts from the S3 repository.
+
+        It allows collecting all the artifacts from the S3 repository.
+
+        It could be overriden if the common implementation is not
+        suitable.
+
+        The credentials must be configured before publishing the artifacts:
+
+            * fill ~/.aws/credentials or ~/.boto,
+            * set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in env.
+
+        The next vars must be set in env:
+
+            * S3_ENDPOINT_URL (http://127.0.0.1:9000),
+            * S3_DST_URL (s3://xtesting/prefix),
+
+        Returns:
+            TestCase.EX_OK if artifacts were published to repository.
+            TestCase.EX_DUMP_ARTIFACTS_ERROR otherwise.
+        """
+        try:
+            build_tag = env.get('BUILD_TAG')
+            b3resource = boto3.resource(
+                's3', endpoint_url=os.environ["S3_ENDPOINT_URL"])
+            dst_s3_url = os.environ["S3_DST_URL"]
+            multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
+                "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
+            config = TransferConfig(multipart_threshold=multipart_threshold)
+            bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
+            for s3_object in b3resource.Bucket(bucket_name).objects.filter(
+                    Prefix=build_tag):
+                path, filename = os.path.split(s3_object.key)
+                if path and not os.path.exists(path):
+                    os.makedirs(path)
+                b3resource.Bucket(bucket_name).download_file(
+                    s3_object.key, os.path.join(path, filename), Config=config)
+            return TestCase.EX_OK
+        except Exception:  # pylint: disable=broad-except
+            TestCase.__logger.exception("Cannot publish the artifacts")
+            return TestCase.EX_DUMP_ARTIFACTS_ERROR
+
+    @staticmethod
+    def zip_campaign_files():
+        """Archive and publish all test campaign data to the S3 repository.
+
+        It allows collecting all the artifacts from the S3 repository.
+
+        It could be overriden if the common implementation is not
+        suitable.
+
+        The credentials must be configured before publishing the artifacts:
+
+            * fill ~/.aws/credentials or ~/.boto,
+            * set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in env.
+
+        The next vars must be set in env:
+
+            * S3_ENDPOINT_URL (http://127.0.0.1:9000),
+            * S3_DST_URL (s3://xtesting/prefix),
+
+        Returns:
+            TestCase.EX_OK if artifacts were published to repository.
+            TestCase.EX_DUMP_ARTIFACTS_ERROR otherwise.
+        """
+        try:
+            build_tag = env.get('BUILD_TAG')
+            assert TestCase.dump_db() == TestCase.EX_OK
+            assert TestCase.dump_artifacts() == TestCase.EX_OK
+            with zipfile.ZipFile('{}.zip'.format(build_tag), 'w') as zfile:
+                zfile.write("{}.json".format(build_tag))
+                for root, _, files in os.walk(build_tag):
+                    for filename in files:
+                        zfile.write(os.path.join(root, filename))
+            b3resource = boto3.resource(
+                's3', endpoint_url=os.environ["S3_ENDPOINT_URL"])
+            dst_s3_url = os.environ["S3_DST_URL"]
+            multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
+                "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
+            config = TransferConfig(multipart_threshold=multipart_threshold)
+            bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
+            mime_type = mimetypes.guess_type('{}.zip'.format(build_tag))
+            b3resource.Bucket(bucket_name).upload_file(
+                '{}.zip'.format(build_tag), '{}.zip'.format(build_tag),
+                Config=config,
+                ExtraArgs={'ContentType': mime_type[
+                    0] or 'application/octet-stream'})
+            dst_http_url = os.environ["HTTP_DST_URL"]
+            link = os.path.join(dst_http_url, '{}.zip'.format(build_tag))
+            TestCase.__logger.info(
+                "All data were successfully published:\n%s", link)
+            return TestCase.EX_OK
+        except KeyError as ex:
+            TestCase.__logger.error("Please check env var: %s", str(ex))
+            return TestCase.EX_PUBLISH_ARTIFACTS_ERROR
+        except botocore.exceptions.NoCredentialsError:
+            TestCase.__logger.error(
+                "Please fill ~/.aws/credentials, ~/.boto or set "
+                "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in env")
+            return TestCase.EX_PUBLISH_ARTIFACTS_ERROR
+        except Exception:  # pylint: disable=broad-except
+            TestCase.__logger.exception("Cannot publish the artifacts")
+            return TestCase.EX_PUBLISH_ARTIFACTS_ERROR
+
     def clean(self):
         """Clean the resources.
 
         It can be overriden if resources must be deleted after
         running the test case.
         """
+
+
+def zip_campaign_files():
+    """Entry point for TestCase.zip_campaign_files()."""
+    if env.get('DEBUG').lower() == 'true':
+        logging.config.fileConfig(pkg_resources.resource_filename(
+            'xtesting', 'ci/logging.debug.ini'))
+    else:
+        logging.config.fileConfig(pkg_resources.resource_filename(
+            'xtesting', 'ci/logging.ini'))
+    logging.captureWarnings(True)
+    TestCase.zip_campaign_files()
