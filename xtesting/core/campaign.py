@@ -162,7 +162,8 @@ class Campaign(object):
             build_tag = env.get('BUILD_TAG')
             assert Campaign.dump_db() == Campaign.EX_OK
             assert Campaign.dump_artifacts() == Campaign.EX_OK
-            with zipfile.ZipFile('{}.zip'.format(build_tag), 'w') as zfile:
+            with zipfile.ZipFile('{}.zip'.format(build_tag),
+                                 'w', zipfile.ZIP_DEFLATED) as zfile:
                 zfile.write("{}.json".format(build_tag))
                 for root, _, files in os.walk(build_tag):
                     for filename in files:
