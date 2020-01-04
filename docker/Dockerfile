@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine:3.11
 
 ARG BRANCH=master
 ARG OPENSTACK_TAG=master
@@ -16,5 +16,5 @@ RUN apk --no-cache add --update python3 bash git mailcap && \
         /src/functest-xtesting && \
     rm -r /src/functest-xtesting && \
     apk del .build-deps
-COPY testcases.yaml /usr/lib/python3.7/site-packages/xtesting/ci/testcases.yaml
+COPY testcases.yaml /usr/lib/python3.8/site-packages/xtesting/ci/testcases.yaml
 CMD ["run_tests", "-t", "all"]
