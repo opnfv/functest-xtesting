@@ -23,7 +23,7 @@ jobs:
   include:
     - stage: run unit tests
       script: >
-        tox -e docs,pep8,pylint,yamllint,ansiblelint,bashate,py27,py37,cover
+        tox -e docs,pep8,pylint,yamllint,ansiblelint,bashate,py27,py38,cover
     - stage: build xtesting images
       script: sudo -E bash build.sh
       env:
