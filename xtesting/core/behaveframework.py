@@ -14,6 +14,7 @@ from __future__ import division
 import logging
 import os
 import time
+import sys
 
 import json
 import six
@@ -43,14 +44,8 @@ class BehaveFramework(testcase.TestCase):
 
     def parse_results(self):
         """Parse output.json and get the details in it."""
-
-        try:
-            with open(self.json_file) as stream_:
-                self.response = json.load(stream_)
-        except IOError:
-            self.__logger.error("Error reading the file %s", self.json_file)
-
-        try:
+        with open(self.json_file) as stream_:
+            self.response = json.load(stream_)
             if self.response:
                 self.total_tests = len(self.response)
             for item in self.response:
@@ -60,21 +55,14 @@ class BehaveFramework(testcase.TestCase):
                     self.fail_tests += 1
                 elif item['status'] == 'skipped':
                     self.skip_tests += 1
-        except KeyError:
-            self.__logger.error("Error in json - %s", self.response)
-
-        try:
             self.result = 100 * (
                 self.pass_tests / self.total_tests)
-        except ZeroDivisionError:
-            self.__logger.error("No test has been run")
-
-        self.details = {}
-        self.details['total_tests'] = self.total_tests
-        self.details['pass_tests'] = self.pass_tests
-        self.details['fail_tests'] = self.fail_tests
-        self.details['skip_tests'] = self.skip_tests
-        self.details['tests'] = self.response
+            self.details = {}
+            self.details['total_tests'] = self.total_tests
+            self.details['pass_tests'] = self.pass_tests
+            self.details['fail_tests'] = self.fail_tests
+            self.details['skip_tests'] = self.skip_tests
+            self.details['tests'] = self.response
 
     def run(self, **kwargs):
         """Run the BehaveFramework feature files

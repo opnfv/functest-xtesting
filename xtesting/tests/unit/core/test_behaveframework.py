@@ -32,28 +32,27 @@ class ParseResultTesting(unittest.TestCase):
         self.test = behaveframework.BehaveFramework(
             case_name='behave', project_name='xtesting')
 
-    def test_raises_exc_open(self):
-        self.test.json_file = 'dummy_file'
-        self.test.response = self._response
-        with mock.patch('six.moves.builtins.open',
-                        mock.mock_open()) as mock_file:
-            mock_file.side_effect = IOError()
-            self.assertRaises(IOError, self.test.parse_results())
-        mock_file.assert_called_once_with('dummy_file')
+    @mock.patch('six.moves.builtins.open', side_effect=OSError)
+    def test_raises_exc_open(self, *args):  # pylint: disable=unused-argument
+        with self.assertRaises(OSError):
+            self.test.parse_results()
 
-    def test_raises_exc_key(self):
-        with mock.patch('six.moves.builtins.open', mock.mock_open()), \
-                mock.patch('json.load', return_value=[{'foo': 'bar'}]):
-            self.assertRaises(KeyError, self.test.parse_results())
+    @mock.patch('json.load', return_value=[{'foo': 'bar'}])
+    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    def test_raises_exc_key(self, *args):  # pylint: disable=unused-argument
+        with self.assertRaises(KeyError):
+            self.test.parse_results()
 
-    def test_raises_exe_zerodivision(self):
-        with mock.patch('six.moves.builtins.open', mock.mock_open()), \
-                mock.patch('json.load', mock.Mock(return_value=[])):
-            self.assertRaises(ZeroDivisionError, self.test.parse_results())
+    @mock.patch('json.load', return_value=[])
+    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    def test_raises_exe_zerodivision(self, *args):
+        # pylint: disable=unused-argument
+        with self.assertRaises(ZeroDivisionError):
+            self.test.parse_results()
 
     def _test_result(self, response, result):
         with mock.patch('six.moves.builtins.open', mock.mock_open()), \
-                mock.patch('json.load', mock.Mock(return_value=response)):
+                mock.patch('json.load', return_value=response):
             self.test.parse_results()
             self.assertEqual(self.test.result, result)
 
@@ -170,6 +169,7 @@ class RunTesting(unittest.TestCase):
                                side_effect=Exception) as mock_method:
             self._test_parse_results(self.test.EX_RUN_ERROR)
             mock_method.assert_called_once_with()
+
 
 if __name__ == "__main__":
     logging.disable(logging.CRITICAL)
