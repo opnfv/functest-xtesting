@@ -449,6 +449,7 @@ class TestCaseTesting(unittest.TestCase):
                 ExtraArgs={'ContentType': 'text/plain'})]
         self.assertEqual(args[1].mock_calls, expected)
 
+
 if __name__ == "__main__":
     logging.disable(logging.CRITICAL)
     unittest.main(verbosity=2)
