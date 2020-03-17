@@ -71,9 +71,17 @@ class Campaign(object):
                 "{}?build_tag={}".format(url, env.get('BUILD_TAG')),
                 headers=testcase.TestCase.headers)
             req.raise_for_status()
-            Campaign.__logger.debug("data from DB: \n%s", req.json())
+            output = req.json()
+            Campaign.__logger.debug("data from DB: \n%s", output)
+            for i, _ in enumerate(output["results"]):
+                for j, _ in enumerate(
+                        output["results"][i]["details"]["links"]):
+                    output["results"][i]["details"]["links"][j] = re.sub(
+                        "^{}/*".format(os.environ["HTTP_DST_URL"]), '',
+                        output["results"][i]["details"]["links"][j])
+            Campaign.__logger.debug("data to archive: \n%s", output)
             with open("{}.json".format(env.get('BUILD_TAG')), "w") as dfile:
-                json.dump(req.json(), dfile)
+                json.dump(output, dfile)
         except Exception:  # pylint: disable=broad-except
             Campaign.__logger.exception(
                 "The results cannot be collected from DB")
