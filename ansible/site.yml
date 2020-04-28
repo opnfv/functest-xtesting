@@ -2,6 +2,9 @@
 - hosts: 127.0.0.1
   roles:
     - role: collivier.xtesting
+      docker_tags:
+        - kali:
+            branch: stable/kali
       builds:
         dependencies:
           - repo: _

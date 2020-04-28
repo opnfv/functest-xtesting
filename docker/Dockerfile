@@ -1,6 +1,6 @@
 FROM alpine:3.11
 
-ARG BRANCH=master
+ARG BRANCH=stable/kali
 ARG OPENSTACK_TAG=master
 
 RUN apk --no-cache add --update python3 bash git mailcap && \
