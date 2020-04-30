@@ -1,7 +1,7 @@
 FROM alpine:3.11
 
 ARG BRANCH=stable/kali
-ARG OPENSTACK_TAG=master
+ARG OPENSTACK_TAG=stable/ussuri
 
 RUN apk --no-cache add --update python3 bash git mailcap && \
     apk --no-cache add --virtual .build-deps --update \
