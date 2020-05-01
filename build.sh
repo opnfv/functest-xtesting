@@ -19,10 +19,10 @@ build_opts=(--pull=true --no-cache --force-rm=true)
 for arch in ${arch};do
     if [[ ${arch} == arm64 ]]; then
         find . -name Dockerfile -exec sed -i \
-            -e "s|alpine:3.9|multiarch/alpine:arm64-v3.9|g" {} +
+            -e "s|alpine:3.9|arm64v8/alpine:3.9|g" {} +
     elif [[ ${arch} == arm ]]; then
         find . -name Dockerfile -exec sed -i \
-            -e "s|alpine:3.9|multiarch/alpine:armhf-v3.9|g" {} +
+            -e "s|alpine:3.9|arm32v6/alpine:3.9|g" {} +
     fi
     (cd docker &&   docker build "${build_opts[@]}" \
         -t "${repo}/${image}:${arch}-${tag}" .)
