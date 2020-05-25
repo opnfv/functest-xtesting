@@ -3,9 +3,9 @@ FROM alpine:3.12
 ARG BRANCH=master
 ARG OPENSTACK_TAG=master
 
-RUN apk --no-cache add --update python3 py3-pip bash git mailcap && \
+RUN apk --no-cache add --update python3 py3-pip bash git mailcap libxml2 libxslt && \
     apk --no-cache add --virtual .build-deps --update \
-        python3-dev build-base && \
+        python3-dev build-base libxml2-dev libxslt-dev && \
     git init /src/functest-xtesting && \
     (cd /src/functest-xtesting && \
         git fetch --tags https://gerrit.opnfv.org/gerrit/functest-xtesting $BRANCH && \
