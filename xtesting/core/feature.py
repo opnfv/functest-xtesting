@@ -103,13 +103,14 @@ class BashFeature(Feature):
         try:
             cmd = kwargs["cmd"]
             console = kwargs["console"] if "console" in kwargs else False
+            cwd = kwargs["cwd"] if "cwd" in kwargs else os.getcwd()
             if not os.path.isdir(self.res_dir):
                 os.makedirs(self.res_dir)
             with open(self.result_file, 'w') as f_stdout:
                 self.__logger.info("Calling %s", cmd)
                 process = subprocess.Popen(
                     cmd, shell=True, stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT)
+                    stderr=subprocess.STDOUT, cwd=cwd)
                 for line in iter(process.stdout.readline, b''):
                     if console:
                         sys.stdout.write(line.decode("utf-8"))

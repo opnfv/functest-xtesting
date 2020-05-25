@@ -1,0 +1,296 @@
+<testsuites>
+	<testsuite name="test_AAA-MTS_ePDG-MTS_PGW-MTS_HSS_auto.xml">
+		<testcase name="200_init_interfaces">
+			<system-out>
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="01_Attache_initial_User01">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (attach_seul_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (attach_seul_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (attach_seul_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (attach_seul_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (attach_seul_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (attach_seul_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (attach_seul_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (attach_seul_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (attach_seul_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (attach_seul_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (attach_seul_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (attach_seul_simu_PDN_GW)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="02_detache_User01_apres_testcase_01">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_PGW | S6b | Send STR (detach_seul_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive STA (detach_seul_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send STR (detach_seul_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (detach_seul_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (detach_seul_simu_HSS)
+				r--- MTS_ePDG | SWm |Receive STA (detach_seul_simu_ePDG)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="03_Attache_sansAPN-Detache_par_User">
+			<failure message="03_Attache_sansAPN-Detache_par_User">
+				scenario: detach_UE_simu_PDN_GW, test failed to step calling of the function fonc_attach_simu_PDN_GW, function: receiveMessageDIAMETER=Receive Answer AAA || first scenario to fail
+				scenario: detach_UE_simu_HSS, test failed to step calling of the function fonc_attach_simu_HSS, function: receiveMessageDIAMETER=Receive Request SAR 
+				scenario: detach_UE_sansAPN_simu_ePDG, test failed to step parameter java.util.concurrent.Semaphore@8e34cfe[Permits = 0] operation system.semaphorewait, function: receiveMessageDIAMETER=Receive Answer DEA 
+			</failure>
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (detach_UE_sansAPN_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (detach_UE_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (detach_UE_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (detach_UE_sansAPN_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (detach_UE_sansAPN_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (detach_UE_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (detach_UE_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (detach_UE_sansAPN_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (detach_UE_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive AAA (detach_UE_simu_PDN_GW)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="04_Attache-maj_profil_user-Detache_par_UE">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (maj_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (maj_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (maj_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (maj_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (maj_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (maj_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (maj_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (maj_sansRAR_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (maj_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (maj_sansRAR_simu_PDN_GW)
+				---s MTS_HSS | Swx | Send PPR (maj_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive RAR (maj_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive PPA (maj_simu_HSS)
+				---s MTS_ePDG | SWm | Send RAA (maj_simu_ePDG)
+				---s MTS_ePDG | SWm | Send AAR (maj_simu_ePDG)
+				r--- MTS_ePDG | SWm | Receive AAA (maj_simu_ePDG)
+				---s MTS_PGW | S6b | Send STR (maj_sansRAR_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive STA (maj_sansRAR_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send STR (maj_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (maj_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_simu_HSS)
+				r--- MTS_ePDG | SWm |Receive STA (maj_simu_ePDG)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="05_Attache-detache_par_le_reseau">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (detach_reseau_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (detach_reseau_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (detach_reseau_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (detach_reseau_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (detach_reseau_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (detach_reseau_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (detach_reseau_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (detach_reseau_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (detach_reseau_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (detach_reseau_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (detach_reseau_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (detach_reseau_simu_PDN_GW)
+				---s MTS_HSS | SWx | Send RTR (detach_reseau_simu_HSS)
+				r--- MTS_PGW | S6b | Receive ASR (detach_reseau_simu_PDN_GW)
+				r--- MTS_ePDG | SWm | Receive ASR (detach_reseau_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive RTA (detach_reseau_simu_HSS)
+				---s MTS_PGW | S6b | Send ASA (detach_reseau_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send ASA (detach_reseau_simu_ePDG)
+				---s MTS_PGW | S6b | Send STR (detach_reseau_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive STA (detach_reseau_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send STR (detach_reseau_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (detach_reseau_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (detach_reseau_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive STA (detach_reseau_simu_ePDG)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="06_Attaches_detache-parUser-2APN">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (2attach_2detach_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (2attach_2detach_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (2attach_2detach_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (2attach_2detach_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (2attach_2detach_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (2attach_2detach_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (2attach_2detach_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (2attach_2detach_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (2attach_2detach_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (2attach_2detach_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (2attach_2detach_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (2attach_2detach_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (2attach_2detach_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (2attach_2detach_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (2attach_2detach_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (2attach_2detach_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (2attach_2detach_simu_ePDG)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (2attach_2detach_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (2attach_2detach_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (2attach_2detach_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (2attach_2detach_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (2attach_2detach_simu_PDN_GW)
+				---s MTS_PGW | S6b | Send STR (2attach_2detach_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive STA (2attach_2detach_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send STR (2attach_2detach_simu_ePDG)
+				r--- MTS_ePDG | SWm |Receive STA (2attach_2detach_simu_ePDG)
+				---s MTS_PGW | S6b | Send STR (2attach_2detach_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive STA (2attach_2detach_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send STR (2attach_2detach_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (2attach_2detach_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (2attach_2detach_simu_HSS)
+				r--- MTS_ePDG | SWm |Receive STA (2attach_2detach_simu_ePDG)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="07_Attache-PPR-sansProfileUpdate-noRAR-_user-Detache">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (maj_sansRAR_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (maj_sansRAR_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (maj_sansRAR_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (maj_sansRAR_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (maj_sansRAR_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (maj_sansRAR_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_sansRAR_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (maj_sansRAR_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (maj_sansRAR_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (maj_sansRAR_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_sansRAR_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (maj_sansRAR_simu_PDN_GW)
+				---s MTS_HSS | SWx | Send PPR (maj_sansRAR_simu_HSS)
+				r--- MTS_HSS | SWx | Receive PPA (maj_sansRAR_simu_HSS)
+				---s MTS_PGW | S6b | Send STR (maj_sansRAR_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive STA (maj_sansRAR_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send STR (maj_sansRAR_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (maj_sansRAR_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_sansRAR_simu_HSS)
+				r--- MTS_ePDG | SWm |Receive STA (maj_sansRAR_simu_ePDG)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="08-Attache-PPRavecActivationDeTrace-user-Detache">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (maj_RAR_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (maj_RAR_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (maj_RAR_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (maj_RAR_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (maj_RAR_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (maj_RAR_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_RAR_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (maj_RAR_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (maj_RAR_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (maj_RAR_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_RAR_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (maj_RAR_simu_PDN_GW)
+				---s MTS_HSS | SWx | Send PPR (maj_RAR_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive RAR (maj_RAR_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive PPA (maj_RAR_simu_HSS)
+				r--- MTS_PGW | S6b | Receive RAR (maj_RAR_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send RAA (maj_RAR_simu_ePDG)
+				---s MTS_PGW | S6b | Send RAA (maj_RAR_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send AAR (maj_RAR_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (maj_RAR_simu_PDN_GW)
+				r--- MTS_ePDG | SWm | Receive AAA (maj_RAR_simu_ePDG)
+				r--- MTS_PGW | S6b | Receive AAA (maj_RAR_simu_PDN_GW)
+				---s MTS_PGW | S6b | Send STR (maj_RAR_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive STA (maj_RAR_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send STR (maj_RAR_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (maj_RAR_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (maj_RAR_simu_HSS)
+				r--- MTS_ePDG | SWm |Receive STA (maj_RAR_simu_ePDG)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="14_Attache-Detache_par_le-reseau_new-server-assigned">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (detach_reseau_NEW_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (detach_reseau_NEW_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (detach_reseau_NEW_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (detach_reseau_NEW_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (detach_reseau_NEW_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (detach_reseau_NEW_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (detach_reseau_NEW_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (detach_reseau_NEW_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (detach_reseau_NEW_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (detach_reseau_NEW_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (detach_reseau_NEW_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (detach_reseau_NEW_simu_PDN_GW)
+				---s MTS_HSS| SWx | Send RTR (detach_reseau_NEW_simu_HSS)
+				r--- MTS_HSS| SWx | Receive RTA (detach_reseau_NEW_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive ASR (detach_reseau_NEW_simu_ePDG)
+				r--- MTS_PGW | S6b | Receive ASR (detach_reseau_NEW_simu_PDN_GW)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+		<testcase name="51_Resynchronization_SQN">
+			<system-out>
+
+				CALLFLOW :
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Identity] (Resynchronization_SQN_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (Resynchronization_SQN_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (Resynchronization_SQN_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (Resynchronization_SQN_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (Resynchronization_SQN_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive MAR (Resynchronization_SQN_simu_HSS)
+				---s MTS_HSS | SWx | Send MAA (Resynchronization_SQN_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Challenge] (Resynchronization_SQN_simu_ePDG)
+				---s MTS_ePDG | SWm | Send DER [EAP-Response/AKA-Challenge] (Resynchronization_SQN_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (Resynchronization_SQN_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (Resynchronization_SQN_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive DEA [EAP-Request/AKA-Success] (Resynchronization_SQN_simu_ePDG)
+				---s MTS_PGW | S6b | Send AAR (detach_reseau_simu_PDN_GW)
+				r--- MTS_HSS | SWx | Receive SAR (Resynchronization_SQN_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (Resynchronization_SQN_simu_HSS)
+				r--- MTS_PGW | S6b | Receive AAA (detach_reseau_simu_PDN_GW)
+				---s MTS_HSS | SWx | Send RTR (Resynchronization_SQN_simu_HSS)
+				r--- MTS_PGW | S6b | Receive ASR (detach_reseau_simu_PDN_GW)
+				r--- MTS_ePDG | SWm | Receive ASR (Resynchronization_SQN_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive RTA (Resynchronization_SQN_simu_HSS)
+				---s MTS_ePDG | SWm | Send ASA (Resynchronization_SQN_simu_ePDG)
+				---s MTS_PGW | S6b | Send ASA (detach_reseau_simu_PDN_GW)
+				---s MTS_PGW | S6b | Send STR (detach_reseau_simu_PDN_GW)
+				r--- MTS_PGW | S6b | Receive STA (detach_reseau_simu_PDN_GW)
+				---s MTS_ePDG | SWm | Send STR (Resynchronization_SQN_simu_ePDG)
+				r--- MTS_HSS | SWx | Receive SAR (Resynchronization_SQN_simu_HSS)
+				---s MTS_HSS | SWx | Send SAA (Resynchronization_SQN_simu_HSS)
+				r--- MTS_ePDG | SWm | Receive STA (Resynchronization_SQN_simu_ePDG)
+			</system-out>
+			<system-err>
+			</system-err>
+		</testcase>
+	</testsuite>
+</testsuites>
+-----------------------------------------
