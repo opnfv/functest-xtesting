@@ -16,7 +16,12 @@
             containers:
               - name: xtesting
                 ref_arg: BRANCH
-                path: docker
+                path: docker/core
+          - name: opnfv/xtesting-mts
+            containers:
+              - name: xtesting-mts
+                ref_arg: BRANCH
+                path: docker/mts
       suites:
         - container: xtesting
           tests:
@@ -26,3 +31,6 @@
             - fourth
             - fifth
             - sixth
+        - container: xtesting-mts
+          tests:
+            - seventh
