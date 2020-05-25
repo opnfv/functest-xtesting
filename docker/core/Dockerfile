@@ -3,7 +3,7 @@ FROM alpine:3.9
 ARG BRANCH=stable/hunter
 ARG OPENSTACK_TAG=stable/rocky
 
-RUN apk --no-cache add --update python py-pip bash git mailcap && \
+RUN apk --no-cache add --update python py-pip bash git mailcap libxml2 libxslt && \
     apk --no-cache add --virtual .build-deps --update \
         python-dev build-base && \
     git init /src/functest-xtesting && \
