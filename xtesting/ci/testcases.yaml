@@ -81,3 +81,20 @@ tiers:
                             - /usr/lib/python3.6/site-packages/xtesting/samples/features/
                         tags:
                             - foo
+
+            -
+                case_name: seven
+                project_name: xtesting
+                enabled: true
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'mts'
+                    args:
+                        suite: /opt/mts/bin/test/test.xml
+                        log_level: INFO
+                        store_method: FILE
+                        java_memory: 2048
+                        console: true
