@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<test name="Commissioning MTS">
+    <testcase name="Pause_5_sec" state="true">
+        <parameter name="[pauseDuration]" operation="set" value="5"/>
+
+        <scenario name="[testcasename]" file="pause.xml" />
+    </testcase>
+</test>
