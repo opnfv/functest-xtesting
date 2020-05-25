@@ -1,0 +1,26 @@
+---
+tiers:
+    -
+        name: samples
+        order: 1
+        description: ''
+        testcases:
+            -
+                case_name: seventh
+                project_name: xtesting
+                enabled: true
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: 'Some MTS tests'
+                run:
+                    name: 'mts'
+                    args:
+                        test_file: /usr/lib/python3.8/site-packages/xtesting/samples/mts/test.xml
+                        testcases:
+                            - Pause_5_sec
+                        max_duration: 2 # in seconds
+                        log_level: INFO
+                        store_method: FILE
+                        java_memory: 2048
+                        console: true
