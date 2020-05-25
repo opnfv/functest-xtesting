@@ -21,3 +21,5 @@ build
 dist
 AUTHORS
 ChangeLog
+.eggs/
+.vscode/
