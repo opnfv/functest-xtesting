@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Related XMLSchema file: conf/schemas/scenario.xsd -->
+
+<scenario>
+  <log>Duree de pause demandee : [pauseDuration]</log>
+  <pause name="Pause" seconds="[pauseDuration]"/>
+</scenario>
