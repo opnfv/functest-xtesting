@@ -9,12 +9,14 @@
 
 """Dump DB and artifacts for third-party certifications."""
 
+import argparse
 import json
 import logging
 import logging.config
 import mimetypes
 import os
 import re
+import sys
 import zipfile
 
 import boto3
@@ -28,6 +30,30 @@ from xtesting.core import testcase
 from xtesting.utils import env
 
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
+
+
+class CampaignParser():
+    """Parser to zip campaign"""
+    # pylint: disable=too-few-public-methods
+
+    def __init__(self):
+        self.parser = argparse.ArgumentParser()
+        self.parser.add_argument("--no-db-dump",
+                                 help="Disable dump files from database links (default=false).",
+                                 action="store_true")
+        self.parser.add_argument("--no-artifacts-dump",
+                                 help="Disable dump files from S3 repository (default=false).",
+                                 action="store_true")
+
+    def parse_args(self, argv=None):
+        """Parse arguments.
+
+        It can call sys.exit if arguments are incorrect.
+
+        Returns:
+            the arguments from cmdline
+        """
+        return vars(self.parser.parse_args(argv))
 
 
 class Campaign():
@@ -45,7 +71,14 @@ class Campaign():
     EX_ZIP_CAMPAIGN_FILES_ERROR = os.EX_SOFTWARE - 7
     """dump_artifacts() failed"""
 
+    EX_ZIP_CAMPAIGN_PARAMS_ERROR = os.EX_SOFTWARE - 8
+    """zip_campaign_files() failed - bad parameters"""
+
     __logger = logging.getLogger(__name__)
+
+    def __init__(self):
+        self.dump_db_flag = False
+        self.dump_artifacts_flag = False
 
     @staticmethod
     def dump_db():
@@ -143,8 +176,7 @@ class Campaign():
             Campaign.__logger.exception("Cannot publish the artifacts")
             return Campaign.EX_DUMP_ARTIFACTS_ERROR
 
-    @staticmethod
-    def zip_campaign_files():  # pylint: disable=too-many-locals
+    def zip_campaign_files(self):  # pylint: disable=too-many-locals
         """Archive and publish all test campaign data to the S3 repository.
 
         It allows collecting all the artifacts from the S3 repository.
@@ -166,52 +198,70 @@ class Campaign():
             Campaign.EX_OK if artifacts were published to repository.
             Campaign.EX_DUMP_ARTIFACTS_ERROR otherwise.
         """
-        try:
-            build_tag = env.get('BUILD_TAG')
-            assert Campaign.dump_db() == Campaign.EX_OK
-            assert Campaign.dump_artifacts() == Campaign.EX_OK
-            with zipfile.ZipFile('{}.zip'.format(build_tag),
-                                 'w', zipfile.ZIP_DEFLATED) as zfile:
-                zfile.write("{}.json".format(build_tag))
-                for root, _, files in os.walk(build_tag):
-                    for filename in files:
-                        zfile.write(os.path.join(root, filename))
-            b3resource = boto3.resource(
-                's3', endpoint_url=os.environ["S3_ENDPOINT_URL"])
-            dst_s3_url = os.environ["S3_DST_URL"]
-            multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
-                "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
-            config = TransferConfig(multipart_threshold=multipart_threshold)
-            bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
-            mime_type = mimetypes.guess_type('{}.zip'.format(build_tag))
-            path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
-            # pylint: disable=no-member
-            b3resource.Bucket(bucket_name).upload_file(
-                '{}.zip'.format(build_tag),
-                os.path.join(path, '{}.zip'.format(build_tag)),
-                Config=config,
-                ExtraArgs={'ContentType': mime_type[
-                    0] or 'application/octet-stream'})
-            dst_http_url = os.environ["HTTP_DST_URL"]
-            link = os.path.join(dst_http_url, '{}.zip'.format(build_tag))
-            Campaign.__logger.info(
-                "All data were successfully published:\n\n%s", link)
-            return Campaign.EX_OK
-        except KeyError as ex:
-            Campaign.__logger.error("Please check env var: %s", str(ex))
-            return Campaign.EX_ZIP_CAMPAIGN_FILES_ERROR
-        except botocore.exceptions.NoCredentialsError:
+        if not self.dump_db_flag or not self.dump_artifacts_flag:
+            try:
+                build_tag = env.get('BUILD_TAG')
+                if not self.dump_db_flag:
+                    assert Campaign.dump_db() == Campaign.EX_OK
+                if not self.dump_artifacts_flag:
+                    assert Campaign.dump_artifacts() == Campaign.EX_OK
+                with zipfile.ZipFile('{}.zip'.format(build_tag),
+                                     'w', zipfile.ZIP_DEFLATED) as zfile:
+                    if not self.dump_db_flag:
+                        zfile.write("{}.json".format(build_tag))
+                    if not self.dump_artifacts_flag:
+                        for root, _, files in os.walk(build_tag):
+                            for filename in files:
+                                zfile.write(os.path.join(root, filename))
+                b3resource = boto3.resource(
+                    's3', endpoint_url=os.environ["S3_ENDPOINT_URL"])
+                dst_s3_url = os.environ["S3_DST_URL"]
+                multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
+                    "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
+                config = TransferConfig(multipart_threshold=multipart_threshold)
+                bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
+                mime_type = mimetypes.guess_type('{}.zip'.format(build_tag))
+                path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
+                # pylint: disable=no-member
+                b3resource.Bucket(bucket_name).upload_file(
+                    '{}.zip'.format(build_tag),
+                    os.path.join(path, '{}.zip'.format(build_tag)),
+                    Config=config,
+                    ExtraArgs={'ContentType': mime_type[
+                        0] or 'application/octet-stream'})
+                dst_http_url = os.environ["HTTP_DST_URL"]
+                link = os.path.join(dst_http_url, '{}.zip'.format(build_tag))
+                Campaign.__logger.info(
+                    "All data were successfully published:\n\n%s", link)
+                return Campaign.EX_OK
+            except KeyError as ex:
+                Campaign.__logger.error("Please check env var: %s", str(ex))
+                return Campaign.EX_ZIP_CAMPAIGN_FILES_ERROR
+            except botocore.exceptions.NoCredentialsError:
+                Campaign.__logger.error(
+                    "Please fill ~/.aws/credentials, ~/.boto or set "
+                    "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in env")
+                return Campaign.EX_ZIP_CAMPAIGN_FILES_ERROR
+            except Exception:  # pylint: disable=broad-except
+                Campaign.__logger.exception("Cannot publish the artifacts")
+                return Campaign.EX_ZIP_CAMPAIGN_FILES_ERROR
+        else:
             Campaign.__logger.error(
-                "Please fill ~/.aws/credentials, ~/.boto or set "
-                "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in env")
-            return Campaign.EX_ZIP_CAMPAIGN_FILES_ERROR
-        except Exception:  # pylint: disable=broad-except
-            Campaign.__logger.exception("Cannot publish the artifacts")
-            return Campaign.EX_ZIP_CAMPAIGN_FILES_ERROR
+                "Please check zip_campaign parameters. --no-db-dump and --no-artifacts-dump "
+                "cannot be set at same time")
+            return Campaign.EX_ZIP_CAMPAIGN_PARAMS_ERROR
+
+    def main(self, **kwargs):  # pylint: disable=too-many-branches
+        """Entry point of class Campaign"""
+        if 'no_db_dump' in kwargs:
+            self.dump_db_flag = kwargs['no_db_dump']
+        if 'no_artifacts_dump' in kwargs:
+            self.dump_artifacts_flag = kwargs['no_artifacts_dump']
+        return self.zip_campaign_files()
 
 
 def main():
-    """Entry point for Campaign.zip_campaign_files()."""
+    """Entry point"""
     if not os.path.exists(testcase.TestCase.dir_results):
         os.makedirs(testcase.TestCase.dir_results)
     if env.get('DEBUG').lower() == 'true':
@@ -221,4 +271,7 @@ def main():
         logging.config.fileConfig(pkg_resources.resource_filename(
             'xtesting', 'ci/logging.ini'))
     logging.captureWarnings(True)
-    Campaign.zip_campaign_files()
+    parser = CampaignParser()
+    args = parser.parse_args(sys.argv[1:])
+    campaign = Campaign()
+    return campaign.main(**args)
