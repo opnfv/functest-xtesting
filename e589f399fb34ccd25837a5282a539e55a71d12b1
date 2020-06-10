@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fe8d256_2ec971df",
+        "filename": "docker/mts/Dockerfile",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2020-06-10T16:50:26Z",
+      "side": 1,
+      "message": "This forces a minimal Docker version and it\u0027s mostly useless (we can leverage on branches)",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "307f02bc_39b19847",
+        "filename": "docker/mts/Dockerfile",
+        "patchSetId": 8
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2020-06-10T16:50:26Z",
+      "side": 1,
+      "message": "\u0026\u0026 must be added between instructions to save spaces (remove build deps)",
+      "range": {
+        "startLine": 16,
+        "startChar": 64,
+        "endLine": 16,
+        "endChar": 65
+      },
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f355983c_0ee2508a",
+        "filename": "docker/mts/sample/test.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2020-06-10T16:50:26Z",
+      "side": 1,
+      "message": "It will be removed (it duplicates the sample in the python package)",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c46734b_1d22ef79",
+        "filename": "requirements.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2020-06-10T16:50:26Z",
+      "side": 1,
+      "message": "lxml!\u003d3.7.0  # BSD\nhttps://github.com/openstack/requirements/blob/master/global-requirements.txt",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa44a25_a69df231",
+        "filename": "test-requirements.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2020-06-10T16:50:26Z",
+      "side": 1,
+      "message": "removed here (it concerns deps for linters)",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fa42b32_a07524c1",
+        "filename": "xtesting/core/feature.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2020-06-10T16:50:26Z",
+      "side": 1,
+      "message": "2nd change if needed",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e065cd6_84b47804",
+        "filename": "xtesting/samples/mts/output/0001_tests_junit_results_20200306_101526.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2020-06-10T16:50:26Z",
+      "side": 1,
+      "message": "output shouldn\u0027t be in tree (+dos2unix :))",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    }
+  ]
+}
