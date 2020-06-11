@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "342f22de_66107157",
+        "filename": "docker/mts/Dockerfile",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7626
+      },
+      "writtenOn": "2020-06-11T10:57:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fe8d256_2ec971df",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "307f02bc_39b19847",
         "filename": "docker/mts/Dockerfile",
         "patchSetId": 8
@@ -59,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "b16da743_639bec4f",
+        "filename": "docker/mts/sample/test.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7626
+      },
+      "writtenOn": "2020-06-11T10:57:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f355983c_0ee2508a",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c46734b_1d22ef79",
         "filename": "requirements.txt",
         "patchSetId": 8
@@ -73,6 +109,24 @@
       "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "496f160c_366623c7",
+        "filename": "requirements.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 7626
+      },
+      "writtenOn": "2020-06-11T10:57:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c46734b_1d22ef79",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +147,24 @@
     },
     {
       "key": {
+        "uuid": "1ce0195d_2369d4c0",
+        "filename": "test-requirements.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 7626
+      },
+      "writtenOn": "2020-06-11T10:57:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fa44a25_a69df231",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7fa42b32_a07524c1",
         "filename": "xtesting/core/feature.py",
         "patchSetId": 8
@@ -104,6 +176,47 @@
       "writtenOn": "2020-06-10T16:50:26Z",
       "side": 1,
       "message": "2nd change if needed",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4a6bb74_d72cd469",
+        "filename": "xtesting/core/feature.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7626
+      },
+      "writtenOn": "2020-06-11T10:57:09Z",
+      "side": 1,
+      "message": "If you remove it from here, the ./startCmd.sh of MTS does not work any more because it is a relative path.",
+      "parentUuid": "7fa42b32_a07524c1",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "228f9a67_3e9ed23b",
+        "filename": "xtesting/core/feature.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 7626
+      },
+      "writtenOn": "2020-06-11T10:57:09Z",
+      "side": 1,
+      "message": "I suggest to keep this change or at least to get the default value from os.getcwd()",
+      "range": {
+        "startLine": 113,
+        "startChar": 46,
+        "endLine": 113,
+        "endChar": 54
+      },
       "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": true
@@ -124,6 +237,24 @@
       "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71addb6b_0fdb02ff",
+        "filename": "xtesting/samples/mts/output/0001_tests_junit_results_20200306_101526.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7626
+      },
+      "writtenOn": "2020-06-11T10:57:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e065cd6_84b47804",
+      "revId": "e589f399fb34ccd25837a5282a539e55a71d12b1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
