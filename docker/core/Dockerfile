@@ -10,7 +10,7 @@ RUN apk --no-cache add --update python3 py3-pip bash git mailcap libxml2 libxslt
         pip3 install --no-cache-dir \
             -chttps://opendev.org/openstack/requirements/raw/branch/$OPENSTACK_TAG/upper-constraints.txt \
             -chttps://git.opnfv.org/functest-xtesting/plain/upper-constraints.txt?h=$BRANCH \
-            lxml && \
+            lxml ;; esac && \
     git init /src/functest-xtesting && \
     (cd /src/functest-xtesting && \
         git fetch --tags https://gerrit.opnfv.org/gerrit/functest-xtesting $BRANCH && \
