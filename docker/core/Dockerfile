@@ -6,6 +6,11 @@ ARG OPENSTACK_TAG=master
 RUN apk --no-cache add --update python3 py3-pip bash git mailcap libxml2 libxslt && \
     apk --no-cache add --virtual .build-deps --update \
         python3-dev build-base libxml2-dev libxslt-dev && \
+    case $(uname -m) in aarch*|arm*) CFLAGS="-O0" \
+        pip3 install --no-cache-dir \
+            -chttps://opendev.org/openstack/requirements/raw/branch/$OPENSTACK_TAG/upper-constraints.txt \
+            -chttps://git.opnfv.org/functest-xtesting/plain/upper-constraints.txt?h=$BRANCH \
+            lxml && \
     git init /src/functest-xtesting && \
     (cd /src/functest-xtesting && \
         git fetch --tags https://gerrit.opnfv.org/gerrit/functest-xtesting $BRANCH && \
