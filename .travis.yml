@@ -29,17 +29,54 @@ jobs:
       env:
         - REPO="${DOCKER_USERNAME}"
         - arch="amd64"
-    - script: sudo -E bash build.sh
-      env:
-        - REPO="${DOCKER_USERNAME}"
-        - arch="arm"
+        - amd64_dirs="docker/core"
+        - arm64_dirs=""
+        - arm_dirs=""
     - script: sudo -E bash build.sh
       env:
         - REPO="${DOCKER_USERNAME}"
         - arch="arm64"
+        - amd64_dirs=""
+        - arm64_dirs="docker/core"
+        - arm_dirs=""
+    - script: sudo -E bash build.sh
+      env:
+        - REPO="${DOCKER_USERNAME}"
+        - arch="arm"
+        - amd64_dirs=""
+        - arm64_dirs=""
+        - arm_dirs="docker/core"
     - stage: publish xtesting manifests
       script: >
         sudo manifest-tool push from-args \
           --platforms linux/amd64,linux/arm,linux/arm64 \
           --template ${DOCKER_USERNAME}/xtesting:ARCH-latest \
           --target ${DOCKER_USERNAME}/xtesting:latest
+    - stage: build xtesting-mts images
+      script: sudo -E bash build.sh
+      env:
+        - REPO="${DOCKER_USERNAME}"
+        - arch="amd64"
+        - amd64_dirs="docker/mts"
+        - arm64_dirs=""
+        - arm_dirs=""
+    - script: sudo -E bash build.sh
+      env:
+        - REPO="${DOCKER_USERNAME}"
+        - arch="arm64"
+        - amd64_dirs=""
+        - arm64_dirs=docker/mts
+        - arm_dirs=""
+    - script: sudo -E bash build.sh
+      env:
+        - REPO="${DOCKER_USERNAME}"
+        - arch="arm"
+        - amd64_dirs=""
+        - arm64_dirs=""
+        - arm_dirs="docker/mts"
+    - stage: publish xtesting-mts manifests
+      script: >
+        sudo manifest-tool push from-args \
+          --platforms linux/amd64,linux/arm,linux/arm64 \
+          --template ${DOCKER_USERNAME}/xtesting-mts:ARCH-latest \
+          --target ${DOCKER_USERNAME}/xtesting-mts:latest
