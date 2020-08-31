@@ -111,7 +111,7 @@ class Runner(object):
                     value = re.sub(r'^["\' ]*|[ \'"]*$', '', "".join(var[1:]))
                     os.environ[key] = value
             rcfd.seek(0, 0)
-            LOGGER.info("Sourcing env file %s\n\n%s", rc_file, rcfd.read())
+            LOGGER.debug("Sourcing env file %s\n\n%s", rc_file, rcfd.read())
 
     @staticmethod
     def get_dict_by_test(testname):
