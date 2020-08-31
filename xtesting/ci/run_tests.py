@@ -110,7 +110,14 @@ class Runner():
                     value = re.sub(r'^["\' ]*|[ \'"]*$', '', "".join(var[1:]))
                     os.environ[key] = value
             rcfd.seek(0, 0)
-            LOGGER.info("Sourcing env file %s\n\n%s", rc_file, rcfd.read())
+            # LOGGER.info("Sourcing env file %s\n\n%s", rc_file, rcfd.read())
+            for line in rcfd:
+                if "OS_PASSWORD" in line:
+                    pass
+                else:
+                    LOGGER.info(line.strip())
+            LOGGER.info(
+                "NOTE: 'OS_PASSWORD' is not printed due to security reasons")
 
     @staticmethod
     def get_dict_by_test(testname):
