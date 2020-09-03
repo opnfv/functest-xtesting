@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1845a00d_55215e93",
+        "filename": "xtesting/ci/run_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2020-09-03T11:50:34Z",
+      "side": 1,
+      "message": "Xtesting is not openstack aware",
+      "revId": "3d69c280f1019473c99cc66b3294077f79e5bd34",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    }
+  ]
+}
