@@ -43,7 +43,7 @@ class TierBuilder():
         del self.tier_objects[:]
         for dic_tier in self.dic_tier_array:
             tier = tier_handler.Tier(
-                name=dic_tier['name'], order=dic_tier['order'],
+                name=dic_tier['name'],
                 description=dic_tier.get('description', ''))
             for dic_testcase in dic_tier['testcases']:
                 testcase = tier_handler.TestCase(

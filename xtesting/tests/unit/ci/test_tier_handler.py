@@ -22,8 +22,7 @@ class TierHandlerTesting(unittest.TestCase):
         self.test = mock.Mock()
         attrs = {'get_name.return_value': 'test_name'}
         self.test.configure_mock(**attrs)
-        self.tier = tier_handler.Tier(
-            'test_tier', 'test_order', 'test_desc')
+        self.tier = tier_handler.Tier('test_tier', 'test_desc')
         self.testcase = tier_handler.TestCase(
             'test_name', 'true', False, 'test_criteria',
             True, description='test_desc', project='project_name')
@@ -67,9 +66,6 @@ class TierHandlerTesting(unittest.TestCase):
     def test_get_name(self):
         self.assertEqual(self.tier.get_name(), 'test_tier')
 
-    def test_get_order(self):
-        self.assertEqual(self.tier.get_order(), 'test_order')
-
     def test_testcase_get_name(self):
         self.assertEqual(self.tier.get_name(), 'test_tier')
 
@@ -84,9 +80,6 @@ class TierHandlerTesting(unittest.TestCase):
 
     def test_testcase_get_project(self):
         self.assertEqual(self.testcase.get_project(), 'project_name')
-
-    def test_testcase_get_order(self):
-        self.assertEqual(self.tier.get_order(), 'test_order')
 
 
 if __name__ == "__main__":

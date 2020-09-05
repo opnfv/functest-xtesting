@@ -30,8 +30,7 @@ class TierBuilderTesting(unittest.TestCase):
             'blocking': 'test_blocking', 'description': 'test_desc',
             'project_name': 'project_name'}
         self.dic_tier = {
-            'name': 'test_tier', 'order': 'test_order',
-            'description': 'test_desc',
+            'name': 'test_tier', 'description': 'test_desc',
             'testcases': [self.testcase, self.testcase_disabled]}
         self.mock_yaml = mock.Mock()
         attrs = {'get.return_value': [self.dic_tier]}
@@ -94,7 +93,6 @@ class TierBuilderTesting(unittest.TestCase):
     def test_str(self):
         message = str(self.tierbuilder)
         self.assertTrue('test_tier' in message)
-        self.assertTrue('test_order' in message)
         self.assertTrue('test_desc' in message)
         self.assertTrue('test_name' in message)
 
