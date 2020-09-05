@@ -2,7 +2,6 @@
 tiers:
     -
         name: samples
-        order: 1
         description: ''
         testcases:
             -
