@@ -24,6 +24,7 @@ import time
 
 from lxml import etree
 import prettytable
+import six
 
 from xtesting.core import testcase
 
@@ -227,14 +228,17 @@ class MTSLauncher(testcase.TestCase):
                     if console:
                         sys.stdout.write(line.decode("utf-8"))
                     f_stdout.write(line.decode("utf-8"))
-                try:
-                    process.wait(timeout=max_duration)
-                except subprocess.TimeoutExpired:
-                    process.kill()
-                    self.__logger.info(
-                        "Killing MTS process after %d second(s).",
-                        max_duration)
-                    return 3
+                if six.PY3:
+                    try:
+                        process.wait(timeout=max_duration)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        self.__logger.info(
+                            "Killing MTS process after %d second(s).",
+                            max_duration)
+                        return 3
+                else:
+                    process.wait()
             with open(self.result_file, 'r') as f_stdin:
                 self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
             return process.returncode
