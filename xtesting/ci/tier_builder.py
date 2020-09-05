@@ -44,15 +44,15 @@ class TierBuilder(object):
         for dic_tier in self.dic_tier_array:
             tier = tier_handler.Tier(
                 name=dic_tier['name'], order=dic_tier['order'],
-                description=dic_tier['description'])
+                description=dic_tier.get('description', ''))
             for dic_testcase in dic_tier['testcases']:
                 testcase = tier_handler.TestCase(
                     name=dic_testcase['case_name'],
                     enabled=dic_testcase.get('enabled', True),
                     skipped=False,
-                    criteria=dic_testcase['criteria'],
-                    blocking=dic_testcase['blocking'],
-                    description=dic_testcase['description'],
+                    criteria=dic_testcase.get('criteria', 100),
+                    blocking=dic_testcase.get('blocking', True),
+                    description=dic_testcase.get('description', ''),
                     project=dic_testcase['project_name'])
                 if not dic_testcase.get('dependencies'):
                     if testcase.is_enabled():
