@@ -36,11 +36,10 @@ def split_text(text, max_len):
 
 class Tier():
 
-    def __init__(self, name, order, description=""):
+    def __init__(self, name, description=""):
         self.tests_array = []
         self.skipped_tests_array = []
         self.name = name
-        self.order = order
         self.description = description
 
     def add_test(self, testcase):
@@ -80,17 +79,13 @@ class Tier():
     def get_name(self):
         return self.name
 
-    def get_order(self):
-        return self.order
-
     def __str__(self):
         msg = prettytable.PrettyTable(
             header_style='upper', padding_width=5,
-            field_names=['tiers', 'order', 'description',
+            field_names=['tiers', 'description',
                          'testcases'])
         msg.add_row(
-            [self.name, self.order,
-             textwrap.fill(self.description, width=40),
+            [self.name, textwrap.fill(self.description, width=40),
              textwrap.fill(' '.join([str(x.get_name(
                  )) for x in self.get_tests()]), width=40)])
         return msg.get_string()
