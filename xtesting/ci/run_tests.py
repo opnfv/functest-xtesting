@@ -220,12 +220,11 @@ class Runner(object):
         tiers_to_run = []
         msg = prettytable.PrettyTable(
             header_style='upper', padding_width=5,
-            field_names=['tiers', 'order', 'description',
-                         'testcases'])
+            field_names=['tiers', 'description', 'testcases'])
         for tier in self.tiers.get_tiers():
             if tier.get_tests():
                 tiers_to_run.append(tier)
-                msg.add_row([tier.get_name(), tier.get_order(),
+                msg.add_row([tier.get_name(),
                              textwrap.fill(tier.description, width=40),
                              textwrap.fill(' '.join([str(x.get_name(
                                  )) for x in tier.get_tests()]), width=40)])
