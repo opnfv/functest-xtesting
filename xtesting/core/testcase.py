@@ -107,8 +107,9 @@ class TestCase(object):
             assert self.stop_time
             if self.stop_time < self.start_time:
                 return "XX:XX"
-            return "{0[0]:02.0f}:{0[1]:02.0f}".format(divmod(
-                self.stop_time - self.start_time, 60))
+            return "{}:{}".format(
+                str((self.stop_time - self.start_time) // 60).zfill(2),
+                str((self.stop_time - self.start_time) % 60).zfill(2))
         except Exception:  # pylint: disable=broad-except
             self.__logger.error("Please run test before getting the duration")
             return "XX:XX"
