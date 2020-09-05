@@ -10,6 +10,7 @@
 # pylint: disable=missing-docstring
 
 import os
+import textwrap
 
 import prettytable
 
@@ -42,5 +43,6 @@ def string():
         header_style='upper', padding_width=5,
         field_names=['env var', 'value'])
     for env_var in INPUTS:
-        msg.add_row([env_var, get(env_var) if get(env_var) else ''])
+        msg.add_row([env_var, textwrap.fill(get(env_var), width=50) if get(
+            env_var) else ''])
     return msg
