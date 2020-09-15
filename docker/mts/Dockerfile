@@ -1,6 +1,6 @@
 FROM opnfv/xtesting
 
-ARG MTS_TAG=6.6.3
+ARG MTS_TAG=6.6.21
 ARG APP_FOLDER=/opt/mts
 ARG MAVEN_OPTS=
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
@@ -8,9 +8,9 @@ ENV NGN_JAVA_HOME=${JAVA_HOME}/bin
 ENV MAVEN_OPTS=$MAVEN_OPTS
 
 COPY mts-installer.properties /src/mts-installer.properties
-RUN apk --no-cache add --update openjdk8-jre lksctp-tools libpcap && \
+RUN apk --no-cache add --update openjdk8-jre && \
     apk --no-cache add --virtual .build-deps --update \
-        libpcap-dev openjdk8 maven git && \
+        openjdk8 maven git && \
     git init /src/git-mts && \
     (cd /src/git-mts && \
         git fetch --tags https://github.com/ericsson-mts/mts $MTS_TAG && \
