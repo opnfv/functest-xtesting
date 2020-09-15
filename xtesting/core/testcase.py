@@ -29,6 +29,8 @@ from six.moves import urllib
 from xtesting.utils import decorators
 from xtesting.utils import env
 
+import urllib
+
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
 
@@ -317,7 +319,8 @@ class TestCase():
                         abs_file, os.path.join(path, log_file), Config=config,
                         ExtraArgs={'ContentType': mime_type[
                             0] or 'application/octet-stream'})
-                    link = os.path.join(dst_http_url, log_file)
+                    encoded_log_file = urllib.parse.quote(log_file)
+                    link = os.path.join(dst_http_url, encoded_log_file)
                     output_str += "\n{}".format(link)
                     self.details["links"].append(link)
             for root, _, files in os.walk(self.res_dir):
@@ -335,9 +338,11 @@ class TestCase():
                         Config=config,
                         ExtraArgs={'ContentType': mime_type[
                             0] or 'application/octet-stream'})
-                    link = os.path.join(dst_http_url, os.path.relpath(
+                    non_encoded_pub_file = os.path.relpath(
                         os.path.join(root, pub_file),
-                        start=self.dir_results))
+                        start=self.dir_results)
+                    encoded_pub_file = urllib.parse.quote(non_encoded_pub_file)
+                    link = os.path.join(dst_http_url, encoded_pub_file)
                     output_str += "\n{}".format(link)
                     self.details["links"].append(link)
             self.__logger.info(
