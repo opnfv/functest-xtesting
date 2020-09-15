@@ -18,6 +18,7 @@ helpers to run any python method or any bash command.
 import csv
 import logging
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -209,10 +210,18 @@ class MTSLauncher(testcase.TestCase):
                                              self.mts_logs_dir)
 
             # Make sure to create the necessary output sub-folders for MTS
-            if not os.path.isdir(self.mts_stats_dir):
-                os.makedirs(self.mts_stats_dir)
-            if not os.path.isdir(self.mts_logs_dir):
-                os.makedirs(self.mts_logs_dir)
+            # and cleanup output files from previous run.
+            if os.path.exists(self.mts_result_csv_file):
+                os.remove(self.mts_result_csv_file)
+
+            if os.path.isdir(self.mts_stats_dir):
+                shutil.rmtree(self.mts_stats_dir)
+            os.makedirs(self.mts_stats_dir)
+
+            if os.path.isdir(self.mts_logs_dir):
+                shutil.rmtree(self.mts_logs_dir)
+            os.makedirs(self.mts_logs_dir)
+
             self.__logger.info(
                 "MTS statistics output dir: %s ", self.mts_stats_dir)
             self.__logger.info("MTS logs output dir: %s ", self.mts_logs_dir)
