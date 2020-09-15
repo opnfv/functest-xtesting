@@ -1,6 +1,6 @@
 FROM opnfv/xtesting
 
-ARG MTS_TAG=6.6.3
+ARG MTS_TAG=6.6.21
 ARG APP_FOLDER=/opt/mts
 ARG MAVEN_OPTS=
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
