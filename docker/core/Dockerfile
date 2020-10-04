@@ -1,6 +1,6 @@
 FROM alpine:3.12
 
-ARG BRANCH=master
+ARG BRANCH=stable/leguer
 ARG OPENSTACK_TAG=master
 
 RUN apk --no-cache add --update python3 py3-pip py3-wheel bash git mailcap libxml2 libxslt && \
