@@ -1,4 +1,4 @@
-FROM opnfv/xtesting
+FROM opnfv/xtesting:leguer
 
 ARG MTS_TAG=6.6.3
 ARG APP_FOLDER=/opt/mts

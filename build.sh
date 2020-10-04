@@ -17,7 +17,7 @@ docker/core \
 docker/mts"}
 arm_dirs=${arm_dirs-${amd64_dirs}}
 arm64_dirs=${arm64_dirs-${amd64_dirs}}
-tag=${BRANCH:-latest}
+tag=${BRANCH:-leguer}
 image="xtesting"
 build_opts=(--pull=true --no-cache --force-rm=true)
 
@@ -26,15 +26,15 @@ for arch in ${arch}; do
         find . -name Dockerfile -exec sed -i \
             -e "s|alpine:3.12|arm64v8/alpine:3.12|g" {} +
         find . -name Dockerfile -exec sed -i \
-            -e "s|opnfv/xtesting|${repo}/xtesting:arm64-${tag}|g" {} +
+            -e "s|opnfv/xtesting:${tag}|${repo}/xtesting:arm64-${tag}|g" {} +
     elif [[ ${arch} == arm ]]; then
         find . -name Dockerfile -exec sed -i \
             -e "s|alpine:3.12|arm32v6/alpine:3.12|g" {} +
         find . -name Dockerfile -exec sed -i \
-            -e "s|opnfv/xtesting|${repo}/xtesting:arm-${tag}|g" {} +
+            -e "s|opnfv/xtesting:${tag}|${repo}/xtesting:arm-${tag}|g" {} +
     else
         find . -name Dockerfile -exec sed -i \
-            -e "s|opnfv/xtesting|${repo}/xtesting:amd64-${tag}|g" {} +
+            -e "s|opnfv/xtesting:${tag}|${repo}/xtesting:amd64-${tag}|g" {} +
     fi
     dirs=${arch}_dirs
     for dir in ${!dirs}; do
