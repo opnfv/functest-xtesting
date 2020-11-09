@@ -5,6 +5,18 @@
       docker_tags:
         - iruya:
             branch: stable/iruya
+      builds:
+        dependencies:
+          - repo: _
+            dport:
+            container: alpine
+            tag: 3.9
+        steps:
+          - name: opnfv/xtesting
+            containers:
+              - name: xtesting
+                ref_arg: BRANCH
+                path: docker
       suites:
         - container: xtesting
           tests:
