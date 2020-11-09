@@ -5,6 +5,18 @@
       docker_tags:
         - jerma:
             branch: stable/jerma
+      builds:
+        dependencies:
+          - repo: _
+            dport:
+            container: alpine
+            tag: '3.10'
+        steps:
+          - name: opnfv/xtesting
+            containers:
+              - name: xtesting
+                ref_arg: BRANCH
+                path: docker
       suites:
         - container: xtesting
           tests:
