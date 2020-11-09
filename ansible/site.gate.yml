@@ -1,0 +1,33 @@
+---
+- hosts: 127.0.0.1
+  roles:
+    - role: collivier.xtesting
+      builds:
+        dependencies:
+          - repo: _
+            dport:
+            container: alpine
+            tag: '3.12'
+        steps:
+          - name: opnfv/xtesting
+            containers:
+              - name: xtesting
+                ref_arg: BRANCH
+                path: docker/core
+          - name: opnfv/xtesting-mts
+            containers:
+              - name: xtesting-mts
+                ref_arg: BRANCH
+                path: docker/mts
+      suites:
+        - container: xtesting
+          tests:
+            - first
+            - second
+            - third
+            - fourth
+            - fifth
+            - sixth
+        - container: xtesting-mts
+          tests:
+            - seventh
