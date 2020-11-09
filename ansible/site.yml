@@ -5,23 +5,6 @@
       docker_tags:
         - hunter:
             branch: stable/hunter
-      builds:
-        dependencies:
-          - repo: _
-            dport:
-            container: alpine
-            tag: '3.9'
-        steps:
-          - name: opnfv/xtesting
-            containers:
-              - name: xtesting
-                ref_arg: BRANCH
-                path: docker/core
-          - name: opnfv/xtesting-mts
-            containers:
-              - name: xtesting-mts
-                ref_arg: BRANCH
-                path: docker/mts
       suites:
         - container: xtesting
           tests:
