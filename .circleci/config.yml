@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: Run tox
-          command: sudo pip install tox && tox
+          command: sudo pip install tox tox-pip-version && tox
       - store_artifacts:
           path: api/build
           destination: api
