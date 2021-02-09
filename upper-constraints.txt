@@ -6,3 +6,4 @@ pylint===1.9.5;python_version=='2.7'
 pylint===2.3.1;python_version=='3.6'
 boto3===1.9.108
 behave===1.2.6
+ansible-lint===4.2.0
