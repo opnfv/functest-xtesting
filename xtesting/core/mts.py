@@ -239,7 +239,9 @@ class MTSLauncher(testcase.TestCase):
                     f_stdout.write(line.decode("utf-8"))
                 if six.PY3:
                     try:
+                        # pylint: disable=unexpected-keyword-arg
                         process.wait(timeout=max_duration)
+                    # pylint: disable=no-member
                     except subprocess.TimeoutExpired:
                         process.kill()
                         self.__logger.info(
