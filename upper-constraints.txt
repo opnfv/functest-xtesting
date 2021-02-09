@@ -4,4 +4,4 @@ behave===1.2.6
 behave-html-formatter===0.9.4;python_version>='3.5'
 pylint===1.9.5;python_version=='2.7'
 pylint===2.3.1;python_version=='3.7'
-ansible-lint===4.3.7
+ansible-lint===4.2.0
