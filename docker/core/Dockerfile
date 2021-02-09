@@ -5,7 +5,7 @@ ARG OPENSTACK_TAG=stable/rocky
 
 RUN apk --no-cache add --update python py-pip bash git mailcap libxml2 libxslt && \
     apk --no-cache add --virtual .build-deps --update \
-        python-dev build-base && \
+        python-dev build-base libxml2-dev libxslt-dev && \
     git init /src/functest-xtesting && \
     (cd /src/functest-xtesting && \
         git fetch --tags https://gerrit.opnfv.org/gerrit/functest-xtesting $BRANCH && \
