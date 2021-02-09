@@ -75,6 +75,6 @@ tiers:
                     name: 'behaveframework'
                     args:
                         suites:
-                            - /usr/lib/python3.6/site-packages/xtesting/samples/features/
+                            - /usr/lib/python2.7/site-packages/xtesting/samples/features/
                         tags:
                             - foo
