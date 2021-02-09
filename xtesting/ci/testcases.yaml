@@ -60,7 +60,7 @@ tiers:
                     name: 'robotframework'
                     args:
                         suites:
-                            - /usr/lib/python3.6/site-packages/xtesting/samples/HelloWorld.robot
+                            - /usr/lib/python3.7/site-packages/xtesting/samples/HelloWorld.robot
                         variable:
                             - 'var01:foo'
                             - 'var02:bar'
@@ -77,7 +77,7 @@ tiers:
                     name: 'behaveframework'
                     args:
                         suites:
-                            - /usr/lib/python3.6/site-packages/xtesting/samples/features/
+                            - /usr/lib/python3.7/site-packages/xtesting/samples/features/
                         tags:
                             - foo
 
