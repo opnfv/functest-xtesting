@@ -1,4 +1,4 @@
-FROM opnfv/xtesting
+FROM opnfv/xtesting:iruya
 
 ARG MTS_TAG=6.6.21
 ARG APP_FOLDER=/opt/mts
