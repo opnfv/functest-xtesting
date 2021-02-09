@@ -1,4 +1,4 @@
-FROM opnfv/xtesting
+FROM opnfv/xtesting:jerma
 
 ARG MTS_TAG=6.6.21
 ARG APP_FOLDER=/opt/mts
@@ -20,5 +20,5 @@ RUN apk --no-cache add --update openjdk8-jre && \
         java -jar target/mts-${MTS_TAG}-installer.jar -options /src/mts-installer.properties) && \
     rm -rf /root/.m2/ ${APP_FOLDER}/tutorial /src/mts-installer.properties /src/git-mts && \
     apk del .build-deps
-COPY testcases.yaml /usr/lib/python3.8/site-packages/xtesting/ci/testcases.yaml
+COPY testcases.yaml /usr/lib/python3.7/site-packages/xtesting/ci/testcases.yaml
 CMD ["run_tests", "-t", "all"]
