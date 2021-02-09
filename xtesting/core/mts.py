@@ -149,7 +149,7 @@ class MTSLauncher(testcase.TestCase):
         """Make sure that all required MTS test cases exist
         in the XML test file.
         """
-        if len(enabled_testcases) > 0:
+        if enabled_testcases:
             # Verify if the MTS test case exists in the whole list of test
             # cases declared in the test XML file
             for enabled_testcase in enabled_testcases:
@@ -189,7 +189,7 @@ class MTSLauncher(testcase.TestCase):
             enabled_testcases = kwargs[
                 "testcases"] if "testcases" in kwargs else []
             enabled_testcases_str = ''
-            if len(enabled_testcases) > 0:
+            if enabled_testcases:
                 enabled_testcases_str = ' '.join(enabled_testcases)
                 check_ok = self.check_enabled_mts_test_cases(enabled_testcases)
                 if not check_ok:
