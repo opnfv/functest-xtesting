@@ -3,7 +3,8 @@ FROM alpine:3.10
 ARG BRANCH=stable/jerma
 ARG OPENSTACK_TAG=stable/train
 
-RUN apk --no-cache add --update python3 bash git mailcap libxml2 libxslt && \
+RUN apk -U upgrade && \
+    apk --no-cache add --update python3 bash git mailcap libxml2 libxslt && \
     apk --no-cache add --virtual .build-deps --update \
         python3-dev build-base libxml2-dev libxslt-dev && \
     git init /src/functest-xtesting && \
