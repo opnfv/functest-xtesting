@@ -3,7 +3,8 @@ FROM alpine:3.13
 ARG BRANCH=master
 ARG OPENSTACK_TAG=master
 
-RUN apk --no-cache add --update python3 py3-pip py3-wheel bash git mailcap libxml2 libxslt && \
+RUN apk -U upgrade && \
+    apk --no-cache add --update python3 py3-pip py3-wheel bash git mailcap libxml2 libxslt && \
     apk --no-cache add --virtual .build-deps --update \
         python3-dev build-base libxml2-dev libxslt-dev && \
     case $(uname -m) in aarch*|arm*) CFLAGS="-O0" \
