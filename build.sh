@@ -29,7 +29,7 @@ for arch in ${arch}; do
             -e "s|opnfv/xtesting|${repo}/xtesting:arm64-${tag}|g" {} +
     elif [[ ${arch} == arm ]]; then
         find . -name Dockerfile -exec sed -i \
-            -e "s|alpine:3.12|arm32v6/alpine:3.12|g" {} +
+            -e "s|alpine:3.13|arm32v6/alpine:3.13|g" {} +
         find . -name Dockerfile -exec sed -i \
             -e "s|opnfv/xtesting|${repo}/xtesting:arm-${tag}|g" {} +
     else
