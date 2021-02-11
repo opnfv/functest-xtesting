@@ -40,6 +40,14 @@ class MTSLauncher(testcase.TestCase):
     __logger = logging.getLogger(__name__)
     mts_install_dir = "/opt/mts"
 
+    def check_requirements(self):
+        """Check if startCmd.sh is in /opt/mts/bin"""
+        if not os.path.exists(
+                os.path.join(self.mts_install_dir, 'bin/startCmd.sh')):
+            self.__logger.warning(
+                "mts is not available for arm for the time being")
+            self.is_skipped = True
+
     def __init__(self, **kwargs):
         super(MTSLauncher, self).__init__(**kwargs)
         self.result_file = "{}/{}.log".format(self.res_dir, self.case_name)
