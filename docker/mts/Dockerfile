@@ -8,7 +8,7 @@ ENV NGN_JAVA_HOME=${JAVA_HOME}/bin
 ENV MAVEN_OPTS=$MAVEN_OPTS
 
 COPY mts-installer.properties /src/mts-installer.properties
-RUN case $(uname -m) in x86_64|aarch64) \
+RUN case $(uname -m) in x86_64) \
         apk --no-cache add --update openjdk8-jre && \
         apk --no-cache add --virtual .build-deps --update \
             openjdk8 maven git && \
