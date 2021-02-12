@@ -70,7 +70,7 @@ jobs:
     - script: sudo -E bash build.sh
       env:
         - REPO="${DOCKER_USERNAME}"
-        - arch="arm64"
+        - arch="arm"
         - amd64_dirs=""
         - arm64_dirs=""
         - arm_dirs="docker/mts"
