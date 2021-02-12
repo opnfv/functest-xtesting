@@ -2,15 +2,18 @@
 - hosts: 127.0.0.1
   roles:
     - role: collivier.xtesting
+      use_gerrit: true
+      gerrit_project: functest-xtesting
+      git_url: https://gerrit.opnfv.org/gerrit/functest-xtesting
       docker_tags:
         - iruya:
             branch: stable/iruya
+            dependency: '3.9'
       builds:
-        dependencies:
-          - repo: _
-            dport:
-            container: alpine
-            tag: 3.9
+        dependency:
+          repo: _
+          dport:
+          container: alpine
         steps:
           - name: opnfv/xtesting
             containers:
