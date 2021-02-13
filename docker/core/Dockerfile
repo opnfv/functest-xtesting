@@ -5,6 +5,7 @@ ARG OPENSTACK_TAG=stable/rocky
 
 RUN apk -U upgrade && \
     apk --no-cache add --update python py-pip bash git mailcap libxml2 libxslt && \
+    apk --no-cache add --update libcurl --repository=http://dl-cdn.alpinelinux.org/alpine/v3.10/main && \
     apk --no-cache add --virtual .build-deps --update \
         python-dev build-base libxml2-dev libxslt-dev && \
     case $(uname -m) in aarch*|arm*) CFLAGS="-O0" \
