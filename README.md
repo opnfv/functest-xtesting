@@ -195,4 +195,10 @@ Build your container
 sudo docker build -t 127.0.0.1:5000/weather .
 ```
 
+Publish your container on your local repository
+
+```bash
+sudo docker push 127.0.0.1:5000/weather
+```
+
 ### That's all folks!
