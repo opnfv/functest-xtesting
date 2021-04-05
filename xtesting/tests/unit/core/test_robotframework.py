@@ -189,8 +189,8 @@ class RunTesting(unittest.TestCase):
                     variablefile=self.variablefile, include=self.include),
                 self.test.EX_RUN_ERROR)
             args[0].assert_not_called()
-            mock_method.asser_not_called()
-            mmethod.asser_not_called()
+            mock_method.assert_not_called()
+            mmethod.assert_not_called()
 
     @mock.patch('os.makedirs', side_effect=Exception)
     @mock.patch('os.path.exists', return_value=False)
@@ -248,7 +248,7 @@ class RunTesting(unittest.TestCase):
                 mock.patch.object(self.test, 'generate_report') as mmethod:
             self._test_parse_results(self.test.EX_RUN_ERROR)
             mock_method.assert_called_once_with()
-            mmethod.asser_not_called()
+            mmethod.assert_not_called()
 
     def test_parse_results_robot_error(self):
         with mock.patch.object(self.test, 'parse_results',
@@ -256,7 +256,7 @@ class RunTesting(unittest.TestCase):
                 mock.patch.object(self.test, 'generate_report') as mmethod:
             self._test_parse_results(self.test.EX_RUN_ERROR)
             mock_method.assert_called_once_with()
-            mmethod.asser_not_called()
+            mmethod.assert_not_called()
 
     @mock.patch('os.makedirs')
     @mock.patch('robot.run')

@@ -53,14 +53,14 @@ tiers:
                 project_name: xtesting
                 enabled: false
                 criteria: 100
-                blocking: false
+                blocking: true
                 clean_flag: false
                 description: ''
                 run:
                     name: 'robotframework'
                     args:
                         suites:
-                            - /usr/lib/python3.6/site-packages/xtesting/samples/HelloWorld.robot
+                            - /usr/lib/python3.8/site-packages/xtesting/samples/HelloWorld.robot
                         variable:
                             - 'var01:foo'
                             - 'var02:bar'
@@ -70,21 +70,21 @@ tiers:
                 project_name: xtesting
                 enabled: false
                 criteria: 100
-                blocking: false
+                blocking: true
                 clean_flag: false
                 description: ''
                 run:
                     name: 'behaveframework'
                     args:
                         suites:
-                            - /usr/lib/python3.6/site-packages/xtesting/samples/features/
+                            - /usr/lib/python3.8/site-packages/xtesting/samples/features/
                         tags:
                             - foo
 
             -
                 case_name: seventh
                 project_name: xtesting
-                enabled: true
+                enabled: false
                 criteria: 100
                 blocking: true
                 clean_flag: false
@@ -100,3 +100,17 @@ tiers:
                         store_method: FILE
                         java_memory: 2048
                         console: true
+
+            -
+                case_name: eighth
+                project_name: xtesting
+                enabled: false
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'ansible'
+                    args:
+                        private_data_dir: '/usr/lib/python3.8/site-packages/xtesting/samples/'
+                        playbook: 'helloworld.yml'

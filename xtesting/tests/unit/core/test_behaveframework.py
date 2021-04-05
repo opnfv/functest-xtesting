@@ -102,7 +102,7 @@ class RunTesting(unittest.TestCase):
                     suites=self.suites, tags=self.tags),
                 self.test.EX_RUN_ERROR)
             args[0].assert_not_called()
-            mock_method.asser_not_called()
+            mock_method.assert_not_called()
 
     @mock.patch('os.makedirs', side_effect=Exception)
     @mock.patch('os.path.exists', return_value=False)
