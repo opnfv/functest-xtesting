@@ -21,6 +21,7 @@ import sys
 import time
 
 import six
+import ansible_runner
 from xtesting.core import testcase
 
 __author__ = ("Serena Feng <feng.xiaowei@zte.com.cn>, "
@@ -118,6 +119,58 @@ class BashFeature(Feature):
             with open(self.result_file, 'r') as f_stdin:
                 self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
             return process.returncode
+        except KeyError:
+            self.__logger.error("Please give cmd as arg. kwargs: %s", kwargs)
+        return -1
+
+class AnsibleFeature(Feature):
+    """Class designed to run ansible playbook."""
+
+    __logger = logging.getLogger(__name__)
+
+    def __init__(self, **kwargs):
+        super(AnsibleFeature, self).__init__(**kwargs)
+        self.result_file = "{}/{}.log".format(self.res_dir, self.case_name)
+
+    def execute(self, **kwargs):
+        """Execute the cmd passed as arg
+
+        Args:
+            kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            0 if playbook executed successfully,
+            non zero otherwise.
+        """
+        try:
+            cmd = kwargs["playbook_path"]
+            dir = kwargs["runner_dir"]
+            extravars_values = kwargs["extravars"]
+            if extravars_values:
+                with open(dir + "/env/extravars", "w") as fd_write:
+                   for var in extravars_values:
+                       for key, value in var.items():
+                           fd_write.write(key +  ": "+ value)
+                       fd_write.write('\n')
+
+            inventory_values = kwargs["inventory"]
+            if inventory_values:
+                with open(dir + "/inventory", "w") as fd_write:
+                   for inv in inventory_values:
+                       fd_write.write(inv)
+                       fd_write.write('\n')
+
+            console = kwargs["console"] if "console" in kwargs else False
+            if not os.path.isdir(self.res_dir):
+                os.makedirs(self.res_dir)
+            with open(self.result_file, 'w') as f_stdout:
+                self.__logger.info("Calling %s", cmd)
+                r = ansible_runner.run(private_data_dir=dir, playbook=cmd, cmdline="-k")
+                self.__logger.info("Return status: %s", r.rc)
+            with open(self.result_file, 'r') as f_stdin:
+                self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
+            # return process.returncode
+            return r.rc
         except KeyError:
             self.__logger.error("Please give cmd as arg. kwargs: %s", kwargs)
         return -1

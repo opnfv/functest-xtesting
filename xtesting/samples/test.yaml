@@ -1,0 +1,20 @@
+---
+- name: Playbook
+  hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: ensure apache is at the latest version
+      apt:
+        name: ntp
+        state: latest
+
+    - name: Creates first directory
+      file:
+         path: "{{ path }}"
+         state: directory
+    - name: Creates second directory
+      file:
+         path: "{{ path1 }}"
+         state: directory
+
