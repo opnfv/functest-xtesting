@@ -17,3 +17,5 @@ os-testr # Apache-2.0
 junitxml
 boto3 # Apache-2.0
 lxml!=3.7.0 # BSD
+ansible
+ansible_runner # Apache-2.0
