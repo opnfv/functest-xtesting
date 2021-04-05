@@ -100,3 +100,15 @@ tiers:
                         store_method: FILE
                         java_memory: 2048
                         console: true
+
+            -
+                case_name: eighth
+                project_name: xtesting
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'ansiblefeature'
+                    args:
+                        playbook_path: '/usr/lib/python3.8/site-packages/xtesting/samples/test.yaml'
