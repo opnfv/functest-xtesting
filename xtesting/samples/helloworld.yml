@@ -1,0 +1,6 @@
+---
+- name: Hello World!
+  hosts: 127.0.0.1
+  tasks:
+  - name: Hello World!
+    shell: echo "Hello World!"

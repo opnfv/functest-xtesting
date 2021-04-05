@@ -4,9 +4,9 @@ ARG BRANCH=master
 ARG OPENSTACK_TAG=master
 
 RUN apk -U upgrade && \
-    apk --no-cache add --update python3 py3-pip py3-wheel bash git mailcap libxml2 libxslt && \
+    apk --no-cache add --update python3 py3-pip py3-wheel bash git mailcap libxml2 libxslt ansible && \
     apk --no-cache add --virtual .build-deps --update \
-        python3-dev build-base libxml2-dev libxslt-dev && \
+        python3-dev build-base libxml2-dev libxslt-dev linux-headers && \
     case $(uname -m) in aarch*|arm*) CFLAGS="-O0" \
         pip3 install --no-cache-dir \
             -chttps://opendev.org/openstack/requirements/raw/branch/$OPENSTACK_TAG/upper-constraints.txt \
