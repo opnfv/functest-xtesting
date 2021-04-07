@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72dc710e_8ae39456",
+        "filename": "xtesting/core/feature.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2021-04-07T08:41:09Z",
+      "side": 1,
+      "message": "I would suggest to define it in xtesting/core/ansible.py and to inherit from TestCase.",
+      "revId": "dcae03724d6ed8e248703d6d774857e42e3a0b99",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "466aa104_657209e3",
+        "filename": "xtesting/core/feature.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2021-04-07T08:41:09Z",
+      "side": 1,
+      "message": "I would suggest format if str concat.",
+      "revId": "dcae03724d6ed8e248703d6d774857e42e3a0b99",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b0b4cf2_88c244d2",
+        "filename": "xtesting/core/feature.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2021-04-07T08:41:09Z",
+      "side": 1,
+      "message": "inventory file could be fully external reachable via an env var.\nThe test must basically check that the file exists as prerequisite.\nhttps://xtesting.readthedocs.io/en/latest/apidoc/xtesting.core.testcase.html#xtesting.core.testcase.TestCase.check_requirements",
+      "revId": "dcae03724d6ed8e248703d6d774857e42e3a0b99",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    }
+  ]
+}
