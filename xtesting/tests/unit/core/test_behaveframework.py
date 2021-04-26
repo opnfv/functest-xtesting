@@ -146,7 +146,7 @@ class RunTesting(unittest.TestCase):
 
     @mock.patch('os.makedirs')
     @mock.patch('xtesting.core.behaveframework.behave_main')
-    def _test_parse_results(self, status, *args):
+    def _test_parse_results(self, status, console, *args):
         self.assertEqual(
             self.test.run(
                 suites=self.suites, tags=self.tags),
@@ -160,15 +160,20 @@ class RunTesting(unittest.TestCase):
             args_list += [
                 '--format=behave_html_formatter:HTMLFormatter',
                 '--outfile={}'.format(html_file)]
+        if console:
+            args_list += ['--format=pretty', '--outfile=-']
         args_list.append('foo')
         args[0].assert_called_once_with(args_list)
         args[1].assert_called_once_with(self.test.res_dir)
 
-    def test_parse_results_exc(self):
+    def test_parse_results_exc(self, console=False):
         with mock.patch.object(self.test, 'parse_results',
                                side_effect=Exception) as mock_method:
-            self._test_parse_results(self.test.EX_RUN_ERROR)
+            self._test_parse_results(self.test.EX_RUN_ERROR, console=console)
             mock_method.assert_called_once_with()
+
+    def test_parse_results_exc_console(self):
+        self.test_parse_results_exc(console=True)
 
 
 if __name__ == "__main__":
