@@ -81,6 +81,7 @@ class BehaveFramework(testcase.TestCase):
         try:
             suites = kwargs["suites"]
             tags = kwargs.get("tags", [])
+            console = kwargs["console"] if "console" in kwargs else False
         except KeyError:
             self.__logger.exception("Mandatory args were not passed")
             return self.EX_RUN_ERROR
@@ -97,6 +98,9 @@ class BehaveFramework(testcase.TestCase):
             html_file = os.path.join(self.res_dir, 'output.html')
             config += ['--format=behave_html_formatter:HTMLFormatter',
                        '--outfile={}'.format(html_file)]
+        if console:
+            config += ['--format=pretty',
+                       '--outfile=-']
         for feature in suites:
             config.append(feature)
         self.start_time = time.time()
