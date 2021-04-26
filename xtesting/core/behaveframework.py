@@ -97,6 +97,8 @@ class BehaveFramework(testcase.TestCase):
             html_file = os.path.join(self.res_dir, 'output.html')
             config += ['--format=behave_html_formatter:HTMLFormatter',
                        '--outfile={}'.format(html_file)]
+        if kwargs.get("console", False):
+            config += ['--format=pretty', '--outfile=-']
         for feature in suites:
             config.append(feature)
         self.start_time = time.time()
