@@ -54,7 +54,8 @@ class Ansible(testcase.TestCase):
             try:
                 if not os.path.exists(self.res_dir):
                     os.makedirs(self.res_dir)
-                kwargs["quiet"] = True
+                if not "quiet" in kwargs:
+                    kwargs["quiet"] = True
                 kwargs["artifact_dir"] = self.res_dir
                 runner = ansible_runner.run(**kwargs)
                 self.details = runner.stats
