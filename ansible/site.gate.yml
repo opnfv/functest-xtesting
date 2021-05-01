@@ -7,7 +7,7 @@
       git_url: https://gerrit.opnfv.org/gerrit/functest-xtesting
       docker_tags:
         - latest:
-            branch: master
+            branch: stable/wallaby
             dependency: '3.13'
       builds:
         dependency:
@@ -34,6 +34,7 @@
             - fourth
             - fifth
             - sixth
+            - eighth
         - container: xtesting-mts
           tests:
             - seventh
