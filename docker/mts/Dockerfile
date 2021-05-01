@@ -1,4 +1,4 @@
-FROM opnfv/xtesting
+FROM opnfv/xtesting:wallaby
 
 ARG MTS_TAG=6.6.21
 ARG APP_FOLDER=/opt/mts
