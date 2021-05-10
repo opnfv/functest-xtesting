@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b32db2e9_3daf9456",
+        "filename": "xtesting/ci/run_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2021-05-10T10:57:06Z",
+      "side": 1,
+      "message": "you could rather use format here",
+      "revId": "b704aa8aa78dbb794762a85f63b9a7790ec68c85",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a7607c8_0c7d57d2",
+        "filename": "xtesting/tests/unit/core/test_testcase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2021-05-10T10:57:06Z",
+      "side": 1,
+      "message": "os.path.join",
+      "revId": "b704aa8aa78dbb794762a85f63b9a7790ec68c85",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58284a6d_c8b3c94f",
+        "filename": "xtesting/utils/constants.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2021-05-10T10:57:06Z",
+      "side": 1,
+      "message": "os.path.join",
+      "revId": "b704aa8aa78dbb794762a85f63b9a7790ec68c85",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac256889_78caaf81",
+        "filename": "xtesting/utils/constants.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2021-05-10T10:57:06Z",
+      "side": 1,
+      "message": "os.path.join",
+      "revId": "b704aa8aa78dbb794762a85f63b9a7790ec68c85",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    }
+  ]
+}
