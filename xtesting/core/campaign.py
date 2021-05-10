@@ -26,6 +26,7 @@ from six.moves import urllib
 
 from xtesting.core import testcase
 from xtesting.utils import env
+from xtesting.utils import constants
 
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
@@ -216,9 +217,9 @@ def main():
         os.makedirs(testcase.TestCase.dir_results)
     if env.get('DEBUG').lower() == 'true':
         logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', 'ci/logging.debug.ini'))
+            'xtesting', constants.DEBUG_INI_PATH))
     else:
         logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', 'ci/logging.ini'))
+            'xtesting', constants.INI_PATH))
     logging.captureWarnings(True)
     Campaign.zip_campaign_files()

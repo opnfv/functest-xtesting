@@ -308,17 +308,17 @@ class Runner():
 def main():
     """Entry point"""
     try:
-        os.makedirs('/var/lib/xtesting/results/')
+        os.makedirs(constants.RESULTS_DIR)
     except OSError as ex:
         if ex.errno != errno.EEXIST:
-            six.print_("Cannot create /var/lib/xtesting/results/")
+            six.print_("Cannot create "+constants.RESULTS_DIR)
             return testcase.TestCase.EX_RUN_ERROR
     if env.get('DEBUG').lower() == 'true':
         logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', 'ci/logging.debug.ini'))
+            'xtesting', constants.DEBUG_INI_PATH))
     else:
         logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', 'ci/logging.ini'))
+            'xtesting', constants.INI_PATH))
     logging.captureWarnings(True)
     parser = RunTestsParser()
     args = parser.parse_args(sys.argv[1:])

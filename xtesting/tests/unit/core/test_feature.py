@@ -40,7 +40,7 @@ class FeatureTestingBase(unittest.TestCase):
     _project_name = "bar"
     _repo = "dir_repo_bar"
     _cmd = "run_bar_tests.py"
-    _output_file = '/var/lib/xtesting/results/foo/foo.log'
+    _output_file = constants.RESULTS_DIR+'foo/foo.log'
     feature = None
 
     @mock.patch('time.time', side_effect=[1, 2])
