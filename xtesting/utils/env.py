@@ -30,9 +30,8 @@ INPUTS = {
 
 
 def get(env_var):
-    if env_var not in INPUTS.keys():
-        return os.environ.get(env_var, None)
-    return os.environ.get(env_var, INPUTS[env_var])
+    # defaults to None if env_var is not found
+    return os.environ.get(env_var, INPUTS.get(env_var))
 
 
 def string():
