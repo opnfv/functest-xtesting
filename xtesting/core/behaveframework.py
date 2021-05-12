@@ -30,7 +30,6 @@ class BehaveFramework(testcase.TestCase):
     # pylint: disable=too-many-instance-attributes
 
     __logger = logging.getLogger(__name__)
-    dir_results = "/var/lib/xtesting/results"
 
     def __init__(self, **kwargs):
         super(BehaveFramework, self).__init__(**kwargs)

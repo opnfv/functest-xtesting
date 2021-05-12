@@ -53,7 +53,6 @@ class RobotFramework(testcase.TestCase):
     """RobotFramework runner."""
 
     __logger = logging.getLogger(__name__)
-    dir_results = "/var/lib/xtesting/results"
 
     def __init__(self, **kwargs):
         super(RobotFramework, self).__init__(**kwargs)
