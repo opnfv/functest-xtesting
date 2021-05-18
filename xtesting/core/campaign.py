@@ -215,11 +215,9 @@ def main():
     """Entry point for Campaign.zip_campaign_files()."""
     if not os.path.exists(testcase.TestCase.dir_results):
         os.makedirs(testcase.TestCase.dir_results)
-    if env.get('DEBUG').lower() == 'true':
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', constants.DEBUG_INI_PATH))
-    else:
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', constants.INI_PATH))
+    logging.config.fileConfig(pkg_resources.resource_filename(
+        'xtesting',
+        constants.DEBUG_INI_PATH if (env.get('DEBUG').lower() == 'true')
+        else constants.INI_PATH))
     logging.captureWarnings(True)
     Campaign.zip_campaign_files()
