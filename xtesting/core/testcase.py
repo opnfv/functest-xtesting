@@ -28,6 +28,7 @@ from six.moves import urllib
 
 from xtesting.utils import decorators
 from xtesting.utils import env
+from xtesting.utils import constants
 
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
@@ -55,7 +56,7 @@ class TestCase():
     EX_PUBLISH_ARTIFACTS_ERROR = os.EX_SOFTWARE - 4
     """publish_artifacts() failed"""
 
-    dir_results = "/var/lib/xtesting/results"
+    dir_results = constants.RESULTS_DIR
     _job_name_rule = "(dai|week)ly-(.+?)-[0-9]*"
     headers = {'Content-Type': 'application/json'}
     __logger = logging.getLogger(__name__)
@@ -69,9 +70,9 @@ class TestCase():
         self.start_time = 0
         self.stop_time = 0
         self.is_skipped = False
-        self.output_log_name = 'xtesting.log'
-        self.output_debug_log_name = 'xtesting.debug.log'
-        self.res_dir = "{}/{}".format(self.dir_results, self.case_name)
+        self.output_log_name = os.path.basename(constants.LOG_PATH)
+        self.output_debug_log_name = os.path.basename(constants.DEBUG_LOG_PATH)
+        self.res_dir = os.path.join(self.dir_results, self.case_name)
 
     def __str__(self):
         try:
