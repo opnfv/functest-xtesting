@@ -313,12 +313,10 @@ def main():
         if ex.errno != errno.EEXIST:
             six.print_("{} {}".format("Cannot create", constants.RESULTS_DIR))
             return testcase.TestCase.EX_RUN_ERROR
-    if env.get('DEBUG').lower() == 'true':
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', constants.DEBUG_INI_PATH))
-    else:
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', constants.INI_PATH))
+    debug = (env.get('DEBUG').lower() == 'true')
+    logging.config.fileConfig(pkg_resources.resource_filename(
+        'xtesting',
+        constants.DEBUG_INI_PATH if debug else constants.INI_PATH))
     logging.captureWarnings(True)
     parser = RunTestsParser()
     args = parser.parse_args(sys.argv[1:])
