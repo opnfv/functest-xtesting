@@ -29,11 +29,6 @@ class TierHandlerTesting(unittest.TestCase):
         self.testcase.str = self.testcase.__str__()
         self.tier.str = self.tier.__str__()
 
-    def test_split_text(self):
-        test_str = 'this is for testing'
-        self.assertEqual(tier_handler.split_text(test_str, 10),
-                         ['this is ', 'for ', 'testing '])
-
     def test_add_test(self):
         self.tier.add_test(self.test)
         self.assertEqual(self.tier.tests_array, [self.test])

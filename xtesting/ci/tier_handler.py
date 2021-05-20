@@ -16,24 +16,6 @@ import textwrap
 import prettytable
 
 
-LINE_LENGTH = 72
-
-
-def split_text(text, max_len):
-    words = text.split()
-    lines = []
-    line = ""
-    for word in words:
-        if len(line) + len(word) < max_len - 1:
-            line += word + " "
-        else:
-            lines.append(line)
-            line = word + " "
-    if line != "":
-        lines.append(line)
-    return lines
-
-
 class Tier():
 
     def __init__(self, name, description=""):
