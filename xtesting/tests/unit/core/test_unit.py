@@ -129,7 +129,7 @@ class SuiteTesting(unittest.TestCase):
     @mock.patch('xtesting.core.unit.Suite.generate_stats')
     @mock.patch('unittest.TestLoader')
     @mock.patch('subunit.run.SubunitTestRunner.run')
-    @mock.patch('os.path.isdir', return_value=True)
+    @mock.patch('os.makedirs')
     def _test_run_exc(self, exc, *args):
         args[1].return_value = mock.Mock(
             decorated=mock.Mock(
@@ -143,7 +143,7 @@ class SuiteTesting(unittest.TestCase):
         self.assertEqual(
             self.psrunner.is_successful(),
             testcase.TestCase.EX_TESTCASE_FAILED)
-        args[0].assert_called_once_with(self.psrunner.res_dir)
+        args[0].assert_called_once_with(self.psrunner.res_dir, exist_ok=True)
         args[1].assert_called_once_with(self.psrunner.suite)
         args[2].assert_not_called()
         args[3].assert_called_once_with(mock.ANY)
@@ -155,7 +155,7 @@ class SuiteTesting(unittest.TestCase):
         self.psrunner.suite = None
         self.assertEqual(self.psrunner.run(), testcase.TestCase.EX_RUN_ERROR)
 
-    @mock.patch('os.path.isdir', return_value=True)
+    @mock.patch('os.makedirs')
     def test_run_no_ut(self, *args):
         mock_result = mock.Mock(
             decorated=mock.Mock(testsRun=0, errors=[], failures=[]))
@@ -166,9 +166,9 @@ class SuiteTesting(unittest.TestCase):
         self.assertEqual(
             self.psrunner.details,
             {'errors': 0, 'failures': 0, 'testsRun': 0})
-        args[0].assert_called_once_with(self.psrunner.res_dir)
+        args[0].assert_called_once_with(self.psrunner.res_dir, exist_ok=True)
 
-    @mock.patch('os.path.isdir', return_value=True)
+    @mock.patch('os.makedirs')
     def test_run_result_ko(self, *args):
         self.psrunner.criteria = 100
         mock_result = mock.Mock(
@@ -182,25 +182,10 @@ class SuiteTesting(unittest.TestCase):
         self.assertEqual(
             self.psrunner.details,
             {'errors': 1, 'failures': 1, 'testsRun': 50})
-        args[0].assert_called_once_with(self.psrunner.res_dir)
-
-    @mock.patch('os.path.isdir', return_value=True)
-    def test_run_result_ok_1(self, *args):
-        mock_result = mock.Mock(
-            decorated=mock.Mock(
-                testsRun=50, errors=[], failures=[]))
-        self._test_run(
-            mock_result, testcase.TestCase.EX_OK,
-            testcase.TestCase.EX_OK)
-        self.assertEqual(self.psrunner.result, 100)
-        self.assertEqual(
-            self.psrunner.details,
-            {'errors': 0, 'failures': 0, 'testsRun': 50})
-        args[0].assert_called_once_with(self.psrunner.res_dir)
+        args[0].assert_called_once_with(self.psrunner.res_dir, exist_ok=True)
 
     @mock.patch('os.makedirs')
-    @mock.patch('os.path.isdir', return_value=False)
-    def test_run_result_ok_2(self, *args):
+    def test_run_result_ok(self, *args):
         mock_result = mock.Mock(
             decorated=mock.Mock(
                 testsRun=50, errors=[], failures=[]))
@@ -211,19 +196,21 @@ class SuiteTesting(unittest.TestCase):
         self.assertEqual(
             self.psrunner.details,
             {'errors': 0, 'failures': 0, 'testsRun': 50})
-        args[0].assert_called_once_with(self.psrunner.res_dir)
-        args[1].assert_called_once_with(self.psrunner.res_dir)
+        args[0].assert_called_once_with(self.psrunner.res_dir, exist_ok=True)
 
     @mock.patch('unittest.TestLoader')
-    def test_run_name_exc(self, mock_class=None):
+    @mock.patch('os.makedirs')
+    def test_run_name_exc(self, mock_mkdir=None, mock_class=None):
         mock_obj = mock.Mock(side_effect=ImportError)
         mock_class.side_effect = mock_obj
         self.assertEqual(self.psrunner.run(name='foo'),
                          testcase.TestCase.EX_RUN_ERROR)
+        mock_mkdir.assert_called_once_with(
+            self.psrunner.res_dir, exist_ok=True)
         mock_class.assert_called_once_with()
         mock_obj.assert_called_once_with()
 
-    @mock.patch('os.path.isdir', return_value=True)
+    @mock.patch('os.makedirs')
     def test_run_name(self, *args):
         mock_result = mock.Mock(
             decorated=mock.Mock(
@@ -235,7 +222,7 @@ class SuiteTesting(unittest.TestCase):
         self.assertEqual(
             self.psrunner.details,
             {'errors': 0, 'failures': 0, 'testsRun': 50})
-        args[0].assert_called_once_with(self.psrunner.res_dir)
+        args[0].assert_called_once_with(self.psrunner.res_dir, exist_ok=True)
 
     def test_run_exc1(self):
         self._test_run_exc(AssertionError)
