@@ -43,6 +43,7 @@ class Weather(testcase.TestCase):
     city_name = "London,uk"
     app_key = "439d4b804bc8187953eb36d2a8c26a02"
 
+    @testcase.TestCase.make_res_dir
     def run(self, **kwargs):
         try:
             self.start_time = time.time()
@@ -50,7 +51,6 @@ class Weather(testcase.TestCase):
                 self.url, self.city_name, self.app_key))
             req.raise_for_status()
             data = req.json()
-            os.makedirs(self.res_dir, exist_ok=True)
             with open('{}/dump.txt'.format(self.res_dir), 'w+') as report:
                 json.dump(data, report, indent=4, sort_keys=True)
             for key in kwargs:

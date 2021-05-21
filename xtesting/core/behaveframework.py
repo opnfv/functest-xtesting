@@ -62,6 +62,7 @@ class BehaveFramework(testcase.TestCase):
             self.details['skip_tests'] = self.skip_tests
             self.details['tests'] = self.response
 
+    @testcase.TestCase.make_res_dir
     def run(self, **kwargs):
         """Run the BehaveFramework feature files
 
@@ -83,12 +84,6 @@ class BehaveFramework(testcase.TestCase):
         except KeyError:
             self.__logger.exception("Mandatory args were not passed")
             return self.EX_RUN_ERROR
-        if not os.path.exists(self.res_dir):
-            try:
-                os.makedirs(self.res_dir)
-            except Exception:  # pylint: disable=broad-except
-                self.__logger.exception("Cannot create %s", self.res_dir)
-                return self.EX_RUN_ERROR
         config = ['--tags='+','.join(tags),
                   '--junit', '--junit-directory={}'.format(self.res_dir),
                   '--format=json', '--outfile={}'.format(self.json_file)]
