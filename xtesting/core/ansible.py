@@ -30,6 +30,7 @@ class Ansible(testcase.TestCase):
         if self.is_skipped:
             self.__logger.warning("ansible-playbook is missing")
 
+    @testcase.TestCase.make_res_dir
     def run(self, **kwargs):
         """ Wrap ansible_runner.interface.run()
 
@@ -52,8 +53,6 @@ class Ansible(testcase.TestCase):
         if ("private_data_dir" in kwargs and
                 os.path.isdir(kwargs['private_data_dir'])):
             try:
-                if not os.path.exists(self.res_dir):
-                    os.makedirs(self.res_dir)
                 if "quiet" not in kwargs:
                     kwargs["quiet"] = True
                 kwargs["artifact_dir"] = self.res_dir

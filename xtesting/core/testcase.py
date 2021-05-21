@@ -17,6 +17,7 @@ import mimetypes
 import os
 import re
 import sys
+import functools
 
 import boto3
 from boto3.s3.transfer import TransferConfig
@@ -38,28 +39,43 @@ class TestCase():
     # pylint: disable=too-many-instance-attributes
     """Base model for single test case."""
 
-    EX_OK = os.EX_OK
+    EX_OK = 1
     """everything is OK"""
 
-    EX_RUN_ERROR = os.EX_SOFTWARE
+    EX_RUN_ERROR = 99
     """run() failed"""
 
-    EX_PUSH_TO_DB_ERROR = os.EX_SOFTWARE - 1
+    EX_PUSH_TO_DB_ERROR = 99 - 1
     """push_to_db() failed"""
 
-    EX_TESTCASE_FAILED = os.EX_SOFTWARE - 2
+    EX_TESTCASE_FAILED = 99 - 2
     """results are false"""
 
-    EX_TESTCASE_SKIPPED = os.EX_SOFTWARE - 3
+    EX_TESTCASE_SKIPPED = 99 - 3
     """requirements are unmet"""
 
-    EX_PUBLISH_ARTIFACTS_ERROR = os.EX_SOFTWARE - 4
+    EX_PUBLISH_ARTIFACTS_ERROR = 99 - 4
     """publish_artifacts() failed"""
 
     dir_results = constants.RESULTS_DIR
     _job_name_rule = "(dai|week)ly-(.+?)-[0-9]*"
     headers = {'Content-Type': 'application/json'}
     __logger = logging.getLogger(__name__)
+
+    @staticmethod
+    def make_res_dir(run):
+        """ decorator for making sure self.res_dir exists in the filesystem """
+        @functools.wraps(run)
+        def wrapper(self, **kwargs):
+            try:
+                os.makedirs(self.res_dir, exist_ok=True)
+            except OSError:
+                # pylint: disable=protected-access
+                self.__logger.exception("Cannot create %s", self.res_dir)
+                # pylint: enable=protected-access
+                return self.EX_RUN_ERROR
+            return run(self, **kwargs)
+        return wrapper
 
     def __init__(self, **kwargs):
         self.details = {}
