@@ -12,7 +12,6 @@
 from __future__ import division
 
 import logging
-import os
 import shutil
 import subprocess
 import time
@@ -73,6 +72,7 @@ class Suite(testcase.TestCase):
         output = subprocess.check_output(cmd)
         self.__logger.debug("\n%s\n\n%s", ' '.join(cmd), output)
 
+    @testcase.TestCase.make_res_dir
     def run(self, **kwargs):
         """Run the test suite.
 
@@ -110,8 +110,6 @@ class Suite(testcase.TestCase):
         try:
             assert self.suite
             self.start_time = time.time()
-            if not os.path.isdir(self.res_dir):
-                os.makedirs(self.res_dir)
             stream = six.BytesIO()
             result = SubunitTestRunner(
                 stream=stream, verbosity=2).run(self.suite).decorated
