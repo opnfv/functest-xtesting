@@ -15,7 +15,6 @@ helpers to run any python method or any bash command.
 
 import abc
 import logging
-import os
 import subprocess
 import sys
 import time
@@ -47,6 +46,7 @@ class Feature(testcase.TestCase):
             kwargs: Arbitrary keyword arguments.
         """
 
+    @testcase.TestCase.make_res_dir
     def run(self, **kwargs):
         """Run the feature.
 
@@ -103,8 +103,6 @@ class BashFeature(Feature):
         try:
             cmd = kwargs["cmd"]
             console = kwargs["console"] if "console" in kwargs else False
-            if not os.path.isdir(self.res_dir):
-                os.makedirs(self.res_dir)
             with open(self.result_file, 'w') as f_stdout:
                 self.__logger.info("Calling %s", cmd)
                 process = subprocess.Popen(

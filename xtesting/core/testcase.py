@@ -17,6 +17,7 @@ import mimetypes
 import os
 import re
 import sys
+import functools
 
 import boto3
 from boto3.s3.transfer import TransferConfig
@@ -59,6 +60,18 @@ class TestCase():
     _job_name_rule = "(dai|week)ly-(.+?)-[0-9]*"
     headers = {'Content-Type': 'application/json'}
     __logger = logging.getLogger(__name__)
+
+    @staticmethod
+    def make_res_dir(run):
+        @functools.wraps(run)
+        def wrapper(self, **kwargs):
+            try:
+                os.makedirs(self.res_dir, exist_ok=True)
+            except OSError:
+                self.__logger.exception("Cannot create %s", self.res_dir)
+                return self.EX_RUN_ERROR
+            return run(self, **kwargs)
+        return wrapper
 
     def __init__(self, **kwargs):
         self.details = {}

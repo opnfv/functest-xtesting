@@ -105,7 +105,7 @@ class BashFeatureTesting(FeatureTestingBase):
             self.feature.run(), testcase.TestCase.EX_RUN_ERROR)
         mock_subproc.assert_not_called()
 
-    @mock.patch('os.path.isdir', return_value=True)
+    @mock.patch('os.makedirs')
     @mock.patch('subprocess.Popen',
                 side_effect=subprocess.CalledProcessError(0, '', ''))
     def test_run_ko1(self, *args):
@@ -116,7 +116,7 @@ class BashFeatureTesting(FeatureTestingBase):
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.path.isdir', return_value=True)
+    @mock.patch('os.makedirs')
     @mock.patch('subprocess.Popen')
     def test_run_ko2(self, *args):
         stream = six.BytesIO()
@@ -132,7 +132,6 @@ class BashFeatureTesting(FeatureTestingBase):
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run1(self, *args):
         stream = six.BytesIO()
@@ -146,9 +145,7 @@ class BashFeatureTesting(FeatureTestingBase):
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run2(self, *args):
         stream = six.BytesIO()
@@ -162,9 +159,7 @@ class BashFeatureTesting(FeatureTestingBase):
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run3(self, *args):
         stream = six.BytesIO()
@@ -178,10 +173,8 @@ class BashFeatureTesting(FeatureTestingBase):
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.makedirs')
-    @mock.patch('os.path.isdir', return_value=False)
     @mock.patch('subprocess.Popen')
     def test_run4(self, *args):
         stream = six.BytesIO()
@@ -196,7 +189,6 @@ class BashFeatureTesting(FeatureTestingBase):
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
-        args[2].assert_called_once_with(self.feature.res_dir)
 
 
 if __name__ == "__main__":

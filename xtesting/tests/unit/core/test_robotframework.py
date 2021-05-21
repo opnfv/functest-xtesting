@@ -192,12 +192,10 @@ class RunTesting(unittest.TestCase):
             mock_method.assert_not_called()
             mmethod.assert_not_called()
 
-    @mock.patch('os.makedirs', side_effect=Exception)
-    @mock.patch('os.path.exists', return_value=False)
+    @mock.patch('os.makedirs', side_effect=OSError)
     def test_makedirs_exc(self, *args):
         self._test_makedirs_exc()
         args[0].assert_called_once_with(self.test.res_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
 
     @mock.patch('robot.run')
     def _test_makedirs(self, *args):
@@ -215,18 +213,9 @@ class RunTesting(unittest.TestCase):
             mmethod.assert_called_once_with()
 
     @mock.patch('os.makedirs')
-    @mock.patch('os.path.exists', return_value=True)
-    def test_makedirs_oserror17(self, *args):
-        self._test_makedirs()
-        args[0].assert_called_once_with(self.test.res_dir)
-        args[1].assert_not_called()
-
-    @mock.patch('os.makedirs')
-    @mock.patch('os.path.exists', return_value=False)
     def test_makedirs(self, *args):
         self._test_makedirs()
-        args[0].assert_called_once_with(self.test.res_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
 
     @mock.patch('os.makedirs')
     @mock.patch('robot.run')
@@ -240,7 +229,7 @@ class RunTesting(unittest.TestCase):
             *self.suites, log='NONE', output=self.test.xml_file,
             report='NONE', stdout=mock.ANY, variable=self.variable,
             variablefile=self.variablefile, include=self.include)
-        args[1].assert_called_once_with(self.test.res_dir)
+        args[1].assert_called_once_with(self.test.res_dir, exist_ok=True)
 
     def test_parse_results_exc(self):
         with mock.patch.object(self.test, 'parse_results',
@@ -271,7 +260,7 @@ class RunTesting(unittest.TestCase):
             *self.suites, log='NONE', output=self.test.xml_file,
             report='NONE', stdout=mock.ANY, variable=self.variable,
             variablefile=self.variablefile, include=self.include)
-        args[1].assert_called_once_with(self.test.res_dir)
+        args[1].assert_called_once_with(self.test.res_dir, exist_ok=True)
         mock_method.assert_called_once_with()
 
     def test_generate_report_exc(self):

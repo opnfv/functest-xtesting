@@ -104,12 +104,10 @@ class RunTesting(unittest.TestCase):
             args[0].assert_not_called()
             mock_method.assert_not_called()
 
-    @mock.patch('os.makedirs', side_effect=Exception)
-    @mock.patch('os.path.exists', return_value=False)
+    @mock.patch('os.makedirs', side_effect=OSError)
     def test_makedirs_exc(self, *args):
         self._test_makedirs_exc()
         args[0].assert_called_once_with(self.test.res_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
 
     @mock.patch('xtesting.core.behaveframework.behave_main')
     def _test_makedirs(self, *args):
@@ -131,18 +129,9 @@ class RunTesting(unittest.TestCase):
             mock_method.assert_called_once_with()
 
     @mock.patch('os.makedirs')
-    @mock.patch('os.path.exists', return_value=False)
     def test_makedirs(self, *args):
         self._test_makedirs()
         args[0].assert_called_once_with(self.test.res_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-
-    @mock.patch('os.makedirs')
-    @mock.patch('os.path.exists', return_value=True)
-    def test_makedirs_oserror17(self, *args):
-        self._test_makedirs()
-        args[0].assert_called_once_with(self.test.res_dir)
-        args[1].assert_not_called()
 
     @mock.patch('os.makedirs')
     @mock.patch('xtesting.core.behaveframework.behave_main')
@@ -164,7 +153,7 @@ class RunTesting(unittest.TestCase):
             args_list += ['--format=pretty', '--outfile=-']
         args_list.append('foo')
         args[0].assert_called_once_with(args_list)
-        args[1].assert_called_once_with(self.test.res_dir)
+        args[1].assert_called_once_with(self.test.res_dir, exist_ok=True)
 
     def test_parse_results_exc(self, console=False):
         with mock.patch.object(self.test, 'parse_results',
