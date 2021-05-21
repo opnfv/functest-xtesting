@@ -47,6 +47,7 @@ class FeatureTestingBase(unittest.TestCase):
     feature = None
 
     @mock.patch('time.time', side_effect=[1, 2])
+    @mock.patch('os.makedirs')
     def _test_run(self, status, mock_method=None):
         self.assertEqual(self.feature.run(cmd=self._cmd), status)
         if status == testcase.TestCase.EX_OK:
@@ -58,6 +59,7 @@ class FeatureTestingBase(unittest.TestCase):
         self.assertEqual(self.feature.stop_time, 2)
 
     @mock.patch('time.time', side_effect=[1, 2])
+    @mock.patch('os.makedirs')
     def _test_run_console(self, console, status, mock_method=None):
         self.assertEqual(
             self.feature.run(cmd=self._cmd, console=console), status)
@@ -105,19 +107,19 @@ class BashFeatureTesting(FeatureTestingBase):
             self.feature.run(), testcase.TestCase.EX_RUN_ERROR)
         mock_subproc.assert_not_called()
 
-    @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen',
                 side_effect=subprocess.CalledProcessError(0, '', ''))
+    @mock.patch('os.makedirs')
     def test_run_ko1(self, *args):
         with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
         mopen.assert_called_once_with(self._output_file, "w")
-        args[0].assert_called_once_with(
+        args[0].assert_called_once_with(self.feature.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
+    @mock.patch('os.makedirs')
     def test_run_ko2(self, *args):
         stream = six.BytesIO()
         stream.write(b"foo")
@@ -128,11 +130,10 @@ class BashFeatureTesting(FeatureTestingBase):
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
         self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
-        args[0].assert_called_once_with(
+        args[0].assert_called_once_with(self.feature.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run1(self, *args):
         stream = six.BytesIO()
@@ -146,9 +147,7 @@ class BashFeatureTesting(FeatureTestingBase):
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run2(self, *args):
         stream = six.BytesIO()
@@ -162,9 +161,7 @@ class BashFeatureTesting(FeatureTestingBase):
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run3(self, *args):
         stream = six.BytesIO()
@@ -178,11 +175,9 @@ class BashFeatureTesting(FeatureTestingBase):
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
 
-    @mock.patch('os.makedirs')
-    @mock.patch('os.path.isdir', return_value=False)
     @mock.patch('subprocess.Popen')
+    @mock.patch('os.makedirs')
     def test_run4(self, *args):
         stream = six.BytesIO()
         stream.write(b"foo")
@@ -193,10 +188,9 @@ class BashFeatureTesting(FeatureTestingBase):
             self._test_run_console(False, testcase.TestCase.EX_OK)
         self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
-        args[0].assert_called_once_with(
+        args[0].assert_called_once_with(self.feature.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        args[1].assert_called_once_with(self.feature.res_dir)
-        args[2].assert_called_once_with(self.feature.res_dir)
 
 
 if __name__ == "__main__":

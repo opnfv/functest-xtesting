@@ -36,68 +36,65 @@ class RunTesting(unittest.TestCase):
         which.assert_called_once_with("ansible-playbook")
 
     @mock.patch("os.path.isdir", return_value=False)
-    def test_fail1(self, isdir):
+    @mock.patch("os.makedirs")
+    def test_fail1(self, *args):
         self.assertEqual(self.test.run(), self.test.EX_RUN_ERROR)
-        isdir.assert_not_called()
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_not_called()
 
     @mock.patch("os.path.isdir", return_value=False)
-    def test_fail2(self, isdir):
+    @mock.patch("os.makedirs")
+    def test_fail2(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
             self.test.run(private_data_dir=private_data_dir),
             self.test.EX_RUN_ERROR)
-        isdir.assert_called_once_with(private_data_dir)
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(private_data_dir)
 
     @mock.patch("ansible_runner.run", side_effect=Exception)
-    @mock.patch("os.makedirs")
-    @mock.patch("os.path.exists", return_value=True)
     @mock.patch("os.path.isdir", return_value=True)
+    @mock.patch("os.makedirs")
     def test_fail3(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
             self.test.run(private_data_dir=private_data_dir),
             self.test.EX_RUN_ERROR)
-        args[0].assert_called_once_with(private_data_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-        args[2].assert_not_called()
-        args[3].assert_called_with(
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(private_data_dir)
+        args[2].assert_called_with(
             private_data_dir=private_data_dir, quiet=True,
             artifact_dir=self.test.res_dir)
 
-    @mock.patch("ansible_runner.run", side_effect=Exception)
-    @mock.patch("os.makedirs")
-    @mock.patch("os.path.exists", return_value=False)
+    @mock.patch("ansible_runner.run", side_effect=OSError)
     @mock.patch("os.path.isdir", return_value=True)
+    @mock.patch("os.makedirs")
     def test_fail4(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
             self.test.run(private_data_dir=private_data_dir),
             self.test.EX_RUN_ERROR)
-        args[0].assert_called_once_with(private_data_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-        args[2].assert_called_once_with(self.test.res_dir)
-        args[3].assert_called_with(
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(private_data_dir)
+        args[2].assert_called_with(
             private_data_dir=private_data_dir, quiet=True,
             artifact_dir=self.test.res_dir)
 
     @mock.patch("ansible_runner.run")
-    @mock.patch("os.makedirs", side_effect=Exception)
-    @mock.patch("os.path.exists", return_value=False)
     @mock.patch("os.path.isdir", return_value=True)
+    @mock.patch("os.makedirs", side_effect=OSError)
     def test_fail5(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
             self.test.run(private_data_dir=private_data_dir),
             self.test.EX_RUN_ERROR)
-        args[0].assert_called_once_with(private_data_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-        args[2].assert_called_once_with(self.test.res_dir)
-        args[3].assert_not_called()
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_not_called()
+        args[2].assert_not_called()
 
     @mock.patch("ansible_runner.run", return_value={})
-    @mock.patch("os.makedirs")
-    @mock.patch("os.path.exists", return_value=False)
     @mock.patch("os.path.isdir", return_value=True)
+    @mock.patch("os.makedirs")
     def test_fail6(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
@@ -105,18 +102,16 @@ class RunTesting(unittest.TestCase):
                 private_data_dir=private_data_dir, quiet=False,
                 artifact_dir="overridden"),
             self.test.EX_RUN_ERROR)
-        args[0].assert_called_once_with(private_data_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-        args[2].assert_called_once_with(self.test.res_dir)
-        args[3].assert_called_with(
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(private_data_dir)
+        args[2].assert_called_with(
             private_data_dir=private_data_dir, quiet=False,
             artifact_dir=self.test.res_dir)
 
     @mock.patch("ansible_runner.run",
                 return_value=munch.Munch(rc=0, stats={"foo": "bar"}))
-    @mock.patch("os.makedirs")
-    @mock.patch("os.path.exists", return_value=False)
     @mock.patch("os.path.isdir", return_value=True)
+    @mock.patch("os.makedirs")
     def test_res_ok1(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
@@ -124,10 +119,9 @@ class RunTesting(unittest.TestCase):
                 private_data_dir=private_data_dir, quiet=False,
                 artifact_dir="overridden"),
             self.test.EX_OK)
-        args[0].assert_called_once_with(private_data_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-        args[2].assert_called_once_with(self.test.res_dir)
-        args[3].assert_called_with(
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(private_data_dir)
+        args[2].assert_called_with(
             private_data_dir=private_data_dir, quiet=False,
             artifact_dir=self.test.res_dir)
         self.assertEqual(self.test.is_successful(), self.test.EX_OK)
@@ -135,9 +129,8 @@ class RunTesting(unittest.TestCase):
 
     @mock.patch("ansible_runner.run",
                 return_value=munch.Munch(rc=0, stats={"foo": "bar"}))
-    @mock.patch("os.makedirs")
-    @mock.patch("os.path.exists", return_value=False)
     @mock.patch("os.path.isdir", return_value=True)
+    @mock.patch("os.makedirs")
     def test_res_ok2(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
@@ -145,10 +138,9 @@ class RunTesting(unittest.TestCase):
                 private_data_dir=private_data_dir, quiet=True,
                 artifact_dir="overridden"),
             self.test.EX_OK)
-        args[0].assert_called_once_with(private_data_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-        args[2].assert_called_once_with(self.test.res_dir)
-        args[3].assert_called_with(
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(private_data_dir)
+        args[2].assert_called_with(
             private_data_dir=private_data_dir, quiet=True,
             artifact_dir=self.test.res_dir)
         self.assertEqual(self.test.is_successful(), self.test.EX_OK)
@@ -156,19 +148,17 @@ class RunTesting(unittest.TestCase):
 
     @mock.patch("ansible_runner.run",
                 return_value=munch.Munch(rc=0, stats={"foo": "bar"}))
-    @mock.patch("os.makedirs")
-    @mock.patch("os.path.exists", return_value=False)
     @mock.patch("os.path.isdir", return_value=True)
+    @mock.patch("os.makedirs")
     def test_res_ok3(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
             self.test.run(
                 private_data_dir=private_data_dir, artifact_dir="overridden"),
             self.test.EX_OK)
-        args[0].assert_called_once_with(private_data_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-        args[2].assert_called_once_with(self.test.res_dir)
-        args[3].assert_called_with(
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(private_data_dir)
+        args[2].assert_called_with(
             private_data_dir=private_data_dir, quiet=True,
             artifact_dir=self.test.res_dir)
         self.assertEqual(self.test.is_successful(), self.test.EX_OK)
@@ -176,19 +166,17 @@ class RunTesting(unittest.TestCase):
 
     @mock.patch("ansible_runner.run",
                 return_value=munch.Munch(rc=1, stats={"foo": "bar"}))
-    @mock.patch("os.makedirs")
-    @mock.patch("os.path.exists", return_value=False)
     @mock.patch("os.path.isdir", return_value=True)
+    @mock.patch("os.makedirs")
     def test_res_ko(self, *args):
         private_data_dir = "titi"
         self.assertEqual(
             self.test.run(
                 private_data_dir=private_data_dir, artifact_dir="overridden"),
             self.test.EX_OK)
-        args[0].assert_called_once_with(private_data_dir)
-        args[1].assert_called_once_with(self.test.res_dir)
-        args[2].assert_called_once_with(self.test.res_dir)
-        args[3].assert_called_with(
+        args[0].assert_called_once_with(self.test.res_dir, exist_ok=True)
+        args[1].assert_called_once_with(private_data_dir)
+        args[2].assert_called_with(
             private_data_dir=private_data_dir, quiet=True,
             artifact_dir=self.test.res_dir)
         self.assertEqual(self.test.is_successful(),
