@@ -84,6 +84,7 @@ class RobotFramework(testcase.TestCase):
             log='{}/log.html'.format(self.res_dir),
             xunit='{}/xunit.xml'.format(self.res_dir))
 
+    @testcase.TestCase.make_res_dir
     def run(self, **kwargs):
         """Run the RobotFramework suites
 
@@ -107,12 +108,6 @@ class RobotFramework(testcase.TestCase):
         except KeyError:
             self.__logger.exception("Mandatory args were not passed")
             return self.EX_RUN_ERROR
-        if not os.path.exists(self.res_dir):
-            try:
-                os.makedirs(self.res_dir)
-            except Exception:  # pylint: disable=broad-except
-                self.__logger.exception("Cannot create %s", self.res_dir)
-                return self.EX_RUN_ERROR
         stream = StringIO()
         robot.run(*suites, variable=variable, variablefile=variablefile,
                   include=include, output=self.xml_file, log='NONE',
