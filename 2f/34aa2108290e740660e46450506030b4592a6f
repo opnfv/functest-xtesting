@@ -1,0 +1,7 @@
+Code-Review+2: Cedric Ollivier <cedric.ollivier@orange.com>
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Submitted-by: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-at: Tue, 25 May 2021 10:05:58 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/c/functest-xtesting/+/72568
+Project: functest-xtesting
+Branch: refs/heads/stable/leguer
