@@ -9,6 +9,7 @@ RUN apk -U upgrade && \
         python3-dev build-base libxml2-dev libxslt-dev linux-headers && \
     wget -q -O- https://opendev.org/openstack/requirements/raw/branch/$OPENSTACK_TAG/upper-constraints.txt > upper-constraints.txt && \
     sed -i -E /^PyYAML==+.*$/d upper-constraints.txt && \
+    sed -i -E /^six==+.*$/d upper-constraints.txt && \
     case $(uname -m) in aarch*|arm*) CFLAGS="-O0" \
         pip3 install --no-cache-dir \
             -cupper-constraints.txt \
