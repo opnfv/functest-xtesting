@@ -19,7 +19,7 @@ from robot.errors import RobotError
 from robot.reporting import resultwriter
 import robot.run
 from robot.utils.robottime import timestamp_to_secs
-from six import StringIO
+from io import StringIO
 
 from xtesting.core import testcase
 

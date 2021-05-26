@@ -19,7 +19,7 @@ import time
 import unittest
 
 from subunit.run import SubunitTestRunner
-import six
+from io import BytesIO
 
 from xtesting.core import testcase
 
@@ -112,7 +112,7 @@ class Suite(testcase.TestCase):
             self.start_time = time.time()
             if not os.path.isdir(self.res_dir):
                 os.makedirs(self.res_dir)
-            stream = six.BytesIO()
+            stream = BytesIO()
             result = SubunitTestRunner(
                 stream=stream, verbosity=2).run(self.suite).decorated
             self.generate_stats(stream)

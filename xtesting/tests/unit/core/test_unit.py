@@ -12,7 +12,7 @@ import subprocess
 import unittest
 
 import mock
-import six
+import io
 
 from xtesting.core import unit
 from xtesting.core import testcase
@@ -26,7 +26,7 @@ class SuiteTesting(unittest.TestCase):
 
     @mock.patch('subprocess.Popen', side_effect=Exception)
     def test_generate_stats_ko(self, *args):
-        stream = six.StringIO()
+        stream = io.StringIO()
         with self.assertRaises(Exception):
             self.psrunner.generate_stats(stream)
         args[0].assert_called_once_with(
@@ -36,17 +36,17 @@ class SuiteTesting(unittest.TestCase):
                 return_value=mock.Mock(
                     communicate=mock.Mock(return_value=(b"foo", b"bar"))))
     def test_generate_stats_ok(self, *args):
-        stream = six.StringIO()
+        stream = io.StringIO()
         self.psrunner.generate_stats(stream)
         args[0].assert_called_once_with(
             ['subunit-stats'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
-    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    @mock.patch('builtins.open', mock.mock_open())
     @mock.patch('subprocess.Popen', side_effect=Exception)
     def test_generate_xunit_ko(self, *args):
-        stream = six.StringIO()
+        stream = io.StringIO()
         with self.assertRaises(Exception), \
-                mock.patch('six.moves.builtins.open',
+                mock.patch('builtins.open',
                            mock.mock_open()) as mock_open:
             self.psrunner.generate_xunit(stream)
         args[0].assert_called_once_with(
@@ -59,8 +59,8 @@ class SuiteTesting(unittest.TestCase):
                 return_value=mock.Mock(
                     communicate=mock.Mock(return_value=(b"foo", b"bar"))))
     def test_generate_xunit_ok(self, *args):
-        stream = six.BytesIO()
-        with mock.patch('six.moves.builtins.open',
+        stream = io.BytesIO()
+        with mock.patch('builtins.open',
                         mock.mock_open()) as mock_open:
             self.psrunner.generate_xunit(stream)
         args[0].assert_called_once_with(
@@ -93,7 +93,7 @@ class SuiteTesting(unittest.TestCase):
     @mock.patch('subunit.run.SubunitTestRunner.run')
     def _test_run(self, mock_result, status, result, *args):
         args[0].return_value = mock_result
-        with mock.patch('six.moves.builtins.open', mock.mock_open()) as m_open:
+        with mock.patch('builtins.open', mock.mock_open()) as m_open:
             self.assertEqual(self.psrunner.run(), status)
         m_open.assert_called_once_with(
             '{}/subunit_stream'.format(self.psrunner.res_dir), 'wb')
@@ -112,7 +112,7 @@ class SuiteTesting(unittest.TestCase):
     @mock.patch('subunit.run.SubunitTestRunner.run')
     def _test_run_name(self, name, mock_result, status, result, *args):
         args[0].return_value = mock_result
-        with mock.patch('six.moves.builtins.open', mock.mock_open()) as m_open:
+        with mock.patch('builtins.open', mock.mock_open()) as m_open:
             self.assertEqual(self.psrunner.run(name=name), status)
         m_open.assert_called_once_with(
             '{}/subunit_stream'.format(self.psrunner.res_dir), 'wb')
@@ -135,7 +135,7 @@ class SuiteTesting(unittest.TestCase):
             decorated=mock.Mock(
                 testsRun=50, errors=[], failures=[]))
         args[3].side_effect = exc
-        with mock.patch('six.moves.builtins.open',
+        with mock.patch('builtins.open',
                         mock.mock_open()) as m_open:
             self.assertEqual(
                 self.psrunner.run(), testcase.TestCase.EX_RUN_ERROR)

@@ -12,8 +12,7 @@
 import logging
 import os
 import unittest
-
-from six.moves import reload_module
+import importlib
 
 from xtesting.utils import env
 
@@ -32,7 +31,7 @@ class EnvTesting(unittest.TestCase):
 
     def test_get_unknown_env(self):
         self.assertEqual(env.get('FOO'), 'foo')
-        reload_module(env)
+        importlib.reload(env)
 
     def test_get_unset_env(self):
         del os.environ['CI_LOOP']

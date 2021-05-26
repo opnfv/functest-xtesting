@@ -22,7 +22,7 @@ from boto3.s3.transfer import TransferConfig
 import botocore
 import pkg_resources
 import requests
-from six.moves import urllib
+from urllib.parse import urlparse
 
 from xtesting.core import testcase
 from xtesting.utils import env
@@ -120,9 +120,9 @@ class Campaign():
             multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
                 "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
             config = TransferConfig(multipart_threshold=multipart_threshold)
-            bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
+            bucket_name = urlparse(dst_s3_url).netloc
             s3path = re.search(
-                '^/*(.*)/*$', urllib.parse.urlparse(dst_s3_url).path).group(1)
+                '^/*(.*)/*$', urlparse(dst_s3_url).path).group(1)
             prefix = os.path.join(s3path, build_tag)
             # pylint: disable=no-member
             for s3_object in b3resource.Bucket(bucket_name).objects.filter(
@@ -183,9 +183,9 @@ class Campaign():
             multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
                 "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
             config = TransferConfig(multipart_threshold=multipart_threshold)
-            bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
+            bucket_name = urlparse(dst_s3_url).netloc
             mime_type = mimetypes.guess_type('{}.zip'.format(build_tag))
-            path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
+            path = urlparse(dst_s3_url).path.strip("/")
             # pylint: disable=no-member
             b3resource.Bucket(bucket_name).upload_file(
                 '{}.zip'.format(build_tag),

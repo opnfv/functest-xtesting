@@ -25,7 +25,6 @@ import textwrap
 import enum
 import pkg_resources
 import prettytable
-import six
 from stevedore import driver
 import yaml
 
@@ -311,7 +310,7 @@ def main():
         os.makedirs(constants.RESULTS_DIR)
     except OSError as ex:
         if ex.errno != errno.EEXIST:
-            six.print_("{} {}".format("Cannot create", constants.RESULTS_DIR))
+            print("{} {}".format("Cannot create", constants.RESULTS_DIR))
             return testcase.TestCase.EX_RUN_ERROR
     if env.get('DEBUG').lower() == 'true':
         logging.config.fileConfig(pkg_resources.resource_filename(

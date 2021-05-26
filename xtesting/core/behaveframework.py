@@ -16,7 +16,6 @@ import os
 import time
 
 import json
-import six
 
 from behave.__main__ import main as behave_main
 
@@ -92,10 +91,9 @@ class BehaveFramework(testcase.TestCase):
         config = ['--tags='+','.join(tags),
                   '--junit', '--junit-directory={}'.format(self.res_dir),
                   '--format=json', '--outfile={}'.format(self.json_file)]
-        if six.PY3:
-            html_file = os.path.join(self.res_dir, 'output.html')
-            config += ['--format=behave_html_formatter:HTMLFormatter',
-                       '--outfile={}'.format(html_file)]
+        html_file = os.path.join(self.res_dir, 'output.html')
+        config += ['--format=behave_html_formatter:HTMLFormatter',
+                    '--outfile={}'.format(html_file)]
         if kwargs.get("console", False):
             config += ['--format=pretty', '--outfile=-']
         for feature in suites:

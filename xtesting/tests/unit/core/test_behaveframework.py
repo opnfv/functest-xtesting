@@ -14,7 +14,6 @@ import os
 import unittest
 
 import mock
-import six
 
 from xtesting.core import behaveframework
 
@@ -32,26 +31,26 @@ class ParseResultTesting(unittest.TestCase):
         self.test = behaveframework.BehaveFramework(
             case_name='behave', project_name='xtesting')
 
-    @mock.patch('six.moves.builtins.open', side_effect=OSError)
+    @mock.patch('builtins.open', side_effect=OSError)
     def test_raises_exc_open(self, *args):  # pylint: disable=unused-argument
         with self.assertRaises(OSError):
             self.test.parse_results()
 
     @mock.patch('json.load', return_value=[{'foo': 'bar'}])
-    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    @mock.patch('builtins.open', mock.mock_open())
     def test_raises_exc_key(self, *args):  # pylint: disable=unused-argument
         with self.assertRaises(KeyError):
             self.test.parse_results()
 
     @mock.patch('json.load', return_value=[])
-    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    @mock.patch('builtins.open', mock.mock_open())
     def test_raises_exe_zerodivision(self, *args):
         # pylint: disable=unused-argument
         with self.assertRaises(ZeroDivisionError):
             self.test.parse_results()
 
     def _test_result(self, response, result):
-        with mock.patch('six.moves.builtins.open', mock.mock_open()), \
+        with mock.patch('builtins.open', mock.mock_open()), \
                 mock.patch('json.load', return_value=response):
             self.test.parse_results()
             self.assertEqual(self.test.result, result)
@@ -68,7 +67,7 @@ class ParseResultTesting(unittest.TestCase):
         data = [{'status': 'passed'}, {'status': 'passed'}]
         self._test_result(data, 100)
 
-    @mock.patch('six.moves.builtins.open', mock.mock_open())
+    @mock.patch('builtins.open', mock.mock_open())
     def test_count(self, *args):  # pylint: disable=unused-argument
         self._response.extend([{'status': 'failed'}, {'status': 'skipped'}])
         with mock.patch('json.load', mock.Mock(return_value=self._response)):
@@ -122,10 +121,9 @@ class RunTesting(unittest.TestCase):
                 '--tags=', '--junit',
                 '--junit-directory={}'.format(self.test.res_dir),
                 '--format=json', '--outfile={}'.format(self.test.json_file)]
-            if six.PY3:
-                args_list += [
-                    '--format=behave_html_formatter:HTMLFormatter',
-                    '--outfile={}'.format(html_file)]
+            args_list += [
+                '--format=behave_html_formatter:HTMLFormatter',
+                '--outfile={}'.format(html_file)]
             args_list.append('foo')
             args[0].assert_called_once_with(args_list)
             mock_method.assert_called_once_with()
@@ -156,10 +154,9 @@ class RunTesting(unittest.TestCase):
             '--tags=', '--junit',
             '--junit-directory={}'.format(self.test.res_dir),
             '--format=json', '--outfile={}'.format(self.test.json_file)]
-        if six.PY3:
-            args_list += [
-                '--format=behave_html_formatter:HTMLFormatter',
-                '--outfile={}'.format(html_file)]
+        args_list += [
+            '--format=behave_html_formatter:HTMLFormatter',
+            '--outfile={}'.format(html_file)]
         if console:
             args_list += ['--format=pretty', '--outfile=-']
         args_list.append('foo')
