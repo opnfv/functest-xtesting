@@ -94,7 +94,7 @@ class RunTestsTesting(unittest.TestCase):
         except Exception:  # pylint: disable=broad-except
             pass
         envfile = 'rc_file'
-        with mock.patch('six.moves.builtins.open',
+        with mock.patch('builtins.open',
                         mock.mock_open(read_data=msg)) as mock_method,\
                 mock.patch('os.path.isfile', return_value=True):
             mock_method.return_value.__iter__ = lambda self: iter(
@@ -117,7 +117,7 @@ class RunTestsTesting(unittest.TestCase):
             'export "\'OS_TENANT_NAME\'" = "\'admin\'"')
 
     def test_get_dict_by_test(self):
-        with mock.patch('six.moves.builtins.open', mock.mock_open()), \
+        with mock.patch('builtins.open', mock.mock_open()), \
                 mock.patch('yaml.safe_load') as mock_yaml:
             mock_obj = mock.Mock()
             testcase_dict = {'case_name': 'testname',

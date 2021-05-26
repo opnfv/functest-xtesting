@@ -14,12 +14,12 @@ from __future__ import division
 import logging
 import os
 
+from io import StringIO
 import robot.api
 from robot.errors import RobotError
 from robot.reporting import resultwriter
 import robot.run
 from robot.utils.robottime import timestamp_to_secs
-from six import StringIO
 
 from xtesting.core import testcase
 
