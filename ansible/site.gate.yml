@@ -34,7 +34,7 @@
             - fourth
             - fifth
             - sixth
-            - eighth
+            - seventh
         - container: xtesting-mts
           tests:
-            - seventh
+            - eighth

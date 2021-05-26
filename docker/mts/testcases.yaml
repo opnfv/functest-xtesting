@@ -5,7 +5,7 @@ tiers:
         description: ''
         testcases:
             -
-                case_name: seventh
+                case_name: eighth
                 project_name: xtesting
                 enabled: true
                 criteria: 100
