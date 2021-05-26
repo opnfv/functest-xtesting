@@ -20,15 +20,13 @@ import subprocess
 import sys
 import time
 
-import six
 from xtesting.core import testcase
 
 __author__ = ("Serena Feng <feng.xiaowei@zte.com.cn>, "
               "Cedric Ollivier <cedric.ollivier@orange.com>")
 
 
-@six.add_metaclass(abc.ABCMeta)
-class Feature(testcase.TestCase):
+class Feature(testcase.TestCase, metaclass=abc.ABCMeta):
     """Base model for single feature."""
 
     __logger = logging.getLogger(__name__)
