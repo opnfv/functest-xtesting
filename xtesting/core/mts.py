@@ -9,11 +9,7 @@
 
 # pylint: disable=too-many-instance-attributes
 
-"""Define the parent classes of all Xtesting Features.
-
-Feature is considered as TestCase offered by Third-party. It offers
-helpers to run any python method or any bash command.
-"""
+"""Implement a Xtesting driver to run mts suite."""
 
 import csv
 import logging
