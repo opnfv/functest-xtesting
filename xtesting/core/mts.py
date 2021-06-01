@@ -9,12 +9,6 @@
 
 # pylint: disable=too-many-instance-attributes
 
-"""Define the parent classes of all Xtesting Features.
-
-Feature is considered as TestCase offered by Third-party. It offers
-helpers to run any python method or any bash command.
-"""
-
 import csv
 import logging
 import os
