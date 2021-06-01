@@ -97,8 +97,8 @@ class BashFeature(Feature):
             kwargs: Arbitrary keyword arguments.
 
         Returns:
-            0 if cmd returns 0,
-            -1 otherwise.
+            -1 in case of error,
+            or the same return code as cmd
         """
         try:
             cmd = kwargs["cmd"]

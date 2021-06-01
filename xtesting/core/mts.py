@@ -171,8 +171,8 @@ class MTSLauncher(testcase.TestCase):
             kwargs: Arbitrary keyword arguments.
 
         Returns:
-            0 if cmd returns 0,
-            -1 otherwise.
+            non-zero in case of error,
+            or the same return code as /opt/mts/bin/startCmd.sh
         """
         try:
             console = kwargs["console"] if "console" in kwargs else False
