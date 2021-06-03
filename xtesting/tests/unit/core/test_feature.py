@@ -11,12 +11,12 @@
 
 import os
 
+from io import BytesIO
 import logging
 import subprocess
 import unittest
 
 import mock
-import six
 
 from xtesting.core import feature
 from xtesting.core import testcase
@@ -73,7 +73,7 @@ class FeatureTesting(FeatureTestingBase):
         # logging must be disabled else it calls time.time()
         # what will break these unit tests.
         logging.disable(logging.CRITICAL)
-        with mock.patch('six.moves.builtins.open'):
+        with mock.patch('builtins.open'):
             self.feature = FakeTestCase(
                 project_name=self._project_name, case_name=self._case_name)
 
@@ -95,7 +95,7 @@ class BashFeatureTesting(FeatureTestingBase):
         # logging must be disabled else it calls time.time()
         # what will break these unit tests.
         logging.disable(logging.CRITICAL)
-        with mock.patch('six.moves.builtins.open'):
+        with mock.patch('builtins.open'):
             self.feature = feature.BashFeature(
                 project_name=self._project_name, case_name=self._case_name)
 
@@ -109,7 +109,7 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('subprocess.Popen',
                 side_effect=subprocess.CalledProcessError(0, '', ''))
     def test_run_ko1(self, *args):
-        with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
+        with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
         mopen.assert_called_once_with(self._output_file, "w")
         args[0].assert_called_once_with(
@@ -119,12 +119,12 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run_ko2(self, *args):
-        stream = six.BytesIO()
+        stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 1}
         args[0].configure_mock(**attrs)
-        with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
+        with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
         self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
@@ -135,12 +135,12 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run1(self, *args):
-        stream = six.BytesIO()
+        stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
         args[0].configure_mock(**attrs)
-        with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
+        with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_OK)
         self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
@@ -151,12 +151,12 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run2(self, *args):
-        stream = six.BytesIO()
+        stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
         args[0].configure_mock(**attrs)
-        with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
+        with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(True, testcase.TestCase.EX_OK)
         self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
@@ -167,12 +167,12 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
     def test_run3(self, *args):
-        stream = six.BytesIO()
+        stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
         args[0].configure_mock(**attrs)
-        with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
+        with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(False, testcase.TestCase.EX_OK)
         self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
@@ -184,12 +184,12 @@ class BashFeatureTesting(FeatureTestingBase):
     @mock.patch('os.path.isdir', return_value=False)
     @mock.patch('subprocess.Popen')
     def test_run4(self, *args):
-        stream = six.BytesIO()
+        stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
         args[0].configure_mock(**attrs)
-        with mock.patch('six.moves.builtins.open', mock.mock_open()) as mopen:
+        with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(False, testcase.TestCase.EX_OK)
         self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
         self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)

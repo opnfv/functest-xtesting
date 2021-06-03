@@ -16,15 +16,13 @@ import logging
 import mimetypes
 import os
 import re
-import sys
 
+from urllib.parse import urlparse
 import boto3
 from boto3.s3.transfer import TransferConfig
 import botocore
 import prettytable
 import requests
-import six
-from six.moves import urllib
 
 from xtesting.utils import decorators
 from xtesting.utils import env
@@ -33,8 +31,7 @@ from xtesting.utils import constants
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
 
-@six.add_metaclass(abc.ABCMeta)
-class TestCase():
+class TestCase(metaclass=abc.ABCMeta):
     # pylint: disable=too-many-instance-attributes
     """Base model for single test case."""
 
@@ -238,7 +235,7 @@ class TestCase():
                 url, data=json.dumps(data, sort_keys=True),
                 headers=self.headers)
             req.raise_for_status()
-            if urllib.parse.urlparse(url).scheme != "file":
+            if urlparse(url).scheme != "file":
                 # href must be postprocessed as OPNFV testapi is misconfigured
                 # (localhost is returned)
                 uid = re.sub(r'^.*/api/v1/results/*', '', req.json()["href"])
@@ -289,7 +286,7 @@ class TestCase():
             multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
                 "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
             config = TransferConfig(multipart_threshold=multipart_threshold)
-            bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
+            bucket_name = urlparse(dst_s3_url).netloc
             try:
                 b3resource.meta.client.head_bucket(Bucket=bucket_name)
             except botocore.exceptions.ClientError as exc:
@@ -298,12 +295,10 @@ class TestCase():
                     # pylint: disable=no-member
                     b3resource.create_bucket(Bucket=bucket_name)
                 else:
-                    typ, value, traceback = sys.exc_info()
-                    six.reraise(typ, value, traceback)
-            except Exception:  # pylint: disable=broad-except
-                typ, value, traceback = sys.exc_info()
-                six.reraise(typ, value, traceback)
-            path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
+                    raise exc
+            except Exception as exc:  # pylint: disable=broad-except
+                raise exc
+            path = urlparse(dst_s3_url).path.strip("/")
             dst_http_url = os.environ["HTTP_DST_URL"]
             output_str = "\n"
             self.details["links"] = []
