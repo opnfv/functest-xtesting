@@ -44,6 +44,7 @@ class FeatureTestingBase(unittest.TestCase):
     _repo = "dir_repo_bar"
     _cmd = "run_bar_tests.py"
     _output_file = os.path.join(constants.RESULTS_DIR, 'foo/foo.log')
+    _max_duration = 1
     feature = None
 
     @mock.patch('time.time', side_effect=[1, 2])
@@ -62,6 +63,15 @@ class FeatureTestingBase(unittest.TestCase):
         self.assertEqual(
             self.feature.run(cmd=self._cmd, console=console), status)
         self.assertEqual(self.feature.result, 100)
+        mock_method.assert_has_calls([mock.call(), mock.call()])
+        self.assertEqual(self.feature.start_time, 1)
+        self.assertEqual(self.feature.stop_time, 2)
+
+    @mock.patch('time.time', side_effect=[1, 2])
+    def _test_run_max_duration(self, status, mock_method=None):
+        self.assertEqual(
+            self.feature.run(cmd=self._cmd, max_duration=self._max_duration),
+            status)
         mock_method.assert_has_calls([mock.call(), mock.call()])
         self.assertEqual(self.feature.start_time, 1)
         self.assertEqual(self.feature.stop_time, 2)
@@ -131,6 +141,31 @@ class BashFeatureTesting(FeatureTestingBase):
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
+
+    @mock.patch('subprocess.Popen')
+    @mock.patch('os.path.isdir', return_value=True)
+    def test_run_ko3(self, *args):
+        stream = BytesIO()
+        stream.write(b"foo")
+        stream.seek(0)
+        wait = mock.MagicMock(side_effect=subprocess.TimeoutExpired(
+                cmd=FeatureTestingBase._cmd,
+                timeout=FeatureTestingBase._max_duration))
+        kill = mock.MagicMock()
+        attrs = {'return_value.wait': wait,
+                 'return_value.kill': kill,
+                 'return_value.stdout': stream,
+                 'return_value.returncode': 0}
+        args[1].configure_mock(**attrs)
+        with mock.patch('builtins.open', mock.mock_open()) as mopen:
+            self._test_run_max_duration(testcase.TestCase.EX_RUN_ERROR)
+        self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
+        self.assertNotIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
+        args[1].assert_called_once_with(
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+        wait.assert_called_once_with(timeout=FeatureTestingBase._max_duration)
+        kill.assert_called_once()
+        args[0].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
