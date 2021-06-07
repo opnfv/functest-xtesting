@@ -96,11 +96,13 @@ class BashFeature(Feature):
 
         Returns:
             0 if cmd returns 0,
-            -1 otherwise.
+            non-zero in all other cases.
         """
         try:
             cmd = kwargs["cmd"]
             console = kwargs["console"] if "console" in kwargs else False
+            # For some tests, we may need to force stop after N sec
+            max_duration = kwargs.get("max_duration")
             if not os.path.isdir(self.res_dir):
                 os.makedirs(self.res_dir)
             with open(self.result_file, 'w') as f_stdout:
@@ -112,7 +114,14 @@ class BashFeature(Feature):
                     if console:
                         sys.stdout.write(line.decode("utf-8"))
                     f_stdout.write(line.decode("utf-8"))
-                process.wait()
+                try:
+                    process.wait(timeout=max_duration)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    self.__logger.info(
+                        "Killing process after %d second(s).",
+                        max_duration)
+                    return -2
             with open(self.result_file, 'r') as f_stdin:
                 self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
             return process.returncode
