@@ -55,7 +55,7 @@ class RobotFramework(testcase.TestCase):
     __logger = logging.getLogger(__name__)
 
     def __init__(self, **kwargs):
-        super(RobotFramework, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.xml_file = os.path.join(self.res_dir, 'output.xml')
 
     def parse_results(self):

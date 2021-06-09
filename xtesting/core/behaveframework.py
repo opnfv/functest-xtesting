@@ -31,7 +31,7 @@ class BehaveFramework(testcase.TestCase):
     __logger = logging.getLogger(__name__)
 
     def __init__(self, **kwargs):
-        super(BehaveFramework, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.json_file = os.path.join(self.res_dir, 'output.json')
         self.total_tests = 0
         self.pass_tests = 0
