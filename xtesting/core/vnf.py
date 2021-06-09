@@ -42,7 +42,7 @@ class VnfOnBoarding(testcase.TestCase):
     __logger = logging.getLogger(__name__)
 
     def __init__(self, **kwargs):
-        super(VnfOnBoarding, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.uuid = uuid.uuid4()
         self.user_name = "{}-{}".format(self.case_name, self.uuid)
         self.tenant_name = "{}-{}".format(self.case_name, self.uuid)

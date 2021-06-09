@@ -89,7 +89,7 @@ class TestCase(metaclass=abc.ABCMeta):
             return msg.get_string()
         except AssertionError:
             self.__logger.error("We cannot print invalid objects")
-            return super(TestCase, self).__str__()
+            return super().__str__()
 
     def get_duration(self):
         """Return the duration of the test case.
