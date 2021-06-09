@@ -32,7 +32,7 @@ class Suite(testcase.TestCase):
     __logger = logging.getLogger(__name__)
 
     def __init__(self, **kwargs):
-        super(Suite, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.suite = None
 
     @classmethod
