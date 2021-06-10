@@ -23,8 +23,6 @@ to try Xtesting. You will love them!
 weather.py
 
 ```python
-#!/usr/bin/env python
-
 # pylint: disable=missing-docstring
 
 import json
