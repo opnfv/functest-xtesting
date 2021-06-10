@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # Copyright (c) 2016 Ericsson AB and others.
 #
 # All rights reserved. This program and the accompanying materials

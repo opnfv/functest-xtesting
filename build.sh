@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Apache License, Version 2.0

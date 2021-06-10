@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.8
 
 # Copyright (c) 2018 Orange and others.
 #
