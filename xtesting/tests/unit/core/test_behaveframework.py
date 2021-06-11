@@ -84,7 +84,7 @@ class RunTesting(unittest.TestCase):
     # pylint: disable=missing-docstring
 
     suites = ["foo"]
-    tags = []
+    tags = ["bar"]
 
     def setUp(self):
         self.test = behaveframework.BehaveFramework(
@@ -118,11 +118,12 @@ class RunTesting(unittest.TestCase):
                 self.test.EX_OK)
             html_file = os.path.join(self.test.res_dir, 'output.html')
             args_list = [
-                '--tags=', '--junit',
+                '--junit',
                 '--junit-directory={}'.format(self.test.res_dir),
                 '--format=json', '--outfile={}'.format(self.test.json_file),
                 '--format=behave_html_formatter:HTMLFormatter',
-                '--outfile={}'.format(html_file)]
+                '--outfile={}'.format(html_file),
+                '--tags='+','.join(self.tags)]
             args_list.append('foo')
             args[0].assert_called_once_with(args_list)
             mock_method.assert_called_once_with()
@@ -150,11 +151,12 @@ class RunTesting(unittest.TestCase):
             status)
         html_file = os.path.join(self.test.res_dir, 'output.html')
         args_list = [
-            '--tags=', '--junit',
+            '--junit',
             '--junit-directory={}'.format(self.test.res_dir),
             '--format=json', '--outfile={}'.format(self.test.json_file),
             '--format=behave_html_formatter:HTMLFormatter',
-            '--outfile={}'.format(html_file)]
+            '--outfile={}'.format(html_file),
+            '--tags='+','.join(self.tags)]
         if console:
             args_list += ['--format=pretty', '--outfile=-']
         args_list.append('foo')
