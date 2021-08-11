@@ -8,7 +8,7 @@
       docker_tags:
         - latest:
             branch: master
-            dependency: '3.13'
+            dependency: '3.14'
       builds:
         dependency:
           repo: _
