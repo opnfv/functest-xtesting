@@ -88,7 +88,6 @@ class FeatureTesting(FeatureTestingBase):
                 project_name=self._project_name, case_name=self._case_name)
 
     def test_run_exc(self):
-        # pylint: disable=bad-continuation
         with mock.patch.object(
                 self.feature, 'execute',
                 side_effect=Exception) as mock_method:
