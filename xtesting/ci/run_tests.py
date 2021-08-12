@@ -113,7 +113,7 @@ class Runner():
 
     @staticmethod
     def get_dict_by_test(testname):
-        # pylint: disable=bad-continuation,missing-docstring
+        # pylint: disable=missing-docstring
         with open(pkg_resources.resource_filename(
                 'xtesting', 'ci/testcases.yaml')) as tyaml:
             testcases_yaml = yaml.safe_load(tyaml)

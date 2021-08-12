@@ -43,10 +43,11 @@ class Suite(testcase.TestCase):
             Exception
         """
         stream.seek(0)
-        stats = subprocess.Popen(
-            ['subunit-stats'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        output, _ = stats.communicate(stream.read())
-        cls.__logger.info("\n\n%s", output.decode("utf-8"))
+        with subprocess.Popen(
+                ['subunit-stats'], stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE) as stats:
+            output, _ = stats.communicate(stream.read())
+            cls.__logger.info("\n\n%s", output.decode("utf-8"))
 
     def generate_xunit(self, stream):
         """Generate junit report from subunit stream
@@ -56,11 +57,11 @@ class Suite(testcase.TestCase):
         """
         stream.seek(0)
         with open("{}/results.xml".format(self.res_dir), "w") as xml:
-            stats = subprocess.Popen(
-                ['subunit2junitxml'], stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE)
-            output, _ = stats.communicate(stream.read())
-            xml.write(output.decode("utf-8"))
+            with subprocess.Popen(
+                    ['subunit2junitxml'], stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE) as stats:
+                output, _ = stats.communicate(stream.read())
+                xml.write(output.decode("utf-8"))
 
     def generate_html(self, stream):
         """Generate html report from subunit stream
