@@ -88,7 +88,6 @@ class FeatureTesting(FeatureTestingBase):
                 project_name=self._project_name, case_name=self._case_name)
 
     def test_run_exc(self):
-        # pylint: disable=bad-continuation
         with mock.patch.object(
                 self.feature, 'execute',
                 side_effect=Exception) as mock_method:
@@ -132,7 +131,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
-        attrs = {'return_value.stdout': stream, 'return_value.returncode': 1}
+        attrs = {'return_value.__enter__.return_value.stdout': stream,
+                 'return_value.__enter__.return_value.returncode': 1}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
@@ -152,10 +152,10 @@ class BashFeatureTesting(FeatureTestingBase):
             cmd=FeatureTestingBase._cmd,
             timeout=FeatureTestingBase._max_duration))
         kill = mock.MagicMock()
-        attrs = {'return_value.wait': wait,
-                 'return_value.kill': kill,
-                 'return_value.stdout': stream,
-                 'return_value.returncode': 0}
+        attrs = {'return_value.__enter__.return_value.wait': wait,
+                 'return_value.__enter__.return_value.kill': kill,
+                 'return_value.__enter__.return_value.stdout': stream,
+                 'return_value.__enter__.return_value.returncode': 0}
         args[1].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_max_duration(testcase.TestCase.EX_RUN_ERROR)
@@ -173,7 +173,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
-        attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
+        attrs = {'return_value.__enter__.return_value.stdout': stream,
+                 'return_value.__enter__.return_value.returncode': 0}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_OK)
@@ -189,7 +190,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
-        attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
+        attrs = {'return_value.__enter__.return_value.stdout': stream,
+                 'return_value.__enter__.return_value.returncode': 0}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(True, testcase.TestCase.EX_OK)
@@ -205,7 +207,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
-        attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
+        attrs = {'return_value.__enter__.return_value.stdout': stream,
+                 'return_value.__enter__.return_value.returncode': 0}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(False, testcase.TestCase.EX_OK)
@@ -222,7 +225,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
-        attrs = {'return_value.stdout': stream, 'return_value.returncode': 0}
+        attrs = {'return_value.__enter__.return_value.stdout': stream,
+                 'return_value.__enter__.return_value.returncode': 0}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(False, testcase.TestCase.EX_OK)
