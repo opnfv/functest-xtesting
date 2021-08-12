@@ -107,20 +107,21 @@ class BashFeature(Feature):
                 os.makedirs(self.res_dir)
             with open(self.result_file, 'w') as f_stdout:
                 self.__logger.info("Calling %s", cmd)
-                process = subprocess.Popen(
-                    cmd, shell=True, stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT)
-                for line in iter(process.stdout.readline, b''):
-                    if console:
-                        sys.stdout.write(line.decode("utf-8"))
-                    f_stdout.write(line.decode("utf-8"))
-                try:
-                    process.wait(timeout=max_duration)
-                except subprocess.TimeoutExpired:
-                    process.kill()
-                    self.__logger.info(
-                        "Killing process after %d second(s).", max_duration)
-                    return -2
+                with subprocess.Popen(
+                        cmd, shell=True, stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT) as process:
+                    for line in iter(process.stdout.readline, b''):
+                        if console:
+                            sys.stdout.write(line.decode("utf-8"))
+                        f_stdout.write(line.decode("utf-8"))
+                    try:
+                        process.wait(timeout=max_duration)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        self.__logger.info(
+                            "Killing process after %d second(s).",
+                            max_duration)
+                        return -2
             with open(self.result_file, 'r') as f_stdin:
                 self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
             return process.returncode

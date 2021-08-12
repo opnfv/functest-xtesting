@@ -32,10 +32,11 @@ class SuiteTesting(unittest.TestCase):
         args[0].assert_called_once_with(
             ['subunit-stats'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
-    @mock.patch('subprocess.Popen',
-                return_value=mock.Mock(
-                    communicate=mock.Mock(return_value=(b"foo", b"bar"))))
+    @mock.patch('subprocess.Popen')
     def test_generate_stats_ok(self, *args):
+        attrs = {'return_value.__enter__.return_value': mock.Mock(
+            communicate=mock.Mock(return_value=(b"foo", b"bar")))}
+        args[0].configure_mock(**attrs)
         stream = io.StringIO()
         self.psrunner.generate_stats(stream)
         args[0].assert_called_once_with(
@@ -55,10 +56,11 @@ class SuiteTesting(unittest.TestCase):
         mock_open.assert_called_once_with(
             '{}/results.xml'.format(self.psrunner.res_dir), 'w')
 
-    @mock.patch('subprocess.Popen',
-                return_value=mock.Mock(
-                    communicate=mock.Mock(return_value=(b"foo", b"bar"))))
+    @mock.patch('subprocess.Popen')
     def test_generate_xunit_ok(self, *args):
+        attrs = {'return_value.__enter__.return_value': mock.Mock(
+            communicate=mock.Mock(return_value=(b"foo", b"bar")))}
+        args[0].configure_mock(**attrs)
         stream = io.BytesIO()
         with mock.patch('builtins.open',
                         mock.mock_open()) as mock_open:
