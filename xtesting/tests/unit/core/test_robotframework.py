@@ -41,15 +41,12 @@ class ResultVisitorTesting(unittest.TestCase):
                 'starttime': "20161216 16:00:00.000",
                 'endtime': "20161216 16:00:01.000",
                 'elapsedtime': 1000,
-                'text': 'Hello, World!',
-                'critical': True}
+                'text': 'Hello, World!'}
         test = model.TestCase(
             name=data['name'], status=data['status'], message=data['text'],
             starttime=data['starttime'], endtime=data['endtime'])
         test.parent = mock.Mock()
-        config = {'name': data['parent'],
-                  'criticality.test_is_critical.return_value': data[
-                      'critical']}
+        config = {'name': data['parent']}
         test.parent.configure_mock(**config)
         self.visitor.visit_test(test)
         self.assertEqual(self.visitor.get_data(), [data])
@@ -89,23 +86,23 @@ class ParseResultTesting(unittest.TestCase):
                              {'description': config['name'], 'tests': []})
 
     def test_null_passed(self):
-        self._config.update({'statistics.critical.passed': 0,
-                             'statistics.critical.total': 20})
+        self._config.update({'statistics.passed': 0,
+                             'statistics.total': 20})
         self._test_result(self._config, 0)
 
     def test_no_test(self):
-        self._config.update({'statistics.critical.passed': 20,
-                             'statistics.critical.total': 0})
+        self._config.update({'statistics.passed': 20,
+                             'statistics.total': 0})
         self._test_result(self._config, 0)
 
     def test_half_success(self):
-        self._config.update({'statistics.critical.passed': 10,
-                             'statistics.critical.total': 20})
+        self._config.update({'statistics.passed': 10,
+                             'statistics.total': 20})
         self._test_result(self._config, 50)
 
     def test_success(self):
-        self._config.update({'statistics.critical.passed': 20,
-                             'statistics.critical.total': 20})
+        self._config.update({'statistics.passed': 20,
+                             'statistics.total': 20})
         self._test_result(self._config, 100)
 
 
