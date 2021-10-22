@@ -1,4 +1,4 @@
-robotframework===3.1.1
+robotframework===4.1.2
 bandit===1.1.0
 behave===1.2.6
 behave-html-formatter===0.9.4
