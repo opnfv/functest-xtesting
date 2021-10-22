@@ -39,7 +39,6 @@ class ResultVisitor(robot.api.ResultVisitor):
         output['status'] = test.status
         output['starttime'] = test.starttime
         output['endtime'] = test.endtime
-        output['critical'] = test.critical
         output['text'] = test.message
         output['elapsedtime'] = test.elapsedtime
         self._data.append(output)
@@ -65,8 +64,8 @@ class RobotFramework(testcase.TestCase):
         result.visit(visitor)
         try:
             self.result = 100 * (
-                result.suite.statistics.critical.passed /
-                result.suite.statistics.critical.total)
+                result.suite.statistics.passed /
+                result.suite.statistics.total)
         except ZeroDivisionError:
             self.__logger.error("No test has been run")
         self.start_time = timestamp_to_secs(result.suite.starttime)
