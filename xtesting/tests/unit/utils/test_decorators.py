@@ -24,8 +24,8 @@ from xtesting.utils import decorators
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
 DIR = '/dev'
-FILE = '{}/null'.format(DIR)
-URL = 'file://{}'.format(FILE)
+FILE = f'{DIR}/null'
+URL = f'file://{FILE}'
 
 
 class FakeTestCase(testcase.TestCase):
@@ -108,7 +108,7 @@ class DecoratorsTesting(unittest.TestCase):
                                create=True) as mock_open:
             test = self._get_testcase()
             self.assertEqual(test.push_to_db(), testcase.TestCase.EX_OK)
-        mock_open.assert_called_once_with(FILE, 'a')
+        mock_open.assert_called_once_with(FILE, 'a', encoding='utf-8')
         handle = mock_open()
         call_args, _ = handle.write.call_args
         self.assertIn('POST', call_args[0])

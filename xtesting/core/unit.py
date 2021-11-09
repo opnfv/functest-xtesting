@@ -56,7 +56,7 @@ class Suite(testcase.TestCase):
             Exception
         """
         stream.seek(0)
-        with open("{}/results.xml".format(self.res_dir), "w") as xml:
+        with open(f"{self.res_dir}/results.xml", "w", encoding='utf-8') as xml:
             with subprocess.Popen(
                     ['subunit2junitxml'], stdin=subprocess.PIPE,
                     stdout=subprocess.PIPE) as stats:
@@ -69,7 +69,7 @@ class Suite(testcase.TestCase):
         Raises:
             CalledProcessError
         """
-        cmd = ['subunit2html', stream, '{}/results.html'.format(self.res_dir)]
+        cmd = ['subunit2html', stream, f'{self.res_dir}/results.html']
         output = subprocess.check_output(cmd)
         self.__logger.debug("\n%s\n\n%s", ' '.join(cmd), output)
 
@@ -117,10 +117,11 @@ class Suite(testcase.TestCase):
                 stream=stream, verbosity=2).run(self.suite).decorated
             self.generate_stats(stream)
             self.generate_xunit(stream)
-            with open('{}/subunit_stream'.format(self.res_dir), 'wb') as subfd:
+            with open(f'{self.res_dir}/subunit_stream',
+                      'wb', encoding='utf-8') as subfd:
                 stream.seek(0)
                 shutil.copyfileobj(stream, subfd)
-            self.generate_html('{}/subunit_stream'.format(self.res_dir))
+            self.generate_html(f'{self.res_dir}/subunit_stream')
             self.stop_time = time.time()
             self.details = {
                 "testsRun": result.testsRun,
