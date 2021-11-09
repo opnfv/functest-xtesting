@@ -119,10 +119,10 @@ class RunTesting(unittest.TestCase):
             html_file = os.path.join(self.test.res_dir, 'output.html')
             args_list = [
                 '--junit',
-                '--junit-directory={}'.format(self.test.res_dir),
-                '--format=json', '--outfile={}'.format(self.test.json_file),
+                f'--junit-directory={self.test.res_dir}',
+                '--format=json', f'--outfile={self.test.json_file}',
                 '--format=behave_html_formatter:HTMLFormatter',
-                '--outfile={}'.format(html_file),
+                f'--outfile={html_file}',
                 '--tags='+','.join(self.tags)]
             args_list.append('foo')
             args[0].assert_called_once_with(args_list)
@@ -152,10 +152,10 @@ class RunTesting(unittest.TestCase):
         html_file = os.path.join(self.test.res_dir, 'output.html')
         args_list = [
             '--junit',
-            '--junit-directory={}'.format(self.test.res_dir),
-            '--format=json', '--outfile={}'.format(self.test.json_file),
+            f'--junit-directory={self.test.res_dir}',
+            '--format=json', f'--outfile={self.test.json_file}',
             '--format=behave_html_formatter:HTMLFormatter',
-            '--outfile={}'.format(html_file),
+            f'--outfile={html_file}',
             '--tags='+','.join(self.tags)]
         if console:
             args_list += ['--format=pretty', '--outfile=-']

@@ -97,7 +97,7 @@ class Runner():
         if not os.path.isfile(rc_file):
             LOGGER.debug("No env file %s found", rc_file)
             return
-        with open(rc_file, "r") as rcfd:
+        with open(rc_file, "r", encoding='utf-8') as rcfd:
             for line in rcfd:
                 var = (line.rstrip('"\n').replace('export ', '').split(
                     "=") if re.search(r'(.*)=(.*)', line) else None)
@@ -115,7 +115,7 @@ class Runner():
     def get_dict_by_test(testname):
         # pylint: disable=missing-docstring
         with open(pkg_resources.resource_filename(
-                'xtesting', 'ci/testcases.yaml')) as tyaml:
+                'xtesting', 'ci/testcases.yaml'), encoding='utf-8') as tyaml:
             testcases_yaml = yaml.safe_load(tyaml)
         for dic_tier in testcases_yaml.get("tiers"):
             for dic_testcase in dic_tier['testcases']:
@@ -209,8 +209,8 @@ class Runner():
                     self.overall_result = Result.EX_ERROR
                     if test.is_blocking():
                         raise BlockingTestFailed(
-                            "The test case {} failed and is blocking".format(
-                                test.get_name()))
+                            f"The test case {test.get_name()} "
+                            "failed and is blocking")
         return self.overall_result
 
     def run_all(self):
@@ -310,7 +310,7 @@ def main():
         os.makedirs(constants.RESULTS_DIR)
     except OSError as ex:
         if ex.errno != errno.EEXIST:
-            print("{} {}".format("Cannot create", constants.RESULTS_DIR))
+            print(f"Cannot create {constants.RESULTS_DIR}")
             return testcase.TestCase.EX_RUN_ERROR
     if env.get('DEBUG').lower() == 'true':
         logging.config.fileConfig(pkg_resources.resource_filename(

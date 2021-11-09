@@ -41,7 +41,7 @@ class BehaveFramework(testcase.TestCase):
 
     def parse_results(self):
         """Parse output.json and get the details in it."""
-        with open(self.json_file) as stream_:
+        with open(self.json_file, encoding='utf-8') as stream_:
             self.response = json.load(stream_)
             if self.response:
                 self.total_tests = len(self.response)
@@ -87,11 +87,11 @@ class BehaveFramework(testcase.TestCase):
             except Exception:  # pylint: disable=broad-except
                 self.__logger.exception("Cannot create %s", self.res_dir)
                 return self.EX_RUN_ERROR
-        config = ['--junit', '--junit-directory={}'.format(self.res_dir),
-                  '--format=json', '--outfile={}'.format(self.json_file)]
+        config = ['--junit', f'--junit-directory={self.res_dir}',
+                  '--format=json', f'--outfile={self.json_file}']
         html_file = os.path.join(self.res_dir, 'output.html')
         config += ['--format=behave_html_formatter:HTMLFormatter',
-                   '--outfile={}'.format(html_file)]
+                   f'--outfile={html_file}']
         if kwargs.get("tags", False):
             config += ['--tags='+','.join(kwargs.get("tags", []))]
         if kwargs.get("console", False):

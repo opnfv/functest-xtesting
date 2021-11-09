@@ -105,9 +105,10 @@ class TestCase(metaclass=abc.ABCMeta):
             assert self.stop_time
             if self.stop_time < self.start_time:
                 return "XX:XX"
-            return "{}:{}".format(
-                str(int(self.stop_time - self.start_time) // 60).zfill(2),
-                str(int(self.stop_time - self.start_time) % 60).zfill(2))
+            return(
+                f"{str(int(self.stop_time - self.start_time) // 60).zfill(2)}:"
+                f"{str(int(self.stop_time - self.start_time) % 60).zfill(2)}")
+
         except Exception:  # pylint: disable=broad-except
             self.__logger.error("Please run test before getting the duration")
             return "XX:XX"
@@ -314,7 +315,7 @@ class TestCase(metaclass=abc.ABCMeta):
                         ExtraArgs={'ContentType': mime_type[
                             0] or 'application/octet-stream'})
                     link = os.path.join(dst_http_url, log_file)
-                    output_str += "\n{}".format(link)
+                    output_str += f"\n{link}"
                     self.details["links"].append(link)
             for root, _, files in os.walk(self.res_dir):
                 for pub_file in files:
@@ -334,7 +335,7 @@ class TestCase(metaclass=abc.ABCMeta):
                     link = os.path.join(dst_http_url, os.path.relpath(
                         os.path.join(root, pub_file),
                         start=self.dir_results))
-                    output_str += "\n{}".format(link)
+                    output_str += f"\n{link}"
                     self.details["links"].append(link)
             self.__logger.info(
                 "All artifacts were successfully published: %s\n", output_str)

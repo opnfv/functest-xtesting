@@ -140,9 +140,9 @@ class GenerateReportTesting(unittest.TestCase):
         args[0].assert_called_once_with(self.test.xml_file)
         args[1].assert_called_once_with(args[0].return_value)
         args[2].assert_called_once_with(
-            report='{}/report.html'.format(self.test.res_dir),
-            log='{}/log.html'.format(self.test.res_dir),
-            xunit='{}/xunit.xml'.format(self.test.res_dir))
+            report=f'{self.test.res_dir}/report.html',
+            log=f'{self.test.res_dir}/log.html',
+            xunit=f'{self.test.res_dir}/xunit.xml')
 
     @mock.patch('robot.reporting.resultwriter.ResultWriter.write_results',
                 return_value=0)
@@ -154,9 +154,9 @@ class GenerateReportTesting(unittest.TestCase):
         args[0].assert_called_once_with(self.test.xml_file)
         args[1].assert_called_once_with(args[0].return_value)
         args[2].assert_called_once_with(
-            report='{}/report.html'.format(self.test.res_dir),
-            log='{}/log.html'.format(self.test.res_dir),
-            xunit='{}/xunit.xml'.format(self.test.res_dir))
+            report=f'{self.test.res_dir}/report.html',
+            log=f'{self.test.res_dir}/log.html',
+            xunit=f'{self.test.res_dir}/xunit.xml')
 
 
 class RunTesting(unittest.TestCase):
