@@ -30,12 +30,13 @@ def can_dump_request_to_file(method):
             except OSError as ex:
                 if ex.errno != errno.EEXIST:
                     raise
-            with open(parseresult.path, 'a') as dumpfile:
+            with open(parseresult.path, 'a', encoding='utf-8') as dumpfile:
                 headers = ""
                 for key in request.headers:
                     headers += key + " " + request.headers[key] + "\n"
-                message = "{} {}\n{}\n{}\n\n\n".format(
-                    request.method, request.url, headers, request.body)
+                message = (
+                    f"{request.method} {request.url}"
+                    f"\n{headers}\n{request.body}\n\n\n")
                 dumpfile.write(message)
         return mock.Mock()
 

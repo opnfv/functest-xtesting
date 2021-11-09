@@ -100,7 +100,7 @@ class RunTestsTesting(unittest.TestCase):
             mock_method.return_value.__iter__ = lambda self: iter(
                 self.readline, '')
             self.runner.source_envfile(envfile)
-            mock_method.assert_called_once_with(envfile, 'r')
+            mock_method.assert_called_once_with(envfile, 'r', encoding='utf-8')
             self.assertEqual(os.environ[key], value)
 
     def test_source_envfile(self):

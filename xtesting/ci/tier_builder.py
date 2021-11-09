@@ -29,7 +29,7 @@ class TierBuilder():
         self.generate_tiers()
 
     def read_test_yaml(self):
-        with open(self.testcases_file) as tc_file:
+        with open(self.testcases_file, encoding='utf-8') as tc_file:
             self.testcases_yaml = yaml.safe_load(tc_file)
 
         self.dic_tier_array = []

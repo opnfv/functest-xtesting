@@ -44,13 +44,13 @@ class VnfOnBoarding(testcase.TestCase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.uuid = uuid.uuid4()
-        self.user_name = "{}-{}".format(self.case_name, self.uuid)
-        self.tenant_name = "{}-{}".format(self.case_name, self.uuid)
+        self.user_name = f"{self.case_name}-{self.uuid}"
+        self.tenant_name = f"{self.case_name}-{self.uuid}"
         self.snaps_creds = {}
         self.created_object = []
         self.os_project = None
-        self.tenant_description = "Created by OPNFV Functest: {}".format(
-            self.case_name)
+        self.tenant_description = (
+            f"Created by OPNFV Functest: {self.case_name}")
 
     def run(self, **kwargs):
         """

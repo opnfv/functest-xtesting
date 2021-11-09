@@ -65,7 +65,7 @@ class MTSLauncher(feature.BashFeature):
         """Parse testPlan.csv containing the status of each testcase of the test file.
         See sample file in `xtesting/samples/mts/output/testPlan.csv`
         """
-        with open(self.mts_result_csv_file) as stream_:
+        with open(self.mts_result_csv_file, encoding='utf-8') as stream_:
             self.__logger.info("Parsing file : %s", self.mts_result_csv_file)
             reader = csv.reader(stream_, delimiter=';')
             rownum = 0
@@ -183,18 +183,13 @@ class MTSLauncher(feature.BashFeature):
                     return -3
 
             # Build command line to launch for MTS
-            cmd = ("cd {} && ./startCmd.sh {} {} -sequential -levelLog:{}"
-                   " -storageLog:{}"
-                   " -config:stats.REPORT_DIRECTORY+{}"
-                   " -config:logs.STORAGE_DIRECTORY+{}"
+            cmd = (f"cd {cwd} && ./startCmd.sh {test_file} "
+                   f"{enabled_testcases_str} -sequential -levelLog:{log_level}"
+                   f" -storageLog:{store_method}"
+                   f" -config:stats.REPORT_DIRECTORY+{self.mts_stats_dir}"
+                   f" -config:logs.STORAGE_DIRECTORY+{self.mts_logs_dir}"
                    " -genReport:true"
-                   " -showRep:false").format(cwd,
-                                             test_file,
-                                             enabled_testcases_str,
-                                             log_level,
-                                             store_method,
-                                             self.mts_stats_dir,
-                                             self.mts_logs_dir)
+                   " -showRep:false")
 
             # Make sure to create the necessary output sub-folders for MTS
             # and cleanup output files from previous run.

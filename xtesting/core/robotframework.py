@@ -79,9 +79,9 @@ class RobotFramework(testcase.TestCase):
         result = robot.api.ExecutionResult(self.xml_file)
         writer = resultwriter.ResultWriter(result)
         return writer.write_results(
-            report='{}/report.html'.format(self.res_dir),
-            log='{}/log.html'.format(self.res_dir),
-            xunit='{}/xunit.xml'.format(self.res_dir))
+            report=f'{self.res_dir}/report.html',
+            log=f'{self.res_dir}/log.html',
+            xunit=f'{self.res_dir}/xunit.xml')
 
     def run(self, **kwargs):
         """Run the RobotFramework suites
