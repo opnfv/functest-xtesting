@@ -54,7 +54,7 @@ class SuiteTesting(unittest.TestCase):
             ['subunit2junitxml'], stdin=subprocess.PIPE,
             stdout=subprocess.PIPE)
         mock_open.assert_called_once_with(
-            '{}/results.xml'.format(self.psrunner.res_dir), 'w')
+            f'{self.psrunner.res_dir}/results.xml', 'w', encoding='utf-8')
 
     @mock.patch('subprocess.Popen')
     def test_generate_xunit_ok(self, *args):
@@ -69,7 +69,7 @@ class SuiteTesting(unittest.TestCase):
             ['subunit2junitxml'], stdin=subprocess.PIPE,
             stdout=subprocess.PIPE)
         mock_open.assert_called_once_with(
-            '{}/results.xml'.format(self.psrunner.res_dir), 'w')
+            f'{self.psrunner.res_dir}/results.xml', 'w', encoding='utf-8')
 
     @mock.patch('subprocess.check_output', side_effect=Exception)
     def test_generate_html_ko(self, *args):
@@ -78,7 +78,7 @@ class SuiteTesting(unittest.TestCase):
             self.psrunner.generate_html(stream)
         args[0].assert_called_once_with(
             ['subunit2html', stream,
-             '{}/results.html'.format(self.psrunner.res_dir)])
+             f'{self.psrunner.res_dir}/results.html'])
 
     @mock.patch('subprocess.check_output')
     def test_generate_html_ok(self, *args):
@@ -86,7 +86,7 @@ class SuiteTesting(unittest.TestCase):
         self.psrunner.generate_html(stream)
         args[0].assert_called_once_with(
             ['subunit2html', stream,
-             '{}/results.html'.format(self.psrunner.res_dir)])
+             f'{self.psrunner.res_dir}/results.html'])
 
     @mock.patch('xtesting.core.unit.Suite.generate_html')
     @mock.patch('xtesting.core.unit.Suite.generate_xunit')
@@ -98,14 +98,14 @@ class SuiteTesting(unittest.TestCase):
         with mock.patch('builtins.open', mock.mock_open()) as m_open:
             self.assertEqual(self.psrunner.run(), status)
         m_open.assert_called_once_with(
-            '{}/subunit_stream'.format(self.psrunner.res_dir), 'wb')
+            f'{self.psrunner.res_dir}/subunit_stream', 'wb', encoding='utf-8')
         self.assertEqual(self.psrunner.is_successful(), result)
         args[0].assert_called_once_with(self.psrunner.suite)
         args[1].assert_not_called()
         args[2].assert_called_once_with(mock.ANY)
         args[3].assert_called_once_with(mock.ANY)
         args[4].assert_called_once_with(
-            '{}/subunit_stream'.format(self.psrunner.res_dir))
+            f'{self.psrunner.res_dir}/subunit_stream')
 
     @mock.patch('xtesting.core.unit.Suite.generate_html')
     @mock.patch('xtesting.core.unit.Suite.generate_xunit')
@@ -117,14 +117,14 @@ class SuiteTesting(unittest.TestCase):
         with mock.patch('builtins.open', mock.mock_open()) as m_open:
             self.assertEqual(self.psrunner.run(name=name), status)
         m_open.assert_called_once_with(
-            '{}/subunit_stream'.format(self.psrunner.res_dir), 'wb')
+            f'{self.psrunner.res_dir}/subunit_stream', 'wb', encoding='utf-8')
         self.assertEqual(self.psrunner.is_successful(), result)
         args[0].assert_called_once_with(self.psrunner.suite)
         args[1].assert_called_once_with()
         args[2].assert_called_once_with(mock.ANY)
         args[3].assert_called_once_with(mock.ANY)
         args[4].assert_called_once_with(
-            '{}/subunit_stream'.format(self.psrunner.res_dir))
+            f'{self.psrunner.res_dir}/subunit_stream')
 
     @mock.patch('xtesting.core.unit.Suite.generate_html')
     @mock.patch('xtesting.core.unit.Suite.generate_xunit')

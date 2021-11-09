@@ -69,7 +69,7 @@ class Campaign():
         try:
             url = env.get('TEST_DB_URL')
             req = requests.get(
-                "{}?build_tag={}".format(url, env.get('BUILD_TAG')),
+                f"{url}?build_tag={env.get('BUILD_TAG')}",
                 headers=testcase.TestCase.headers)
             req.raise_for_status()
             output = req.json()
@@ -78,10 +78,11 @@ class Campaign():
                 for j, _ in enumerate(
                         output["results"][i]["details"]["links"]):
                     output["results"][i]["details"]["links"][j] = re.sub(
-                        "^{}/*".format(os.environ["HTTP_DST_URL"]), '',
+                        "^{os.environ['HTTP_DST_URL']}/*", '',
                         output["results"][i]["details"]["links"][j])
             Campaign.__logger.debug("data to archive: \n%s", output)
-            with open("{}.json".format(env.get('BUILD_TAG')), "w") as dfile:
+            with open("{env.get('BUILD_TAG')}.json", "w",
+                      encoding='utf-8') as dfile:
                 json.dump(output, dfile)
         except Exception:  # pylint: disable=broad-except
             Campaign.__logger.exception(
@@ -126,19 +127,19 @@ class Campaign():
             prefix = os.path.join(s3path, build_tag)
             # pylint: disable=no-member
             for s3_object in b3resource.Bucket(bucket_name).objects.filter(
-                    Prefix="{}/".format(prefix)):
+                    Prefix=f"{prefix}/"):
                 path, _ = os.path.split(s3_object.key)
-                lpath = re.sub('^{}/*'.format(s3path), '', path)
+                lpath = re.sub(f'^{s3path}/*', '', path)
                 if lpath and not os.path.exists(lpath):
                     os.makedirs(lpath)
                 # pylint: disable=no-member
                 b3resource.Bucket(bucket_name).download_file(
                     s3_object.key,
-                    re.sub('^{}/*'.format(s3path), '', s3_object.key),
+                    re.sub(f'^{s3path}/*', '', s3_object.key),
                     Config=config)
                 Campaign.__logger.info(
                     "Downloading %s",
-                    re.sub('^{}/*'.format(s3path), '', s3_object.key))
+                    re.sub(f'^{s3path}/*', '', s3_object.key))
             return Campaign.EX_OK
         except Exception:  # pylint: disable=broad-except
             Campaign.__logger.exception("Cannot publish the artifacts")
@@ -171,9 +172,9 @@ class Campaign():
             build_tag = env.get('BUILD_TAG')
             assert Campaign.dump_db() == Campaign.EX_OK
             assert Campaign.dump_artifacts() == Campaign.EX_OK
-            with zipfile.ZipFile('{}.zip'.format(build_tag),
+            with zipfile.ZipFile(f'{build_tag}.zip',
                                  'w', zipfile.ZIP_DEFLATED) as zfile:
-                zfile.write("{}.json".format(build_tag))
+                zfile.write(f"{build_tag}.json")
                 for root, _, files in os.walk(build_tag):
                     for filename in files:
                         zfile.write(os.path.join(root, filename))
@@ -184,17 +185,17 @@ class Campaign():
                 "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
             config = TransferConfig(multipart_threshold=multipart_threshold)
             bucket_name = urlparse(dst_s3_url).netloc
-            mime_type = mimetypes.guess_type('{}.zip'.format(build_tag))
+            mime_type = mimetypes.guess_type(f'{build_tag}.zip')
             path = urlparse(dst_s3_url).path.strip("/")
             # pylint: disable=no-member
             b3resource.Bucket(bucket_name).upload_file(
-                '{}.zip'.format(build_tag),
-                os.path.join(path, '{}.zip'.format(build_tag)),
+                f'{build_tag}.zip',
+                os.path.join(path, f'{build_tag}.zip'),
                 Config=config,
                 ExtraArgs={'ContentType': mime_type[
                     0] or 'application/octet-stream'})
             dst_http_url = os.environ["HTTP_DST_URL"]
-            link = os.path.join(dst_http_url, '{}.zip'.format(build_tag))
+            link = os.path.join(dst_http_url, f'{build_tag}.zip')
             Campaign.__logger.info(
                 "All data were successfully published:\n\n%s", link)
             return Campaign.EX_OK

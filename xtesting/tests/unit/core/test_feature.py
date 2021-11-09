@@ -120,7 +120,7 @@ class BashFeatureTesting(FeatureTestingBase):
     def test_run_ko1(self, *args):
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
-        mopen.assert_called_once_with(self._output_file, "w")
+        mopen.assert_called_once_with(self._output_file, "w", encoding='utf-8')
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
@@ -136,8 +136,12 @@ class BashFeatureTesting(FeatureTestingBase):
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
-        self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
-        self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'w', encoding='utf-8'),
+            mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'r', encoding='utf-8'),
+            mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
@@ -159,8 +163,12 @@ class BashFeatureTesting(FeatureTestingBase):
         args[1].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_max_duration(testcase.TestCase.EX_RUN_ERROR)
-        self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
-        self.assertNotIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'w', encoding='utf-8'),
+            mopen.mock_calls)
+        self.assertNotIn(
+            mock.call(self._output_file, 'r', encoding='utf-8'),
+            mopen.mock_calls)
         args[1].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         wait.assert_called_once_with(timeout=FeatureTestingBase._max_duration)
@@ -178,8 +186,12 @@ class BashFeatureTesting(FeatureTestingBase):
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_OK)
-        self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
-        self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'w', encoding='utf-8'),
+            mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'r', encoding='utf-8'),
+            mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
@@ -195,8 +207,12 @@ class BashFeatureTesting(FeatureTestingBase):
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(True, testcase.TestCase.EX_OK)
-        self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
-        self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'w', encoding='utf-8'),
+            mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'r', encoding='utf-8'),
+            mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
@@ -212,8 +228,12 @@ class BashFeatureTesting(FeatureTestingBase):
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(False, testcase.TestCase.EX_OK)
-        self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
-        self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'w', encoding='utf-8'),
+            mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'r', encoding='utf-8'),
+            mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
@@ -230,8 +250,12 @@ class BashFeatureTesting(FeatureTestingBase):
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(False, testcase.TestCase.EX_OK)
-        self.assertIn(mock.call(self._output_file, 'w'), mopen.mock_calls)
-        self.assertIn(mock.call(self._output_file, 'r'), mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'w', encoding='utf-8'),
+            mopen.mock_calls)
+        self.assertIn(
+            mock.call(self._output_file, 'r', encoding='utf-8'),
+            mopen.mock_calls)
         args[0].assert_called_once_with(
             self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)

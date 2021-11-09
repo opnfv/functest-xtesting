@@ -86,7 +86,7 @@ class BashFeature(Feature):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.result_file = "{}/{}.log".format(self.res_dir, self.case_name)
+        self.result_file = f"{self.res_dir}/{self.case_name}.log"
 
     def execute(self, **kwargs):
         """Execute the cmd passed as arg
@@ -105,7 +105,7 @@ class BashFeature(Feature):
             max_duration = kwargs.get("max_duration")
             if not os.path.isdir(self.res_dir):
                 os.makedirs(self.res_dir)
-            with open(self.result_file, 'w') as f_stdout:
+            with open(self.result_file, 'w', encoding='utf-8') as f_stdout:
                 self.__logger.info("Calling %s", cmd)
                 with subprocess.Popen(
                         cmd, shell=True, stdout=subprocess.PIPE,
@@ -122,7 +122,7 @@ class BashFeature(Feature):
                             "Killing process after %d second(s).",
                             max_duration)
                         return -2
-            with open(self.result_file, 'r') as f_stdin:
+            with open(self.result_file, 'r', encoding='utf-8') as f_stdin:
                 self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
             return process.returncode
         except KeyError:
