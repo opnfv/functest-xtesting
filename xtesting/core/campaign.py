@@ -81,7 +81,7 @@ class Campaign():
                         "^{os.environ['HTTP_DST_URL']}/*", '',
                         output["results"][i]["details"]["links"][j])
             Campaign.__logger.debug("data to archive: \n%s", output)
-            with open("{env.get('BUILD_TAG')}.json", "w",
+            with open(f"{env.get('BUILD_TAG')}.json", "w",
                       encoding='utf-8') as dfile:
                 json.dump(output, dfile)
         except Exception:  # pylint: disable=broad-except
