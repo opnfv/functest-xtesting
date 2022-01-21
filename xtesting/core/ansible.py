@@ -58,7 +58,7 @@ class Ansible(testcase.TestCase):
                     kwargs["quiet"] = True
                 kwargs["artifact_dir"] = self.res_dir
                 runner = ansible_runner.run(**kwargs)
-                self.details = runner.stats
+                self.details = runner.stats or {}
                 if runner.rc == 0:
                     self.result = 100
                 status = self.EX_OK
