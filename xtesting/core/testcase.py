@@ -305,6 +305,8 @@ class TestCase():
             path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
             dst_http_url = os.environ["HTTP_DST_URL"]
             output_str = "\n"
+            # protects if test cases return details as None
+            self.details = self.details or {}
             self.details["links"] = []
             for log_file in [self.output_log_name, self.output_debug_log_name]:
                 if os.path.exists(os.path.join(self.dir_results, log_file)):
