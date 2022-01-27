@@ -322,5 +322,9 @@ def main():
     logging.captureWarnings(True)
     parser = RunTestsParser()
     args = parser.parse_args(sys.argv[1:])
+    # Reset argv to prevent wrong usage by the underlying test framework
+    # e.g. pyats fails by expecting an arg to -p (publish to database) when
+    # called via Robot.run()
+    sys.argv = [sys.argv[0]]
     runner = Runner()
     return runner.main(**args).value
