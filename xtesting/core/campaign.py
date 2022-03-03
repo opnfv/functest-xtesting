@@ -20,12 +20,14 @@ import zipfile
 import boto3
 from boto3.s3.transfer import TransferConfig
 import botocore
-import pkg_resources
 import requests
 from six.moves import urllib
 
 from xtesting.core import testcase
+from xtesting.utils import config
+from xtesting.utils import constants
 from xtesting.utils import env
+
 
 __author__ = "Cedric Ollivier <cedric.ollivier@orange.com>"
 
@@ -118,7 +120,7 @@ class Campaign():
             dst_s3_url = os.environ["S3_DST_URL"]
             multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
                 "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
-            config = TransferConfig(multipart_threshold=multipart_threshold)
+            tconfig = TransferConfig(multipart_threshold=multipart_threshold)
             bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
             s3path = re.search(
                 '^/*(.*)/*$', urllib.parse.urlparse(dst_s3_url).path).group(1)
@@ -133,8 +135,8 @@ class Campaign():
                 # pylint: disable=no-member
                 b3resource.Bucket(bucket_name).download_file(
                     s3_object.key,
-                    re.sub('^{}/*'.format(s3path), '', s3_object.key),
-                    Config=config)
+                    re.sub(f'^{s3path}/*', '', s3_object.key),
+                    Config=tconfig)
                 Campaign.__logger.info(
                     "Downloading %s",
                     re.sub('^{}/*'.format(s3path), '', s3_object.key))
@@ -181,15 +183,15 @@ class Campaign():
             dst_s3_url = os.environ["S3_DST_URL"]
             multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
                 "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
-            config = TransferConfig(multipart_threshold=multipart_threshold)
+            tconfig = TransferConfig(multipart_threshold=multipart_threshold)
             bucket_name = urllib.parse.urlparse(dst_s3_url).netloc
-            mime_type = mimetypes.guess_type('{}.zip'.format(build_tag))
+            mime_type = mimetypes.guess_type(f'{build_tag}.zip')
             path = urllib.parse.urlparse(dst_s3_url).path.strip("/")
             # pylint: disable=no-member
             b3resource.Bucket(bucket_name).upload_file(
-                '{}.zip'.format(build_tag),
-                os.path.join(path, '{}.zip'.format(build_tag)),
-                Config=config,
+                f'{build_tag}.zip',
+                os.path.join(path, f'{build_tag}.zip'),
+                Config=tconfig,
                 ExtraArgs={'ContentType': mime_type[
                     0] or 'application/octet-stream'})
             dst_http_url = os.environ["HTTP_DST_URL"]
@@ -215,10 +217,10 @@ def main():
     if not os.path.exists(testcase.TestCase.dir_results):
         os.makedirs(testcase.TestCase.dir_results)
     if env.get('DEBUG').lower() == 'true':
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', 'ci/logging.debug.ini'))
+        logging.config.fileConfig(config.get_xtesting_config(
+            'logging.debug.ini', constants.DEBUG_INI_PATH_DEFAULT))
     else:
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', 'ci/logging.ini'))
+        logging.config.fileConfig(config.get_xtesting_config(
+            'logging.ini', constants.INI_PATH_DEFAULT))
     logging.captureWarnings(True)
     Campaign.zip_campaign_files()
