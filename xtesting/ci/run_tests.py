@@ -88,8 +88,9 @@ class Runner():
         self.clean_flag = True
         self.report_flag = False
         self.push_flag = False
-        self.tiers = tier_builder.TierBuilder(
-            pkg_resources.resource_filename('xtesting', 'ci/testcases.yaml'))
+        self.tiers = tier_builder.TierBuilder(_get_xtesting_config(
+            constants.TESTCASE_DESCRIPTION,
+            constants.TESTCASE_DESCRIPTION_DEFAULT))
 
     @staticmethod
     def source_envfile(rc_file=constants.ENV_FILE):
@@ -304,6 +305,14 @@ class Runner():
         LOGGER.info("Xtesting report:\n\n%s\n", msg)
 
 
+def _get_xtesting_config(filename, default):
+    for path in constants.XTESTING_PATHES:
+        abspath = os.path.abspath(os.path.expanduser(path))
+        if os.path.isfile(os.path.join(abspath, filename)):
+            return os.path.join(abspath, filename)
+    return default
+
+
 def main():
     """Entry point"""
     try:
@@ -313,11 +322,11 @@ def main():
             print(f"Cannot create {constants.RESULTS_DIR}")
             return testcase.TestCase.EX_RUN_ERROR
     if env.get('DEBUG').lower() == 'true':
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', constants.DEBUG_INI_PATH))
+        logging.config.fileConfig(_get_xtesting_config(
+            'logging.debug.ini', constants.DEBUG_INI_PATH_DEFAULT))
     else:
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', constants.INI_PATH))
+        logging.config.fileConfig(_get_xtesting_config(
+            'logging.ini', constants.INI_PATH_DEFAULT))
     logging.captureWarnings(True)
     parser = RunTestsParser()
     args = parser.parse_args(sys.argv[1:])
