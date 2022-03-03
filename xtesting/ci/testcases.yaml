@@ -51,7 +51,7 @@ tiers:
           args:
             suites:
               - >-
-                /usr/lib/python3.8/site-packages/xtesting/samples/HelloWorld.robot
+                /usr/lib/python3.9/site-packages/xtesting/samples/HelloWorld.robot
             variable:
               - 'var01:foo'
               - 'var02:bar'
@@ -66,7 +66,7 @@ tiers:
           name: behaveframework
           args:
             suites:
-              - /usr/lib/python3.8/site-packages/xtesting/samples/features
+              - /usr/lib/python3.9/site-packages/xtesting/samples/features
             tags:
               - foo
       - case_name: seventh
@@ -97,5 +97,5 @@ tiers:
         run:
           name: ansible
           args:
-            private_data_dir: /usr/lib/python3.8/site-packages/xtesting/samples
+            private_data_dir: /usr/lib/python3.9/site-packages/xtesting/samples
             playbook: helloworld.yml

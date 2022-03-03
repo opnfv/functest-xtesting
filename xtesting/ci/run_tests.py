@@ -23,7 +23,6 @@ import sys
 import textwrap
 
 import enum
-import pkg_resources
 import prettytable
 import six
 from stevedore import driver
@@ -31,6 +30,7 @@ import yaml
 
 from xtesting.ci import tier_builder
 from xtesting.core import testcase
+from xtesting.utils import config
 from xtesting.utils import constants
 from xtesting.utils import env
 
@@ -89,8 +89,9 @@ class Runner():
         self.clean_flag = True
         self.report_flag = False
         self.push_flag = False
-        self.tiers = tier_builder.TierBuilder(
-            pkg_resources.resource_filename('xtesting', 'ci/testcases.yaml'))
+        self.tiers = tier_builder.TierBuilder(config.get_xtesting_config(
+            constants.TESTCASE_DESCRIPTION,
+            constants.TESTCASE_DESCRIPTION_DEFAULT))
 
     @staticmethod
     def source_envfile(rc_file=constants.ENV_FILE):
@@ -114,9 +115,11 @@ class Runner():
 
     @staticmethod
     def get_dict_by_test(testname):
-        # pylint: disable=bad-continuation,missing-docstring
-        with open(pkg_resources.resource_filename(
-                'xtesting', 'ci/testcases.yaml')) as tyaml:
+        # pylint: disable=missing-docstring
+        with open(config.get_xtesting_config(
+                constants.TESTCASE_DESCRIPTION,
+                constants.TESTCASE_DESCRIPTION_DEFAULT),
+                encoding='utf-8') as tyaml:
             testcases_yaml = yaml.safe_load(tyaml)
         for dic_tier in testcases_yaml.get("tiers"):
             for dic_testcase in dic_tier['testcases']:
@@ -314,11 +317,11 @@ def main():
             six.print_("Cannot create /var/lib/xtesting/results/")
             return testcase.TestCase.EX_RUN_ERROR
     if env.get('DEBUG').lower() == 'true':
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', 'ci/logging.debug.ini'))
+        logging.config.fileConfig(config.get_xtesting_config(
+            'logging.debug.ini', constants.DEBUG_INI_PATH_DEFAULT))
     else:
-        logging.config.fileConfig(pkg_resources.resource_filename(
-            'xtesting', 'ci/logging.ini'))
+        logging.config.fileConfig(config.get_xtesting_config(
+            'logging.ini', constants.INI_PATH_DEFAULT))
     logging.captureWarnings(True)
     parser = RunTestsParser()
     args = parser.parse_args(sys.argv[1:])
