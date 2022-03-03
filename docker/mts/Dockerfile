@@ -21,5 +21,5 @@ RUN case $(uname -m) in x86_64) \
             java -jar target/mts-${MTS_TAG}-installer.jar -options /src/mts-installer.properties) && \
         rm -rf /root/.m2/ ${APP_FOLDER}/tutorial /src/mts-installer.properties /src/git-mts && \
         apk del .build-deps;; esac
-COPY testcases.yaml /usr/lib/python3.9/site-packages/xtesting/ci/testcases.yaml
+COPY testcases.yaml /etc/xtesting/testcases.yaml
 CMD ["run_tests", "-t", "all"]
