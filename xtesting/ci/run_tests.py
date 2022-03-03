@@ -115,8 +115,10 @@ class Runner():
     @staticmethod
     def get_dict_by_test(testname):
         # pylint: disable=missing-docstring
-        with open(pkg_resources.resource_filename(
-                'xtesting', 'ci/testcases.yaml'), encoding='utf-8') as tyaml:
+        with open(_get_xtesting_config(
+                constants.TESTCASE_DESCRIPTION,
+                constants.TESTCASE_DESCRIPTION_DEFAULT),
+                encoding='utf-8') as tyaml:
             testcases_yaml = yaml.safe_load(tyaml)
         for dic_tier in testcases_yaml.get("tiers"):
             for dic_testcase in dic_tier['testcases']:
