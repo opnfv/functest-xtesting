@@ -60,7 +60,8 @@ class TestCase(metaclass=abc.ABCMeta):
 
     def __init__(self, **kwargs):
         self.details = {}
-        self.project_name = kwargs.get('project_name', 'xtesting')
+        self.project_name = os.environ.get(
+            'PROJECT_NAME', kwargs.get('project_name', 'xtesting'))
         self.case_name = kwargs.get('case_name', '')
         self.criteria = kwargs.get('criteria', 100)
         self.result = 0
