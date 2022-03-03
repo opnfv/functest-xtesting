@@ -25,5 +25,5 @@ RUN apk -U upgrade && \
         /src/functest-xtesting && \
     rm -r /src/functest-xtesting upper-constraints.txt && \
     apk del .build-deps
-COPY testcases.yaml /etc/xtesting/testcases.yaml
+COPY testcases.yaml /usr/lib/python3.9/site-packages/xtesting/ci/testcases.yaml
 CMD ["run_tests", "-t", "all"]
