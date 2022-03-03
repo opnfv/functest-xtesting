@@ -41,6 +41,24 @@ class AbstractTestCaseTesting(unittest.TestCase):
             testcase.TestCase(case_name="base", project_name="xtesting")
 
 
+class ProjectNameTesting(unittest.TestCase):
+
+    _case_name = "base"
+    _project_name = "xtesting"
+
+    def test_project_name_yaml(self):
+        test = FakeTestCase(
+            case_name=self._case_name, project_name=self._project_name)
+        self.assertEqual(self._project_name, test.project_name)
+
+    def test_project_name_env(self):
+        os.environ['PROJECT_NAME'] = 'whatever'
+        test = FakeTestCase(
+            case_name=self._case_name, project_name=self._project_name)
+        self.assertEqual('whatever', test.project_name)
+        del os.environ['PROJECT_NAME']
+
+
 class TestCaseTesting(unittest.TestCase):
     # pylint: disable=too-many-instance-attributes,too-many-public-methods
 
