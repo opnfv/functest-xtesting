@@ -128,18 +128,21 @@ class Campaign():
             # pylint: disable=no-member
             for s3_object in b3resource.Bucket(bucket_name).objects.filter(
                     Prefix="{}/".format(prefix)):
-                path, _ = os.path.split(s3_object.key)
+                path, _ = os.path.split(
+                    urllib.parse.unquote_plus(s3_object.key))
                 lpath = re.sub('^{}/*'.format(s3path), '', path)
                 if lpath and not os.path.exists(lpath):
                     os.makedirs(lpath)
-                # pylint: disable=no-member
-                b3resource.Bucket(bucket_name).download_file(
-                    s3_object.key,
-                    re.sub('^{}/*'.format(s3path), '', s3_object.key),
-                    Config=tconfig)
                 Campaign.__logger.info(
                     "Downloading %s",
-                    re.sub('^{}/*'.format(s3path), '', s3_object.key))
+                    re.sub('^{}/*'.format(s3path), '',
+                           urllib.parse.unquote_plus(s3_object.key)))
+                # pylint: disable=no-member
+                b3resource.Bucket(bucket_name).download_file(
+                    urllib.parse.unquote_plus(s3_object.key),
+                    re.sub('^{}/*'.format(s3path), '',
+                           urllib.parse.unquote_plus(s3_object.key)),
+                    Config=tconfig)
             return Campaign.EX_OK
         except Exception:  # pylint: disable=broad-except
             Campaign.__logger.exception("Cannot publish the artifacts")
