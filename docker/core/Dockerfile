@@ -24,6 +24,9 @@ RUN apk -U upgrade && \
         -chttps://git.opnfv.org/functest-xtesting/plain/upper-constraints.txt?h=$BRANCH \
         /src/functest-xtesting && \
     rm -r /src/functest-xtesting upper-constraints.txt && \
+    addgroup -g 1000 xtesting && adduser -u 1000 -G xtesting -D xtesting && \
+    mkdir -p /var/lib/xtesting/results && chown -R xtesting: /var/lib/xtesting && \
     apk del .build-deps
 COPY testcases.yaml /usr/lib/python3.9/site-packages/xtesting/ci/testcases.yaml
+USER xtesting
 CMD ["run_tests", "-t", "all"]
