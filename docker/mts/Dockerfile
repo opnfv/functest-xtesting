@@ -7,6 +7,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
 ENV NGN_JAVA_HOME=${JAVA_HOME}/bin
 ENV MAVEN_OPTS=$MAVEN_OPTS
 
+USER root
 COPY mts-installer.properties /src/mts-installer.properties
 RUN case $(uname -m) in x86_64) \
         apk --no-cache add --update openjdk8-jre && \
@@ -22,4 +23,5 @@ RUN case $(uname -m) in x86_64) \
         rm -rf /root/.m2/ ${APP_FOLDER}/tutorial /src/mts-installer.properties /src/git-mts && \
         apk del .build-deps;; esac
 COPY testcases.yaml /usr/lib/python3.9/site-packages/xtesting/ci/testcases.yaml
+USER xtesting
 CMD ["run_tests", "-t", "all"]
