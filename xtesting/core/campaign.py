@@ -226,4 +226,5 @@ def main():
         logging.config.fileConfig(config.get_xtesting_config(
             'logging.ini', constants.INI_PATH_DEFAULT))
     logging.captureWarnings(True)
+    os.chdir(testcase.TestCase.dir_results)
     Campaign.zip_campaign_files()

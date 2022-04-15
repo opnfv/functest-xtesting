@@ -29,4 +29,5 @@ RUN apk -U upgrade && \
     apk del .build-deps
 COPY testcases.yaml /usr/lib/python3.9/site-packages/xtesting/ci/testcases.yaml
 USER xtesting
+WORKDIR /var/lib/xtesting/results
 CMD ["run_tests", "-t", "all"]
