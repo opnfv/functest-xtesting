@@ -56,6 +56,9 @@ class RobotFramework(testcase.TestCase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.xml_file = os.path.join(self.res_dir, 'output.xml')
+        # skip_factor is used to determine if SKIP status is taken into account as a successful output into
+        # in result percentage computation.
+        self.skip_factor = 0
 
     def parse_results(self):
         """Parse output.xml and get the details in it."""
@@ -64,7 +67,7 @@ class RobotFramework(testcase.TestCase):
         result.visit(visitor)
         try:
             self.result = 100 * (
-                result.suite.statistics.passed /
+                (result.suite.statistics.passed + self.skip_factor * result.suite.statistics.skipped)/
                 result.suite.statistics.total)
         except ZeroDivisionError:
             self.__logger.error("No test has been run")
@@ -103,6 +106,7 @@ class RobotFramework(testcase.TestCase):
             variable = kwargs.get("variable", [])
             variablefile = kwargs.get("variablefile", [])
             include = kwargs.get("include", [])
+            self.skip_factor = int(kwargs.get("allow_skip", False))
         except KeyError:
             self.__logger.exception("Mandatory args were not passed")
             return self.EX_RUN_ERROR
