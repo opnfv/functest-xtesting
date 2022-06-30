@@ -86,25 +86,41 @@ class ParseResultTesting(unittest.TestCase):
                              {'description': config['name'], 'tests': []})
 
     def test_null_passed(self):
-        self._config.update({'statistics.passed': 0,
+        self._config.update({'statistics.skipped': 0,
+                             'statistics.passed': 0,
                              'statistics.total': 20})
         self._test_result(self._config, 0)
 
     def test_no_test(self):
-        self._config.update({'statistics.passed': 20,
+        self._config.update({'statistics.skipped': 0,
+                             'statistics.passed': 20,
                              'statistics.total': 0})
         self._test_result(self._config, 0)
 
     def test_half_success(self):
-        self._config.update({'statistics.passed': 10,
+        self._config.update({'statistics.skipped': 0,
+                             'statistics.passed': 10,
                              'statistics.total': 20})
         self._test_result(self._config, 50)
 
     def test_success(self):
-        self._config.update({'statistics.passed': 20,
+        self._config.update({'statistics.skipped': 0,
+                             'statistics.passed': 20,
                              'statistics.total': 20})
         self._test_result(self._config, 100)
 
+    def test_skip_excluded(self):
+        self._config.update({'statistics.skipped': 1,
+                             'statistics.passed': 4,
+                             'statistics.total': 5})
+        self._test_result(self._config, 80)
+
+    def test_skip_included(self):
+        self._config.update({'statistics.skipped': 1,
+                             'statistics.passed': 4,
+                             'statistics.total': 5})
+        self.test.skip_factor = 1
+        self._test_result(self._config, 100)
 
 class GenerateReportTesting(unittest.TestCase):
 
