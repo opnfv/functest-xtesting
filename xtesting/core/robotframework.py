@@ -56,6 +56,7 @@ class RobotFramework(testcase.TestCase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.xml_file = os.path.join(self.res_dir, 'output.xml')
+        self.deny_skipping = kwargs.get("deny_skipping", False)
 
     def parse_results(self):
         """Parse output.xml and get the details in it."""
@@ -63,9 +64,15 @@ class RobotFramework(testcase.TestCase):
         visitor = ResultVisitor()
         result.visit(visitor)
         try:
-            self.result = 100 * (
-                result.suite.statistics.passed /
-                result.suite.statistics.total)
+            if self.deny_skipping:
+                self.result = 100 * (
+                    result.suite.statistics.passed /
+                    result.suite.statistics.total)
+            else:
+                self.result = 100 * ((
+                    result.suite.statistics.passed +
+                    result.suite.statistics.skipped)/
+                    result.suite.statistics.total)
         except ZeroDivisionError:
             self.__logger.error("No test has been run")
         self.start_time = timestamp_to_secs(result.suite.starttime)
