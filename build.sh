@@ -24,12 +24,12 @@ build_opts=(--pull=true --no-cache --force-rm=true)
 for arch in ${arch}; do
     if [[ ${arch} == arm64 ]]; then
         find . -name Dockerfile -exec sed -i \
-            -e "s|alpine:3.15|arm64v8/alpine:3.15|g" {} +
+            -e "s|alpine:3.16|arm64v8/alpine:3.16|g" {} +
         find . -name Dockerfile -exec sed -i \
             -e "s|opnfv/xtesting:yoga|${repo}/xtesting:arm64-${tag}|g" {} +
     elif [[ ${arch} == arm ]]; then
         find . -name Dockerfile -exec sed -i \
-            -e "s|alpine:3.15|arm32v6/alpine:3.15|g" {} +
+            -e "s|alpine:3.16|arm32v6/alpine:3.16|g" {} +
         find . -name Dockerfile -exec sed -i \
             -e "s|opnfv/xtesting:yoga|${repo}/xtesting:arm-${tag}|g" {} +
     else
