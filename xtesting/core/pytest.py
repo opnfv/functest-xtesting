@@ -53,10 +53,10 @@ class Pytest(xtesting.core.testcase.TestCase):
         # running pytest with 'options' in 'dir'
         #  the pytesthooks initiates an empty 'details' and populates it with individual test results
         self.start_time = time.time()
-        pytest.main(args=['--tb=no', '-p', 'xtesting.utils.pytesthooks'] + options + [dir])
+        pytest.main(args=[dir] + ['--tb=no', '-p', 'xtesting.utils.pytesthooks'] + options)
         self.stop_time = time.time()
 
         # fectching results in pytesthooks
         self.details = xtesting.utils.pytesthooks.details
         self.result = xtesting.utils.pytesthooks.result
-        return self.EX_OK if xtesting.utils.pytesthooks.ok else self.EX_NOK
+        return self.EX_OK
