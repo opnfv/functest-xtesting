@@ -8,26 +8,55 @@ import xtesting
 
 
 class Pytest(xtesting.core.testcase.TestCase):
-    """pytest runner."""
+    """pytest driver
 
-    __logger = logging.getLogger(__name__)
+    The 'pytest driver' can be used on every test set written for pytest.
+    Given a pytest package that is launched with the command:
 
-    def run(self, **kwargs):
+    `pytest --opt1 arg1 --opt2 testdir`
+
+    it can be executed by xtesting with the following testcase.yaml:
+
+    ```yaml
+     run:
+        name: pytest
+        args:
+          dir: testdir
+          options:
+            opt1: arg1
+            opt2: null
+    ```
+
+    options can be written as a list of strings `['--opt1', 'arg1', '--opt2']`
+    """
+
+    logger = logging.getLogger('pytest')
+
+    def run(self, **args):
+        # parsing args
+        #  - 'dir' is mandatory
+        #  - 'options' is an optional list or a dict flatten to a list
         try:
-            dir = kwargs.pop('dir')
-            options = kwargs.pop('options', [])
+            dir = args.pop('dir')
+            options = args.pop('options', [])
+            if isinstance(options, dict):
+                options = [v for o in
+                           zip([f'--{k}' if len(str(k)) > 1 else f'-{k}' for k in options], options.values())
+                           for v in o if v is not None]
         except KeyError as err:
-            self.__logger.exception(f"Missing args: {err.args[0]!r}")
+            self.logger.exception(f"Missing args: {err.args[0]!r}")
             return self.EX_RUN_ERROR
-        if kwargs:
-            self.__logger.exception(f"Unexpected args {kwargs}")
+        if args:
+            self.logger.exception(f"Unexpected args {args}")
             return self.EX_RUN_ERROR
 
+        # running pytest with 'options' in 'dir'
+        #  the pytesthooks initiates an empty 'details' and populates it with individual test results
         self.start_time = time.time()
-
         pytest.main(args=['--tb=no', '-p', 'xtesting.utils.pytesthooks'] + options + [dir])
-
         self.stop_time = time.time()
+
+        # fectching results in pytesthooks
         self.details = xtesting.utils.pytesthooks.details
-        self.result = 100
-        return self.EX_OK
+        self.result = xtesting.utils.pytesthooks.result
+        return self.EX_OK if xtesting.utils.pytesthooks.ok else self.EX_NOK
