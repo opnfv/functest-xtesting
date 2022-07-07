@@ -1,0 +1,7 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-by: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-at: Thu, 07 Jul 2022 09:22:56 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/c/functest-xtesting/+/73419
+Project: functest-xtesting
+Branch: refs/heads/master
