@@ -31,5 +31,5 @@ def pytest_runtest_makereport(item, call):
         else:
             test = {}
         if passed + failed:
-            result = passed / (passed + failed)
+            result = passed / (passed + failed) * 100
         details['tests'].append(test)
