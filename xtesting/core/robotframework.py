@@ -106,10 +106,7 @@ class RobotFramework(testcase.TestCase):
             EX_RUN_ERROR otherwise.
         """
         try:
-            suites = kwargs["suites"]
-            variable = kwargs.get("variable", [])
-            variablefile = kwargs.get("variablefile", [])
-            include = kwargs.get("include", [])
+            suites = kwargs.pop("suites")
         except KeyError:
             self.__logger.exception("Mandatory args were not passed")
             return self.EX_RUN_ERROR
@@ -120,9 +117,11 @@ class RobotFramework(testcase.TestCase):
                 self.__logger.exception("Cannot create %s", self.res_dir)
                 return self.EX_RUN_ERROR
         stream = StringIO()
-        robot.run(*suites, variable=variable, variablefile=variablefile,
-                  include=include, output=self.xml_file, log='NONE',
-                  report='NONE', stdout=stream)
+        kwargs["output"] = self.xml_file
+        kwargs["log"] = "NONE"
+        kwargs["report"] = "NONE"
+        kwargs["stdout"] = stream
+        robot.run(*suites, **kwargs)
         self.__logger.info("\n%s", stream.getvalue())
         try:
             self.parse_results()
