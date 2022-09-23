@@ -215,11 +215,16 @@ class RunTesting(unittest.TestCase):
 
     @mock.patch('robot.run')
     def _test_makedirs(self, *args):
+        kwargs = {
+            'variable': self.variable,
+            'variablefile': self.variablefile,
+            'include': self.include
+        }
         with mock.patch.object(self.test, 'parse_results') as mock_method, \
                 mock.patch.object(self.test, 'generate_report',
                                   return_value=0) as mmethod:
             self.assertEqual(
-                self.test.run(suites=self.suites, variable=self.variable),
+                self.test.run(suites=self.suites, **kwargs),
                 self.test.EX_OK)
             args[0].assert_called_once_with(
                 *self.suites, log='NONE', output=self.test.xml_file,
@@ -245,10 +250,13 @@ class RunTesting(unittest.TestCase):
     @mock.patch('os.makedirs')
     @mock.patch('robot.run')
     def _test_parse_results(self, status, *args):
+        kwargs = {
+            'variable': self.variable,
+            'variablefile': self.variablefile,
+            'include': self.include
+        }
         self.assertEqual(
-            self.test.run(
-                suites=self.suites, variable=self.variable,
-                variablefile=self.variablefile, include=self.include),
+            self.test.run(suites=self.suites, **kwargs),
             status)
         args[0].assert_called_once_with(
             *self.suites, log='NONE', output=self.test.xml_file,
@@ -275,11 +283,14 @@ class RunTesting(unittest.TestCase):
     @mock.patch('os.makedirs')
     @mock.patch('robot.run')
     def _test_generate_report(self, status, *args):
+        kwargs = {
+            'variable': self.variable,
+            'variablefile': self.variablefile,
+            'include': self.include
+        }
         with mock.patch.object(self.test, 'parse_results') as mock_method:
             self.assertEqual(
-                self.test.run(
-                    suites=self.suites, variable=self.variable,
-                    variablefile=self.variablefile, include=self.include),
+                self.test.run(suites=self.suites, **kwargs),
                 status)
         args[0].assert_called_once_with(
             *self.suites, log='NONE', output=self.test.xml_file,
