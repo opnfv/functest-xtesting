@@ -43,8 +43,8 @@ jobs:
       script: >
         sudo manifest-tool push from-args \
           --platforms linux/amd64,linux/arm,linux/arm64 \
-          --template ${DOCKER_USERNAME}/xtesting:ARCH-latest \
-          --target ${DOCKER_USERNAME}/xtesting:latest
+          --template ${DOCKER_USERNAME}/xtesting:ARCH-zed \
+          --target ${DOCKER_USERNAME}/xtesting:zed
     - stage: build xtesting-mts images
       script: sudo -E bash build.sh
       env:
@@ -71,5 +71,5 @@ jobs:
       script: >
         sudo manifest-tool push from-args \
           --platforms linux/amd64,linux/arm,linux/arm64 \
-          --template ${DOCKER_USERNAME}/xtesting-mts:ARCH-latest \
-          --target ${DOCKER_USERNAME}/xtesting-mts:latest
+          --template ${DOCKER_USERNAME}/xtesting-mts:ARCH-zed \
+          --target ${DOCKER_USERNAME}/xtesting-mts:zed
