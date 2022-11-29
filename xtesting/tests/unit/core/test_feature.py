@@ -22,6 +22,8 @@ from xtesting.core import feature
 from xtesting.core import testcase
 from xtesting.utils import constants
 
+def fake_communicate(timeout):
+    return 'test_run_out', 'test_run_err'
 
 class FakeTestCase(feature.Feature):
 
@@ -122,7 +124,7 @@ class BashFeatureTesting(FeatureTestingBase):
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
         mopen.assert_called_once_with(self._output_file, "w", encoding='utf-8')
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY, text=True, encoding="utf-8")
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.path.isdir', return_value=True)
@@ -132,7 +134,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.__enter__.return_value.stdout': stream,
-                 'return_value.__enter__.return_value.returncode': 1}
+                 'return_value.__enter__.return_value.returncode': 1,
+                 'return_value.__enter__.return_value.communicate': fake_communicate}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
@@ -143,7 +146,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY, text=True, encoding="utf-8")
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('subprocess.Popen')
@@ -152,11 +155,11 @@ class BashFeatureTesting(FeatureTestingBase):
         stream = BytesIO()
         stream.write(b"foo")
         stream.seek(0)
-        wait = mock.MagicMock(side_effect=subprocess.TimeoutExpired(
+        communicate = mock.MagicMock(side_effect=subprocess.TimeoutExpired(
             cmd=FeatureTestingBase._cmd,
             timeout=FeatureTestingBase._max_duration))
         kill = mock.MagicMock()
-        attrs = {'return_value.__enter__.return_value.wait': wait,
+        attrs = {'return_value.__enter__.return_value.communicate': communicate,
                  'return_value.__enter__.return_value.kill': kill,
                  'return_value.__enter__.return_value.stdout': stream,
                  'return_value.__enter__.return_value.returncode': 0}
@@ -170,10 +173,28 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[1].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
-        wait.assert_called_once_with(timeout=FeatureTestingBase._max_duration)
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY, text=True, encoding="utf-8")
+        communicate.assert_called_once_with(timeout=FeatureTestingBase._max_duration)
         kill.assert_called_once()
         args[0].assert_called_once_with(self.feature.res_dir)
+
+    @mock.patch('os.path.isdir', return_value=True)
+    @mock.patch('subprocess.Popen')
+    def test_invalid_max_duration_should_use_default_timeout(self, *args):
+        stream = BytesIO()
+        stream.write(b"foo")
+        stream.seek(0)
+        communicate = mock.MagicMock(return_value=('test_run_out', 'test_run_err'))
+        attrs = {'return_value.__enter__.return_value.stdout': stream,
+                 'return_value.__enter__.return_value.returncode': 0,
+                 'return_value.__enter__.return_value.communicate': communicate}
+        args[0].configure_mock(**attrs)
+
+        self._max_duration = "invalid duration value"
+        with mock.patch('builtins.open', mock.mock_open()):
+            self._test_run_max_duration(testcase.TestCase.EX_OK)
+
+        communicate.assert_called_once_with(timeout=feature.BashFeature.DEFAULT_TIMEOUT)
 
     @mock.patch('os.path.isdir', return_value=True)
     @mock.patch('subprocess.Popen')
@@ -182,7 +203,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.__enter__.return_value.stdout': stream,
-                 'return_value.__enter__.return_value.returncode': 0}
+                 'return_value.__enter__.return_value.returncode': 0,
+                 'return_value.__enter__.return_value.communicate': fake_communicate}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run(testcase.TestCase.EX_OK)
@@ -193,7 +215,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY, text=True, encoding="utf-8")
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.path.isdir', return_value=True)
@@ -203,7 +225,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.__enter__.return_value.stdout': stream,
-                 'return_value.__enter__.return_value.returncode': 0}
+                 'return_value.__enter__.return_value.returncode': 0,
+                 'return_value.__enter__.return_value.communicate': fake_communicate}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(True, testcase.TestCase.EX_OK)
@@ -214,7 +237,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY, text=True, encoding="utf-8")
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.path.isdir', return_value=True)
@@ -224,7 +247,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.__enter__.return_value.stdout': stream,
-                 'return_value.__enter__.return_value.returncode': 0}
+                 'return_value.__enter__.return_value.returncode': 0,
+                 'return_value.__enter__.return_value.communicate': fake_communicate}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(False, testcase.TestCase.EX_OK)
@@ -235,7 +259,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY, text=True, encoding="utf-8")
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.makedirs')
@@ -246,7 +270,8 @@ class BashFeatureTesting(FeatureTestingBase):
         stream.write(b"foo")
         stream.seek(0)
         attrs = {'return_value.__enter__.return_value.stdout': stream,
-                 'return_value.__enter__.return_value.returncode': 0}
+                 'return_value.__enter__.return_value.returncode': 0,
+                 'return_value.__enter__.return_value.communicate': fake_communicate}
         args[0].configure_mock(**attrs)
         with mock.patch('builtins.open', mock.mock_open()) as mopen:
             self._test_run_console(False, testcase.TestCase.EX_OK)
@@ -257,7 +282,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY, text=True, encoding="utf-8")
         args[1].assert_called_once_with(self.feature.res_dir)
         args[2].assert_called_once_with(self.feature.res_dir)
 

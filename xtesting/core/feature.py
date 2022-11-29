@@ -73,8 +73,8 @@ class Feature(testcase.TestCase, metaclass=abc.ABCMeta):
             if self.execute(**kwargs) == 0:
                 exit_code = testcase.TestCase.EX_OK
                 self.result = 100
-        except Exception:  # pylint: disable=broad-except
-            self.__logger.exception("%s FAILED", self.project_name)
+        except Exception as e:  # pylint: disable=broad-except
+            self.__logger.exception(f"{self.project_name} FAILED, Exception: {e}")
         self.stop_time = time.time()
         return exit_code
 
@@ -83,6 +83,7 @@ class BashFeature(Feature):
     """Class designed to run any bash command."""
 
     __logger = logging.getLogger(__name__)
+    DEFAULT_TIMEOUT = 180  # in seconds
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -102,25 +103,33 @@ class BashFeature(Feature):
             cmd = kwargs["cmd"]
             console = kwargs["console"] if "console" in kwargs else False
             # For some tests, we may need to force stop after N sec
-            max_duration = kwargs.get("max_duration")
+            max_duration = kwargs.get("max_duration")  # None if not found.
+            had_format_error = False
+            if max_duration is not None:
+                try:
+                    max_duration = int(max_duration)
+                except (ValueError, TypeError):
+                    had_format_error = True
+                    self.__logger.info(f'Wrong value for max_duration: "{max_duration}", '
+                                       f'defaulting to {self.DEFAULT_TIMEOUT}s.')
+                    max_duration = self.DEFAULT_TIMEOUT
             if not os.path.isdir(self.res_dir):
                 os.makedirs(self.res_dir)
             with open(self.result_file, 'w', encoding='utf-8') as f_stdout:
                 self.__logger.info("Calling %s", cmd)
-                with subprocess.Popen(
-                        cmd, shell=True, stdout=subprocess.PIPE,
-                        stderr=subprocess.STDOUT) as process:
-                    for line in iter(process.stdout.readline, b''):
-                        if console:
-                            sys.stdout.write(line.decode("utf-8"))
-                        f_stdout.write(line.decode("utf-8"))
+                if max_duration and not had_format_error:
+                    self.__logger.info("Parameter 'max_duration' set to %ss.", max_duration)
+                with subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT, text=True, encoding="utf-8") as process:
                     try:
-                        process.wait(timeout=max_duration)
+                        out, err = process.communicate(timeout=max_duration)
+                        if console:
+                            sys.stdout.write(out)
+                        f_stdout.write(out)
                     except subprocess.TimeoutExpired:
                         process.kill()
                         self.__logger.info(
-                            "Killing process after %d second(s).",
-                            max_duration)
+                            "Killing process after %d second(s).", max_duration)
                         return -2
             with open(self.result_file, 'r', encoding='utf-8') as f_stdin:
                 self.__logger.debug("$ %s\n%s", cmd, f_stdin.read().rstrip())
