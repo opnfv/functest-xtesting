@@ -17,19 +17,15 @@ def pytest_sessionstart(session):
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     global details, passed, failed, result
-    outcome = yield
-    outcome = outcome.get_result()
-    if call.when == 'call':
-        if outcome == 'passed':
+    yreport = yield
+    report = yreport.get_result()
+    if report.when == 'call':
+        test = dict(name=report.nodeid, status=report.outcome.upper())
+        if report.passed:
             passed += 1
-            test = dict(status='PASSED', result=call.result)
-        elif outcome == 'failed':
+        elif report.failed:
             failed += 1
-            test = dict(status='FAILED', result=call.excinfo)
-        elif outcome == 'skipped':
-            test = dict(status='SKIPPED', result=call.excinfo)
-        else:
-            test = {}
+            test['failure'] = report.longreprtext
         if passed + failed:
             result = passed / (passed + failed) * 100
         details['tests'].append(test)
