@@ -40,9 +40,9 @@ class Pytest(xtesting.core.testcase.TestCase):
             dir = args.pop('dir')
             options = args.pop('options', [])
             if isinstance(options, dict):
-                options = [v for o in
-                           zip([f'--{k}' if len(str(k)) > 1 else f'-{k}' for k in options], options.values())
-                           for v in o if v is not None]
+                options = [str(item) for opt in
+                           zip([f'--{k}' if len(str(k)) > 1 else f'-{k}' for k in options.keys()], options.values())
+                           for item in opt if item is not None]
         except KeyError as err:
             self.logger.exception(f"Missing args: {err.args[0]!r}")
             return self.EX_RUN_ERROR
