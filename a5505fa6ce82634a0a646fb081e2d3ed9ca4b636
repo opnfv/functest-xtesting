@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7f55ab4_27169632",
+        "filename": "tox.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6865
+      },
+      "writtenOn": "2023-03-17T14:11:02Z",
+      "side": 1,
+      "message": "I am not sure this modification is related to this change or the commit message at least.\nOtherwise LGTM",
+      "revId": "a5505fa6ce82634a0a646fb081e2d3ed9ca4b636",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    }
+  ]
+}
