@@ -16,3 +16,4 @@ bashate # Apache-2.0
 ansible-lint[core]
 bandit
 munch # MIT
+pre-commit
