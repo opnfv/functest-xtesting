@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "399ce15e_951e805b",
+        "filename": "tox.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2023-03-20T08:48:29Z",
+      "side": 1,
+      "message": "my bad. I use py311 on my local compute.",
+      "parentUuid": "f26fcdb3_d995be01",
+      "revId": "a5505fa6ce82634a0a646fb081e2d3ed9ca4b636",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d7f55ab4_27169632",
         "filename": "tox.ini",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2023-03-17T14:11:02Z",
       "side": 1,
       "message": "I am not sure this modification is related to this change or the commit message at least.\nOtherwise LGTM",
+      "revId": "a5505fa6ce82634a0a646fb081e2d3ed9ca4b636",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca614a2c_6ef46c96",
+        "filename": "tox.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2023-03-20T08:48:29Z",
+      "side": 1,
+      "message": "I can split it. It just removes a duplicate.",
+      "parentUuid": "d7f55ab4_27169632",
       "revId": "a5505fa6ce82634a0a646fb081e2d3ed9ca4b636",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": true
