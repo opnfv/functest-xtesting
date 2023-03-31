@@ -99,3 +99,14 @@ tiers:
           args:
             private_data_dir: /usr/lib/python3.9/site-packages/xtesting/samples
             playbook: helloworld.yml
+      - case_name: nineth
+        project_name: xtesting
+        enabled: true
+        criteria: 100
+        blocking: true
+        clean_flag: false
+        description: ''
+        run:
+          name: pytest
+          args:
+            dir: xtesting.samples.fourth
