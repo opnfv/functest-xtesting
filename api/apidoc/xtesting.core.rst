@@ -15,6 +15,7 @@ Submodules
    xtesting.core.behaveframework
    xtesting.core.campaign
    xtesting.core.feature
+   xtesting.core.pytest
    xtesting.core.robotframework
    xtesting.core.testcase
    xtesting.core.unit
