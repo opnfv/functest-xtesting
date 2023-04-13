@@ -11,7 +11,9 @@ Submodules
 
 .. toctree::
 
+   xtesting.core.ansible
    xtesting.core.behaveframework
+   xtesting.core.campaign
    xtesting.core.feature
    xtesting.core.robotframework
    xtesting.core.testcase
