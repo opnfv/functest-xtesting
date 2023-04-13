@@ -143,6 +143,7 @@ class Runner():
 
     def run_test(self, test):
         """Run one test case"""
+        # pylint: disable=too-many-branches
         if not test.is_enabled() or test.is_skipped():
             msg = prettytable.PrettyTable(
                 header_style='upper', padding_width=5,
@@ -168,6 +169,11 @@ class Runner():
                     LOGGER.info("Skipping test case '%s'...", test.get_name())
                     LOGGER.info("Test result:\n\n%s\n", test_case)
                     return testcase.TestCase.EX_TESTCASE_SKIPPED
+                if 'env' in run_dict:
+                    LOGGER.info(
+                        "Setting env for test case '%s'...", test.get_name())
+                    for key, value in run_dict['env'].items():
+                        os.environ[key] = str(value)
                 LOGGER.info("Running test case '%s'...", test.get_name())
                 try:
                     kwargs = run_dict['args']
