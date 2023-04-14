@@ -13,8 +13,7 @@ amd64 \
 arm64 \
 arm"}
 amd64_dirs=${amd64_dirs-"\
-docker/core \
-docker/mts"}
+docker/core"}
 arm_dirs=${arm_dirs-${amd64_dirs}}
 arm64_dirs=${arm64_dirs-${amd64_dirs}}
 tag=${BRANCH:-stable/xena}

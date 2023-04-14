@@ -69,24 +69,6 @@ tiers:
               - /usr/lib/python3.9/site-packages/xtesting/samples/features
             tags:
               - foo
-      - case_name: seventh
-        project_name: xtesting
-        enabled: false
-        criteria: 100
-        blocking: true
-        clean_flag: false
-        description: ''
-        run:
-          name: mts
-          args:
-            test_file: /opt/mts/bin/test/test.xml
-            testcases:
-              - Pause_5_sec
-            max_duration: 2
-            log_level: INFO
-            store_method: FILE
-            java_memory: 2048
-            console: true
       - case_name: eighth
         project_name: xtesting
         enabled: false
