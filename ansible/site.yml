@@ -12,6 +12,3 @@
             - fifth
             - sixth
             - eighth
-        - container: xtesting-mts
-          tests:
-            - seventh
