@@ -20,6 +20,8 @@ to try Xtesting. You will love them!
 
 ### dump all the following files in an empty dir
 
+or download them from [ansible-role-xtesting repo](https://github.com/collivier/ansible-role-xtesting/tree/master/tests/weather)
+
 weather.py
 
 ```python
@@ -172,6 +174,27 @@ RUN apk --no-cache add --update python3 py3-pip py3-wheel git && \
     git init /src && pip3 install /src
 COPY testcases.yaml /usr/lib/python3.8/site-packages/xtesting/ci/testcases.yaml
 CMD ["run_tests", "-t", "all"]
+```
+
+site.yml
+
+```
+---
+- hosts:
+    - 127.0.0.1
+  roles:
+    - role: collivier.xtesting
+      project: weather
+      registry_deploy: true
+      repo: 127.0.0.1
+      dport: 5000
+      suites:
+        - container: weather
+          tests:
+            - humidity
+            - pressure
+            - temp
+            - half
 ```
 
 ### make world
