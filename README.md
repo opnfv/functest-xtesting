@@ -188,6 +188,15 @@ ansible-playbook site.yml
 deactivate
 rm -r xtesting
 ```
+Running _ansible-playbook_ will indirectly call _sudo_.
+
+Depending on your system settings, you may need to specify the
+_ansible_python_interpreter_ variable value to _ansible-playbook_.
+This can be done directly in the command line with the option _-e_.
+
+_stevedore_ package might be installed on the system during this process.
+In this case, the _virtualenv_ context will become obsolete
+and should be recreated.
 
 Build your container
 
