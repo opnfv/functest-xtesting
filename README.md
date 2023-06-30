@@ -174,6 +174,23 @@ COPY testcases.yaml /usr/lib/python3.8/site-packages/xtesting/ci/testcases.yaml
 CMD ["run_tests", "-t", "all"]
 ```
 
+site.yml
+
+```
+---
+- hosts:
+    - 127.0.0.1
+  roles:
+    - role: collivier.xtesting
+      project: weather
+      repo: 127.0.0.1
+      dport: 5000
+      suites:
+        - container: weather0
+          tests:
+            - simple
+```
+
 ### make world
 
 Deploy your own Xtesting toolchain
