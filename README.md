@@ -188,6 +188,10 @@ ansible-playbook site.yml
 deactivate
 rm -r xtesting
 ```
+Running _ansible-playbook_ will indirectly call _sudo_.
+Also, depending on your system settings, you might need to specify the
+_ansible_python_interpreter_ variable value to _ansible-playbook_.
+This can be done directly in the command line with the option _-e_.
 
 Build your container
 
