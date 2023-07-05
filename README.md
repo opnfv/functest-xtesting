@@ -179,11 +179,11 @@ CMD ["run_tests", "-t", "all"]
 Deploy your own Xtesting toolchain
 
 ```bash
-virtualenv xtesting
+virtualenv xtesting -p python3 --system-site-packages
 . xtesting/bin/activate
 pip install ansible
 ansible-galaxy install collivier.xtesting
-ansible-galaxy collection install ansible.posix community.general community.grafana community.kubernetes
+ansible-galaxy collection install ansible.posix community.general community.grafana community.kubernetes community.docker community.postgresql
 ansible-playbook site.yml
 deactivate
 rm -r xtesting
