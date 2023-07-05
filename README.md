@@ -174,6 +174,27 @@ COPY testcases.yaml /usr/lib/python3.8/site-packages/xtesting/ci/testcases.yaml
 CMD ["run_tests", "-t", "all"]
 ```
 
+site.yml
+
+```yaml
+---
+- hosts:
+    - 127.0.0.1
+  roles:
+    - role: collivier.xtesting
+      project: weather
+      registry_deploy: true
+      repo: 127.0.0.1
+      dport: 5000
+      suites:
+        - container: weather
+          tests:
+            - humidity
+            - pressure
+            - temp
+            - half
+```
+
 ### make world
 
 Deploy your own Xtesting toolchain
@@ -195,7 +216,7 @@ Build your container
 sudo docker build -t 127.0.0.1:5000/weather .
 ```
 
-Publish your container on your local repository
+Publish your container on your local registry
 
 ```bash
 sudo docker push 127.0.0.1:5000/weather
