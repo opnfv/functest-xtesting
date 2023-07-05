@@ -201,4 +201,15 @@ Publish your container on your local repository
 sudo docker push 127.0.0.1:5000/weather
 ```
 
+### web interface
+
+The web interface is available on the port 8000.
+It contains cross-URLs to query _minio_ and _jenkins_.
+In case of problems, use the IP address in the URL
+(e.g. _http://192.168.0.10:8000_) rather than the FQDN.
+
+Jenkins jobs are visible on the web server listening on the port 8080.
+The entry point is the daily job, in this case _weather-latest-daily_.
+
+
 ### That's all folks!
