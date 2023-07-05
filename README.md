@@ -195,7 +195,14 @@ Build your container
 sudo docker build -t 127.0.0.1:5000/weather .
 ```
 
-Publish your container on your local repository
+If you do not have a local registry listening on port 5000, install one
+for example within a docker container.
+
+```bash
+sudo docker run -d -p 5000:5000 --restart=always --name registry registry:2
+```
+
+Publish your container on your local registry
 
 ```bash
 sudo docker push 127.0.0.1:5000/weather
