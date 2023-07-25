@@ -18,6 +18,18 @@ to try Xtesting. You will love them!
 
 ## [Write your own Xtesting driver](https://www.katacoda.com/ollivier/courses/xtestingci/firstdriver)
 
+Note that [running MongoDB 5.0+ requires _avx_ CPU instruction set](https://www.mongodb.com/docs/manual/administration/production-notes/#x86_64)
+that is usually shipped in all recent _x86_ hardware processors.
+Though, it may not be available in your virtualized environments.
+For example, Qemu _avx_ support is only available [since version 7.2](https://github.com/nodkz/mongodb-memory-server/issues/710#issuecomment-1297462935)
+and must be explicitly enabled (e.g. with the argument _-cpu max_).
+
+You can check the presence of the _avx_ CPU instruction set on your processor
+with the following command.
+```bash
+grep '^processor\|^flags.* avx' /proc/cpuinfo
+```
+
 ### dump all the following files in an empty dir
 
 weather.py
