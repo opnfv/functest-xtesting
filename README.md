@@ -18,6 +18,10 @@ to try Xtesting. You will love them!
 
 ## [Write your own Xtesting driver](https://www.katacoda.com/ollivier/courses/xtestingci/firstdriver)
 
+Note that [running MongoDB 5.0+ requires _avx_ CPU instruction set](https://github.com/nodkz/mongodb-memory-server/issues/710#issuecomment-1297462935)
+and that Qemu _avx_ support is only available [since version 7.2](https://github.com/nodkz/mongodb-memory-server/issues/710#issuecomment-1297462935)
+through the argument _-cpu_ (e.g. with _-cpu max_).
+
 ### dump all the following files in an empty dir
 
 weather.py
