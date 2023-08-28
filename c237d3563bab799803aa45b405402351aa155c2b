@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6476c31e_67770152",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7813
+      },
+      "writtenOn": "2023-08-28T14:13:45Z",
+      "side": 1,
+      "message": "my-eth-app\n├── README.md\n├── node_modules\n├── package.json\n├── .gitignore\n└── packages\n    ├── contracts\n    │   ├── README.json\n    │   ├── package.json\n    │   └── src\n    │       ├── abis\n    │       │   ├── erc20.json\n    │       │   └── ownable.json\n    │       ├── addresses.js\n    │       └── index.js\n    ├── react-app\n    │   ├── README.md\n    │   ├── package.json\n    │   ├── node_modules\n    │   ├── public\n    │   │   ├── favicon.ico\n    │   │   ├── index.html\n    │   │   └── manifest.json\n    │   └── src\n    │       ├── App.css\n    │       ├── App.js\n    │       ├── App.test.js\n    │       ├── ethereumLogo.svg\n    │       ├── index.css\n    │       ├── index.js\n    │       ├── serviceWorker.js\n    │       └── setupTests.js\n    └── subgraph\n        ├── README.md\n        ├── abis\n        │   └── erc20.json\n        ├── package.json\n        ├── schema.graphql\n        ├── src\n        │   └── mappings\n        │       ├── tokens.ts\n        │       └── transfers.ts\n        └── subgraph.yaml",
+      "revId": "c237d3563bab799803aa45b405402351aa155c2b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5"
+    }
+  ]
+}
