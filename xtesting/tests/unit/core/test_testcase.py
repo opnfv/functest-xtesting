@@ -180,7 +180,8 @@ class TestCaseTesting(unittest.TestCase):
         args[0].assert_called_once_with(
             os.environ['TEST_DB_URL'],
             data=json.dumps(payload, sort_keys=True),
-            headers=self._headers)
+            headers=self._headers,
+            timeout=10)
 
     def test_pushdb_daily_job(self):
         self._test_pushdb_version(version="master")
