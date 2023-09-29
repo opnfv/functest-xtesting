@@ -143,7 +143,7 @@ class Runner():
 
     def run_test(self, test):
         """Run one test case"""
-        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-branches,broad-exception-raised
         if not test.is_enabled() or test.is_skipped():
             msg = prettytable.PrettyTable(
                 header_style='upper', padding_width=5,
