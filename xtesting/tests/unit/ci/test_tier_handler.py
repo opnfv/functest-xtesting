@@ -26,8 +26,8 @@ class TierHandlerTesting(unittest.TestCase):
         self.testcase = tier_handler.TestCase(
             'test_name', 'true', False, 'test_criteria',
             True, description='test_desc', project='project_name')
-        self.testcase.str = self.testcase.__str__()
-        self.tier.str = self.tier.__str__()
+        self.testcase.str = str(self.testcase)
+        self.tier.str = str(self.tier)
 
     def test_add_test(self):
         self.tier.add_test(self.test)

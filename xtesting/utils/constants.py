@@ -12,7 +12,7 @@
 import os
 import sys
 
-import pkg_resources
+import importlib.resources
 
 ENV_FILE = '/var/lib/xtesting/conf/env_file'
 
@@ -20,14 +20,21 @@ XTESTING_PATHES = [
     "~/.xtesting", "/etc/xtesting", os.path.join(sys.prefix + "/etc/xtesting")]
 
 TESTCASE_DESCRIPTION = 'testcases.yaml'
-TESTCASE_DESCRIPTION_DEFAULT = pkg_resources.resource_filename(
-    'xtesting', f'ci/{TESTCASE_DESCRIPTION}')
+
+with importlib.resources.as_file(
+        importlib.resources.files('xtesting') /
+        f'ci/{TESTCASE_DESCRIPTION}') as path:
+    TESTCASE_DESCRIPTION_DEFAULT = path
 
 RESULTS_DIR = '/var/lib/xtesting/results'
 LOG_PATH = os.path.join(RESULTS_DIR, 'xtesting.log')
 DEBUG_LOG_PATH = os.path.join(RESULTS_DIR, 'xtesting.debug.log')
 
-INI_PATH_DEFAULT = pkg_resources.resource_filename(
-    'xtesting', 'ci/logging.ini')
-DEBUG_INI_PATH_DEFAULT = pkg_resources.resource_filename(
-    'xtesting', 'ci/logging.debug.ini')
+with importlib.resources.as_file(
+        importlib.resources.files('xtesting') /
+        'ci/logging.ini') as path:
+    INI_PATH_DEFAULT = path
+with importlib.resources.as_file(
+        importlib.resources.files('xtesting') /
+        'ci/logging.debug.ini') as path:
+    DEBUG_INI_PATH_DEFAULT = path

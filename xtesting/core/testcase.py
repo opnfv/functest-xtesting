@@ -149,7 +149,7 @@ class TestCase(metaclass=abc.ABCMeta):
             self.__logger.error("Please run test before checking the results")
         return TestCase.EX_TESTCASE_FAILED
 
-    def check_requirements(self):  # pylint: disable=no-self-use
+    def check_requirements(self):
         """Check the requirements of the test case.
 
         It can be overriden on purpose.
@@ -235,7 +235,8 @@ class TestCase(metaclass=abc.ABCMeta):
                 data["version"] = "unknown"
             req = requests.post(
                 url, data=json.dumps(data, sort_keys=True),
-                headers=self.headers)
+                headers=self.headers,
+                timeout=10)
             req.raise_for_status()
             if urlparse(url).scheme != "file":
                 # href must be postprocessed as OPNFV testapi is misconfigured

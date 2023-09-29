@@ -199,6 +199,7 @@ class Runner():
                     "\n\n",
                     test.get_name())
         else:
+            # pylint: disable=broad-exception-raised
             raise Exception("Cannot import the class for the test case.")
         return result
 

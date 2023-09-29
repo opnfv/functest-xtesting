@@ -70,7 +70,8 @@ class Campaign():
             url = env.get('TEST_DB_URL')
             req = requests.get(
                 f"{url}?build_tag={env.get('BUILD_TAG')}",
-                headers=testcase.TestCase.headers)
+                headers=testcase.TestCase.headers,
+                timeout=10)
             req.raise_for_status()
             output = req.json()
             Campaign.__logger.debug("data from DB: \n%s", output)
