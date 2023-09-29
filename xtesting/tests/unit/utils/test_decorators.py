@@ -94,7 +94,8 @@ class DecoratorsTesting(unittest.TestCase):
         self.assertEqual(test.push_to_db(), testcase.TestCase.EX_OK)
         args[0].assert_called_once_with(
             'http://127.0.0.1', data=self._get_json(),
-            headers={'Content-Type': 'application/json'})
+            headers={'Content-Type': 'application/json'},
+            timeout=10)
 
     def test_wrong_shema(self):
         os.environ['TEST_DB_URL'] = '/dev/null'
