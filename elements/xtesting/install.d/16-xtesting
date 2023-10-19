@@ -1,0 +1,7 @@
+#!/bin/bash
+
+./download-frozen-image-v2.sh /data/docker \
+  opnfv/xtesting:latest
+git clone https://git.opnfv.org/functest-xtesting
+
+exit 0
