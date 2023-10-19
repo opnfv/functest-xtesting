@@ -1,0 +1,11 @@
+#!/bin/bash
+
+download-frozen-image-v2.sh /data/docker/xtesting \
+  opnfv/xtesting:xena
+git init /home/debian/functest-xtesting && \
+(cd /home/debian/functest-xtesting && \
+  git fetch --tags https://git.opnfv.org/functest-xtesting stable/xena && \
+  git checkout FETCH_HEAD) && \
+chown -R 1000:1000 /home/debian/functest-xtesting
+
+exit 0
