@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "f8ea0cb11499254ce56f9f3a84e0dc2575d632a0",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a8ce20e_7d0fbe90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2023-11-16T15:55:20Z",
+      "side": 1,
+      "message": "uhm looks like out scope or I would have to have a very long README for all possible ansible nuances.\n\nThx for the feedback.",
+      "revId": "f8ea0cb11499254ce56f9f3a84e0dc2575d632a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5"
     }
   ]
 }
