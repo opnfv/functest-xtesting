@@ -2,6 +2,9 @@
 - hosts: 127.0.0.1
   roles:
     - role: collivier.xtesting
+      docker_tags:
+        - '2023.2':
+            branch: stable/2023.2
       suites:
         - container: xtesting
           tests:
