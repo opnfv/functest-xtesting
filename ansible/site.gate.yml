@@ -6,6 +6,9 @@
       gerrit_project: functest-xtesting
       git_url: https://gerrit.opnfv.org/gerrit/functest-xtesting
       docker_tags:
+        - '2023.1':
+            branch: stable/2023.1
+      docker_tags:
         - latest:
             branch: master
             dependency: '3.17'
