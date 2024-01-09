@@ -6,8 +6,8 @@
       gerrit_project: functest-xtesting
       git_url: https://gerrit.opnfv.org/gerrit/functest-xtesting
       docker_tags:
-        - latest:
-            branch: master
+        - yoga:
+            branch: stable/yoga
             dependency: '3.16'
       builds:
         dependency:
