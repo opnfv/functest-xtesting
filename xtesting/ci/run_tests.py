@@ -170,10 +170,11 @@ class Runner():
                     LOGGER.info("Test result:\n\n%s\n", test_case)
                     return testcase.TestCase.EX_TESTCASE_SKIPPED
                 if 'env' in run_dict:
-                    LOGGER.info(
-                        "Setting env for test case '%s'...", test.get_name())
                     for key, value in run_dict['env'].items():
-                        os.environ[key] = str(value)
+                        if key not in os.environ:
+                            LOGGER.info("Setting env for test case '%s'...",
+                                        test.get_name())
+                            os.environ[key] = str(value)
                 LOGGER.info("Running test case '%s'...", test.get_name())
                 try:
                     kwargs = run_dict['args']
