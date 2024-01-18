@@ -1,0 +1,7 @@
+Verified+1: Anuket Required GHA Bot <releng+anuket-required-gha@linuxfoundation.org>
+Code-Review+2: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-by: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-at: Thu, 18 Jan 2024 12:16:54 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/c/functest-xtesting/+/74520
+Project: functest-xtesting
+Branch: refs/heads/stable/2023.2
