@@ -1,7 +1,7 @@
 FROM alpine:3.16
 
 ARG BRANCH=stable/yoga
-ARG OPENSTACK_TAG=stable/yoga
+ARG OPENSTACK_TAG=unmaintained/yoga
 
 RUN apk -U upgrade && \
     apk --no-cache add --update python3 py3-pip py3-wheel bash git mailcap libxml2 libxslt ansible && \
