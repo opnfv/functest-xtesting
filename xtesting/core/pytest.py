@@ -90,7 +90,7 @@ class Pytest(testcase.TestCase):
             self.__logger.info(
                 "\n\n %s \n",
                 output.getvalue().splitlines()[-1].replace('=', ''))
-            self.details = Pytest.tests
+            self.details["tests"] = Pytest.tests
             if Pytest.passed + Pytest.failed:
                 self.result = Pytest.passed / (
                     Pytest.passed + Pytest.failed) * 100
