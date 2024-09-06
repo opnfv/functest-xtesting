@@ -79,7 +79,7 @@ class TestCase(metaclass=abc.ABCMeta):
             if self.is_skipped:
                 result = 'SKIP'
             else:
-                result = 'PASS' if(self.is_successful(
+                result = 'PASS' if (self.is_successful(
                     ) == TestCase.EX_OK) else 'FAIL'
             msg = prettytable.PrettyTable(
                 header_style='upper', padding_width=5,
@@ -106,7 +106,7 @@ class TestCase(metaclass=abc.ABCMeta):
             assert self.stop_time
             if self.stop_time < self.start_time:
                 return "XX:XX"
-            return(
+            return (
                 f"{str(int(self.stop_time - self.start_time) // 60).zfill(2)}:"
                 f"{str(int(self.stop_time - self.start_time) % 60).zfill(2)}")
 
