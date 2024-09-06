@@ -302,7 +302,7 @@ class Runner():
                     if test_case.is_skipped:
                         result = 'SKIP'
                     else:
-                        result = 'PASS' if(test_case.is_successful(
+                        result = 'PASS' if (test_case.is_successful(
                             ) == test_case.EX_OK) else 'FAIL'
                     msg.add_row(
                         [test_case.case_name, test_case.project_name,
