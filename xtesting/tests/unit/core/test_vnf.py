@@ -41,7 +41,7 @@ class VnfBaseTesting(unittest.TestCase):
             mock_method.assert_called_with()
 
     def test_run_deploy_vnf_exc(self):
-        with mock.patch.object(self.test, 'prepare'),\
+        with mock.patch.object(self.test, 'prepare'), \
             mock.patch.object(self.test, 'deploy_orchestrator',
                               return_value=True), \
             mock.patch.object(self.test, 'deploy_vnf',
@@ -51,7 +51,7 @@ class VnfBaseTesting(unittest.TestCase):
             mock_method.assert_called_with()
 
     def test_run_test_vnf_exc(self):
-        with mock.patch.object(self.test, 'prepare'),\
+        with mock.patch.object(self.test, 'prepare'), \
             mock.patch.object(self.test, 'deploy_orchestrator',
                               return_value=True), \
             mock.patch.object(self.test, 'deploy_vnf', return_value=True), \
@@ -62,7 +62,7 @@ class VnfBaseTesting(unittest.TestCase):
             mock_method.assert_called_with()
 
     def test_run_deploy_orch_ko(self):
-        with mock.patch.object(self.test, 'prepare'),\
+        with mock.patch.object(self.test, 'prepare'), \
                 mock.patch.object(self.test, 'deploy_orchestrator',
                                   return_value=False), \
                 mock.patch.object(self.test, 'deploy_vnf',
@@ -73,7 +73,7 @@ class VnfBaseTesting(unittest.TestCase):
                              testcase.TestCase.EX_TESTCASE_FAILED)
 
     def test_run_vnf_deploy_ko(self):
-        with mock.patch.object(self.test, 'prepare'),\
+        with mock.patch.object(self.test, 'prepare'), \
                 mock.patch.object(self.test, 'deploy_orchestrator',
                                   return_value=True), \
                 mock.patch.object(self.test, 'deploy_vnf',
@@ -84,7 +84,7 @@ class VnfBaseTesting(unittest.TestCase):
                              testcase.TestCase.EX_TESTCASE_FAILED)
 
     def test_run_vnf_test_ko(self):
-        with mock.patch.object(self.test, 'prepare'),\
+        with mock.patch.object(self.test, 'prepare'), \
                 mock.patch.object(self.test, 'deploy_orchestrator',
                                   return_value=True), \
                 mock.patch.object(self.test, 'deploy_vnf',
@@ -95,7 +95,7 @@ class VnfBaseTesting(unittest.TestCase):
                              testcase.TestCase.EX_TESTCASE_FAILED)
 
     def test_run_default(self):
-        with mock.patch.object(self.test, 'prepare'),\
+        with mock.patch.object(self.test, 'prepare'), \
                 mock.patch.object(self.test, 'deploy_orchestrator',
                                   return_value=True), \
                 mock.patch.object(self.test, 'deploy_vnf',
