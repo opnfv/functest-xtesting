@@ -73,6 +73,7 @@ class Pytest(testcase.TestCase):
             options = kwargs.pop('options', {})
             options['html'] = f'{self.res_dir}/results.html'
             options['junitxml'] = f'{self.res_dir}/results.xml'
+            options['p'] = 'no:cacheprovider'
             if 'tb' not in options:
                 options['tb'] = 'no'
             options = [
