@@ -12,6 +12,8 @@
 import contextlib
 import io
 import logging
+import os
+import shutil
 import time
 
 import pytest
@@ -69,6 +71,8 @@ class Pytest(testcase.TestCase):
         status = self.EX_RUN_ERROR
         self.start_time = time.time()
         try:
+            if os.path.exists(os.path.join(self.dir_results, self.case_name)):
+                shutil.rmtree(os.path.join(self.dir_results, self.case_name))
             pydir = kwargs.pop('dir')
             options = kwargs.pop('options', {})
             options['html'] = f'{self.res_dir}/results.html'
