@@ -117,7 +117,8 @@ class RobotFramework(testcase.TestCase):
                 self.__logger.exception("Cannot create %s", self.res_dir)
                 return self.EX_RUN_ERROR
         stream = StringIO()
-        kwargs["output"] = self.xml_file
+        if 'output' not in kwargs:
+            kwargs["output"] = self.xml_file
         kwargs["log"] = "NONE"
         kwargs["report"] = "NONE"
         kwargs["stdout"] = stream
