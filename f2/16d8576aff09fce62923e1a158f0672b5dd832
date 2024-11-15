@@ -1,0 +1,8 @@
+Verified+1: Functest Bot <ced.ollivier@gmail.com>
+Code-Review+2: Cedric Ollivier <cedric.ollivier@orange.com>
+Verified+1: Anuket Required GHA Bot <releng+anuket-required-gha@linuxfoundation.org>
+Submitted-by: Cedric Ollivier <cedric.ollivier@orange.com>
+Submitted-at: Fri, 15 Nov 2024 19:23:01 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/c/functest-xtesting/+/74659
+Project: functest-xtesting
+Branch: refs/heads/stable/zed
