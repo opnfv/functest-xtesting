@@ -119,6 +119,8 @@ class RobotFramework(testcase.TestCase):
         stream = StringIO()
         if 'output' not in kwargs:
             kwargs["output"] = self.xml_file
+        else:
+            self.xml_file = kwargs["output"]
         kwargs["log"] = "NONE"
         kwargs["report"] = "NONE"
         kwargs["stdout"] = stream
