@@ -1,10 +1,10 @@
-robotframework===6.1.1
-bandit===1.7.9
+robotframework===7.1.1
+bandit===1.8.0
 behave===1.2.6
 behave-html-formatter===0.9.10
-pylint===3.2.7
+pylint===3.3.2
 flake8===7.1.1
-ansible-lint===24.7.0
-pre-commit===3.8.0
-astroid===3.2.4
-sphinx-rtd-theme==3.0.0rc1
+ansible-lint===24.12.2
+pre-commit===4.0.1
+astroid===3.3.6
+sphinx-rtd-theme==3.0.2
