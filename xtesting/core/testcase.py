@@ -57,6 +57,7 @@ class TestCase(metaclass=abc.ABCMeta):
     _job_name_rule = "(dai|week)ly-(.+?)-[0-9]*"
     headers = {'Content-Type': 'application/json'}
     __logger = logging.getLogger(__name__)
+    __test__ = False
 
     def __init__(self, **kwargs):
         self.details = {}
