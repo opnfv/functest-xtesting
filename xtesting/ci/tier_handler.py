@@ -77,7 +77,7 @@ class TestCase():
 
     def __init__(self, name, enabled, skipped, criteria, blocking,
                  description="", project=""):
-        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-arguments,too-many-positional-arguments
         self.name = name
         self.enabled = enabled
         self.skipped = skipped
