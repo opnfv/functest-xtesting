@@ -8,7 +8,7 @@
       docker_tags:
         - '2024.2':
             branch: stable/2024.2
-            dependency: '3.20'
+            dependency: '3.21'
       builds:
         dependency:
           repo: _

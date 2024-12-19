@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.21
 
 ARG BRANCH=stable/2024.2
 ARG OPENSTACK_TAG=stable/2024.2
