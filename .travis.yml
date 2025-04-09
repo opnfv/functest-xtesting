@@ -43,5 +43,5 @@ jobs:
       script: >
         sudo manifest-tool push from-args \
           --platforms linux/amd64,linux/arm,linux/arm64 \
-          --template ${DOCKER_USERNAME}/xtesting:ARCH-latest \
-          --target ${DOCKER_USERNAME}/xtesting:latest
+          --template ${DOCKER_USERNAME}/xtesting:ARCH-2025.1 \
+          --target ${DOCKER_USERNAME}/xtesting:2025.1
