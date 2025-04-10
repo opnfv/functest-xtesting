@@ -354,14 +354,16 @@ class TestCaseTesting(unittest.TestCase):
         self.assertEqual(self.test.publish_artifacts(),
                          testcase.TestCase.EX_PUBLISH_ARTIFACTS_ERROR)
         args[0].assert_called_once_with(
-            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'],
+            config=mock.ANY)
 
     @mock.patch('boto3.resource', side_effect=Exception)
     def test_publish_artifacts_exc3(self, *args):
         self.assertEqual(self.test.publish_artifacts(),
                          testcase.TestCase.EX_PUBLISH_ARTIFACTS_ERROR)
         args[0].assert_called_once_with(
-            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'],
+            config=mock.ANY)
 
     @mock.patch('boto3.resource')
     def test_publish_artifacts_exc4(self, *args):
@@ -369,7 +371,8 @@ class TestCaseTesting(unittest.TestCase):
         self.assertEqual(self.test.publish_artifacts(),
                          testcase.TestCase.EX_PUBLISH_ARTIFACTS_ERROR)
         args[0].assert_called_once_with(
-            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'],
+            config=mock.ANY)
 
     @mock.patch('boto3.resource')
     def test_publish_artifacts_exc5(self, *args):
@@ -380,7 +383,8 @@ class TestCaseTesting(unittest.TestCase):
         self.assertEqual(self.test.publish_artifacts(),
                          testcase.TestCase.EX_PUBLISH_ARTIFACTS_ERROR)
         args[0].assert_called_once_with(
-            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'],
+            config=mock.ANY)
 
     @mock.patch('mimetypes.guess_type', return_value=(None, None))
     @mock.patch('boto3.resource')
@@ -390,7 +394,8 @@ class TestCaseTesting(unittest.TestCase):
                          testcase.TestCase.EX_OK)
         args[0].assert_called_once_with(self.test.res_dir)
         args[1].assert_called_once_with(
-            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'],
+            config=mock.ANY)
 
     @mock.patch('mimetypes.guess_type', return_value=(None, None))
     @mock.patch('boto3.resource')
@@ -404,7 +409,8 @@ class TestCaseTesting(unittest.TestCase):
                          testcase.TestCase.EX_OK)
         args[0].assert_called_once_with(self.test.res_dir)
         args[1].assert_called_once_with(
-            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'])
+            's3', endpoint_url=os.environ['S3_ENDPOINT_URL'],
+            config=mock.ANY)
 
     @mock.patch('mimetypes.guess_type', return_value=(None, None))
     @mock.patch('os.path.exists', return_value=True)
@@ -417,7 +423,9 @@ class TestCaseTesting(unittest.TestCase):
                          testcase.TestCase.EX_OK)
         args[0].assert_called_once_with(self.test.res_dir)
         expected = [
-            mock.call('s3', endpoint_url=os.environ['S3_ENDPOINT_URL']),
+            mock.call(
+                's3', endpoint_url=os.environ['S3_ENDPOINT_URL'],
+                config=mock.ANY),
             mock.call().meta.client.head_bucket(Bucket='xtesting'),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
@@ -451,7 +459,9 @@ class TestCaseTesting(unittest.TestCase):
                          testcase.TestCase.EX_OK)
         args[0].assert_called_once_with(self.test.res_dir)
         expected = [
-            mock.call('s3', endpoint_url=os.environ['S3_ENDPOINT_URL']),
+            mock.call(
+                's3', endpoint_url=os.environ['S3_ENDPOINT_URL'],
+                config=mock.ANY),
             mock.call().meta.client.head_bucket(Bucket='xtesting'),
             mock.call().Bucket('xtesting'),
             mock.call().Bucket().upload_file(
