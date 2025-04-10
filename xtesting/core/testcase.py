@@ -285,7 +285,10 @@ class TestCase(metaclass=abc.ABCMeta):
         """
         try:
             b3resource = boto3.resource(
-                's3', endpoint_url=os.environ["S3_ENDPOINT_URL"])
+                's3', endpoint_url=os.environ["S3_ENDPOINT_URL"],
+                config=botocore.config.Config(
+                    request_checksum_calculation="when_required",
+                    response_checksum_validation="when_required"))
             dst_s3_url = os.environ["S3_DST_URL"]
             multipart_threshold = 5 * 1024 ** 5 if "google" in os.environ[
                 "S3_ENDPOINT_URL"] else 8 * 1024 * 1024
