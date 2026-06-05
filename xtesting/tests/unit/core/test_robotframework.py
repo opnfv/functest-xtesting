@@ -44,7 +44,7 @@ class ResultVisitorTesting(unittest.TestCase):
                 'text': 'Hello, World!'}
         test = model.TestCase(
             name=data['name'], status=data['status'], message=data['text'],
-            starttime=data['starttime'], endtime=data['endtime'])
+            start_time=data['starttime'], end_time=data['endtime'])
         test.parent = mock.Mock()
         config = {'name': data['parent']}
         test.parent.configure_mock(**config)

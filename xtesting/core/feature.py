@@ -108,7 +108,8 @@ class BashFeature(Feature):
             with open(self.result_file, 'w', encoding='utf-8') as f_stdout:
                 self.__logger.info("Calling %s", cmd)
                 with subprocess.Popen(
-                        cmd, shell=True, stdout=subprocess.PIPE,
+                        cmd, shell=kwargs.get("shell", False),
+                        stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT) as process:
                     for line in iter(process.stdout.readline, b''):
                         if console:

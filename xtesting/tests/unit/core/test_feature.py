@@ -122,7 +122,7 @@ class BashFeatureTesting(FeatureTestingBase):
             self._test_run(testcase.TestCase.EX_RUN_ERROR)
         mopen.assert_called_once_with(self._output_file, "w", encoding='utf-8')
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=False, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.path.isdir', return_value=True)
@@ -143,7 +143,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=False, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('subprocess.Popen')
@@ -170,7 +170,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[1].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=False, stderr=mock.ANY, stdout=mock.ANY)
         wait.assert_called_once_with(timeout=FeatureTestingBase._max_duration)
         kill.assert_called_once()
         args[0].assert_called_once_with(self.feature.res_dir)
@@ -193,7 +193,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=False, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.path.isdir', return_value=True)
@@ -214,7 +214,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=False, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.path.isdir', return_value=True)
@@ -235,7 +235,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=False, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
 
     @mock.patch('os.makedirs')
@@ -257,7 +257,7 @@ class BashFeatureTesting(FeatureTestingBase):
             mock.call(self._output_file, 'r', encoding='utf-8'),
             mopen.mock_calls)
         args[0].assert_called_once_with(
-            self._cmd, shell=True, stderr=mock.ANY, stdout=mock.ANY)
+            self._cmd, shell=False, stderr=mock.ANY, stdout=mock.ANY)
         args[1].assert_called_once_with(self.feature.res_dir)
         args[2].assert_called_once_with(self.feature.res_dir)
 
