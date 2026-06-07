@@ -16,7 +16,7 @@ jobs:
   include:
     - stage: run unit tests
       script: >
-        tox -e docs,pep8,pylint,yamllint,bashate,py39,cover
+        tox -e docs,pep8,pylint,yamllint,bashate,py314,cover
     - stage: build xtesting images
       script: sudo -E bash build.sh
       env:
@@ -43,5 +43,5 @@ jobs:
       script: >
         sudo manifest-tool push from-args \
           --platforms linux/amd64,linux/arm,linux/arm64 \
-          --template ${DOCKER_USERNAME}/xtesting:ARCH-latest \
-          --target ${DOCKER_USERNAME}/xtesting:latest
+          --template ${DOCKER_USERNAME}/xtesting:ARCH-2026.1 \
+          --target ${DOCKER_USERNAME}/xtesting:2026.1

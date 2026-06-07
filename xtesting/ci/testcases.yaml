@@ -29,6 +29,7 @@ tiers:
           name: bashfeature
           args:
             cmd: echo -n Hello World; exit 0
+            shell: true
       - case_name: fourth
         project_name: xtesting
         criteria: 100
