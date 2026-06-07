@@ -1,7 +1,7 @@
-FROM alpine:edge
+FROM alpine:3.23
 
-ARG BRANCH=master
-ARG OPENSTACK_TAG=master
+ARG BRANCH=stable/2026.1
+ARG OPENSTACK_TAG=stable/2026.1
 
 RUN apk -U upgrade && \
     apk --no-cache add --update python3 py3-pip py3-wheel bash git mailcap libxml2 libxslt ansible && \
