@@ -16,7 +16,7 @@ amd64_dirs=${amd64_dirs-"\
 docker/core"}
 arm_dirs=${arm_dirs-${amd64_dirs}}
 arm64_dirs=${arm64_dirs-${amd64_dirs}}
-tag=${BRANCH:-stable/2025.1}
+tag=${BRANCH:-2025.1}
 image="xtesting"
 build_opts=(--pull=true --no-cache --force-rm=true)
 
