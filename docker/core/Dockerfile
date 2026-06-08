@@ -1,7 +1,7 @@
-FROM alpine:edge
+FROM alpine:3.23
 
-ARG BRANCH=master
-ARG OPENSTACK_TAG=master
+ARG BRANCH=stable/2025.2
+ARG OPENSTACK_TAG=stable/2025.2
 
 RUN apk -U upgrade && \
     apk --no-cache add --update python3 py3-pip py3-wheel bash git mailcap libxml2 libxslt ansible && \
@@ -26,7 +26,7 @@ RUN apk -U upgrade && \
     addgroup -g 1000 xtesting && adduser -u 1000 -G xtesting -D xtesting && \
     mkdir -p /var/lib/xtesting/results && chown -R xtesting: /var/lib/xtesting && \
     apk del .build-deps
-COPY testcases.yaml /usr/lib/python3.14/site-packages/xtesting/ci/testcases.yaml
+COPY testcases.yaml /usr/lib/python3.12/site-packages/xtesting/ci/testcases.yaml
 USER xtesting
 WORKDIR /var/lib/xtesting/results
 CMD ["run_tests", "-t", "all"]
