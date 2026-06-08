@@ -29,6 +29,7 @@ tiers:
           name: bashfeature
           args:
             cmd: echo -n Hello World; exit 0
+            shell: true
       - case_name: fourth
         project_name: xtesting
         criteria: 100
@@ -41,7 +42,6 @@ tiers:
             name: xtesting.samples.fourth
       - case_name: fifth
         project_name: xtesting
-        enabled: false
         criteria: 100
         blocking: true
         clean_flag: false
@@ -51,13 +51,12 @@ tiers:
           args:
             suites:
               - >-
-                /usr/lib/python3.12/site-packages/xtesting/samples/HelloWorld.robot
+                /usr/lib/python3.14/site-packages/xtesting/samples/HelloWorld.robot
             variable:
               - 'var01:foo'
               - 'var02:bar'
       - case_name: sixth
         project_name: xtesting
-        enabled: false
         criteria: 100
         blocking: true
         clean_flag: false
@@ -66,12 +65,11 @@ tiers:
           name: behaveframework
           args:
             suites:
-              - /usr/lib/python3.12/site-packages/xtesting/samples/features
+              - /usr/lib/python3.14/site-packages/xtesting/samples/features
             tags:
               - foo
       - case_name: eighth
         project_name: xtesting
-        enabled: false
         criteria: 100
         blocking: true
         clean_flag: false
@@ -79,11 +77,10 @@ tiers:
         run:
           name: ansible
           args:
-            private_data_dir: /usr/lib/python3.12/site-packages/xtesting/samples
+            private_data_dir: /usr/lib/python3.14/site-packages/xtesting/samples
             playbook: helloworld.yml
       - case_name: nineth
         project_name: xtesting
-        enabled: true
         criteria: 100
         blocking: true
         clean_flag: false
@@ -91,4 +88,4 @@ tiers:
         run:
           name: pytest
           args:
-            dir: /usr/lib/python3.12/site-packages/xtesting/samples/fourth.py
+            dir: /usr/lib/python3.14/site-packages/xtesting/samples/fourth.py
