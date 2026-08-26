@@ -164,17 +164,17 @@ class Runner():
                     invoke_on_load=True,
                     invoke_kwds=test_dict).driver
                 self.executed_test_cases[test.get_name()] = test_case
-                test_case.check_requirements()
-                if test_case.is_skipped:
-                    LOGGER.info("Skipping test case '%s'...", test.get_name())
-                    LOGGER.info("Test result:\n\n%s\n", test_case)
-                    return testcase.TestCase.EX_TESTCASE_SKIPPED
                 if 'env' in run_dict:
                     for key, value in run_dict['env'].items():
                         if key not in os.environ:
                             LOGGER.info("Setting env for test case '%s'...",
                                         test.get_name())
                             os.environ[key] = str(value)
+                test_case.check_requirements()
+                if test_case.is_skipped:
+                    LOGGER.info("Skipping test case '%s'...", test.get_name())
+                    LOGGER.info("Test result:\n\n%s\n", test_case)
+                    return testcase.TestCase.EX_TESTCASE_SKIPPED
                 LOGGER.info("Running test case '%s'...", test.get_name())
                 try:
                     kwargs = run_dict['args']
